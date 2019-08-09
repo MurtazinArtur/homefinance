@@ -1,23 +1,23 @@
 package geekfactory.homefinance.dao.repository;
 
 import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
-import geekfactory.homefinance.dao.model.TransactionTypeModel;
+import geekfactory.homefinance.dao.model.BankModel;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
-public class TransactionTypeRepository implements Repository<TransactionTypeModel>{
-    private final static String INSERT = "INSERT INTO transaction_type_tbl(name) VALUES (?)";
-    private final static String FIND_BY_ID = "SELECT id, name FROM transaction_type_tbl WHERE id = ?";
-    private final static String FIND_ALL = "SELECT id, name FROM transaction_type_tbl";
-    private final static String REMOVE = "DELETE FROM transaction_type_tbl WHERE id = ?";
-    private final static String UPDATE = "UPDATE transaction_type_tbl set name = ? WHERE id = ?";
+public class BankRepository implements Repository<BankModel>{
+    private final static String INSERT = "INSERT INTO bank_tbl(name) VALUES (?)";
+    private final static String FIND_BY_ID = "SELECT id, name FROM bank_tbl WHERE id = ?";
+    private final static String FIND_ALL = "SELECT id, name FROM bank_tbl";
+    private final static String REMOVE = "DELETE FROM bank_tbl WHERE id = ?";
+    private final static String UPDATE = "UPDATE bank_tbl set name = ? WHERE id = ?";
     private ConnectionSupplier connectionSupplier = new ConnectionSupplier();
 
     @Override
-    public Optional<TransactionTypeModel> findById(long id) {
+    public Optional<BankModel> findById(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
             try {
@@ -27,7 +27,7 @@ public class TransactionTypeRepository implements Repository<TransactionTypeMode
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 if (resultSet.next()) {
-                    TransactionTypeModel model = new TransactionTypeModel();
+                    BankModel model = new BankModel();
                     model.setId(resultSet.getLong(1));
                     model.setName(resultSet.getString(2));
                     return Optional.of(model);
@@ -43,15 +43,15 @@ public class TransactionTypeRepository implements Repository<TransactionTypeMode
     }
 
     @Override
-    public Collection<TransactionTypeModel> findAll() {
-        Collection<TransactionTypeModel> listCategory = new ArrayList<>();
+    public Collection<BankModel> findAll() {
+        Collection<BankModel> listCategory = new ArrayList<>();
         try {
             Connection connection = connectionSupplier.getConnection();
             try {
                 PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
-                    listCategory.add(new TransactionTypeModel(resultSet.getLong(1), resultSet.getString(2)));
+                    listCategory.add(new BankModel(resultSet.getLong(1), resultSet.getString(2)));
                 }
             } catch (SQLException e) {
                 throw new HomeFinanceDaoException("Error find", e);
@@ -63,7 +63,7 @@ public class TransactionTypeRepository implements Repository<TransactionTypeMode
     }
 
     @Override
-    public boolean remove(long id) {
+    public boolean remove(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
             try {
@@ -84,7 +84,7 @@ public class TransactionTypeRepository implements Repository<TransactionTypeMode
     }
 
     @Override
-    public void save(TransactionTypeModel model) {
+    public void save(BankModel model) {
         try {
             Connection connection = connectionSupplier.getConnection();
             try {
@@ -108,7 +108,7 @@ public class TransactionTypeRepository implements Repository<TransactionTypeMode
     }
 
     @Override
-    public void update(TransactionTypeModel model, long idRow) {
+    public void update(BankModel model, Long idRow) {
         try {
             Connection connection = connectionSupplier.getConnection();
             try {

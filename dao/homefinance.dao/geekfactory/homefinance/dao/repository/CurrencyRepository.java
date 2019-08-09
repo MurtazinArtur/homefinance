@@ -17,7 +17,7 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
     private ConnectionSupplier connectionSupplier = new ConnectionSupplier();
 
     @Override
-    public Optional<CurrencyModel> findById(long id) {
+    public Optional<CurrencyModel> findById(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
             try {
@@ -66,7 +66,7 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
     }
 
     @Override
-    public boolean remove(long id) {
+    public boolean remove(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
             try {
@@ -113,7 +113,7 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
     }
 
     @Override
-    public void update(CurrencyModel model, long idRow) {
+    public void update(CurrencyModel model, Long idRow) {
         try {
             Connection connection = connectionSupplier.getConnection();
             try {

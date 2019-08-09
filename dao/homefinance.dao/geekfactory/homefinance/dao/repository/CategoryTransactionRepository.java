@@ -17,7 +17,7 @@ public class CategoryTransactionRepository implements Repository<CategoryTransac
     private ConnectionSupplier connectionSupplier = new ConnectionSupplier();
 
     @Override
-    public Optional<CategoryTransactionModel> findById(long id) {
+    public Optional<CategoryTransactionModel> findById(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
             try {
@@ -33,6 +33,8 @@ public class CategoryTransactionRepository implements Repository<CategoryTransac
                     if (resultSet.getString(3) != null) {
                         Optional<CategoryTransactionModel> parentCategory = findById(resultSet.getLong(3));
                         model.setParentCategory(parentCategory.get());
+                    }else {
+                       model.setParentCategory(null);
                     }
                     return Optional.of(model);
                 }
@@ -74,7 +76,7 @@ public class CategoryTransactionRepository implements Repository<CategoryTransac
     }
 
     @Override
-    public boolean remove(long id) {
+    public boolean remove(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
             try {
@@ -104,8 +106,6 @@ public class CategoryTransactionRepository implements Repository<CategoryTransac
                 preparedStatement.setString(1, model.getName());
                 if (model.getParentCategory() != null) {
                     preparedStatement.setLong(2, model.getParentCategory().getId());
-                } else {
-                    preparedStatement.setString(2, null);
                 }
                 preparedStatement.executeUpdate();
                 ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -124,7 +124,7 @@ public class CategoryTransactionRepository implements Repository<CategoryTransac
     }
 
     @Override
-    public void update(CategoryTransactionModel model, long idRow) {
+    public void update(CategoryTransactionModel model, Long idRow) {
         if (model != null) {
             try {
                 Connection connection = connectionSupplier.getConnection();

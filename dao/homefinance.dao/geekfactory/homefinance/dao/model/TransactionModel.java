@@ -14,13 +14,14 @@ import java.util.Collection;
 @ToString
 @AllArgsConstructor
 public class TransactionModel {
-    long id;
-    BigDecimal amount;
-    LocalDateTime date;
-    String source;
-    Collection<CategoryTransactionModel> category;
-    Collection<TransactionTypeModel> type;
-    AccountModel account;
+    private Long id;
+    private BigDecimal amount;
+    private LocalDateTime date;
+    private String source;
+    private Collection<CategoryTransactionModel> category;
+    private BankModel bank;
+    private AccountModel account;
+    private CurrencyModel currency;
 
     public TransactionModel() {
     }

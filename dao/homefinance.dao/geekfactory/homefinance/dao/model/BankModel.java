@@ -9,10 +9,10 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
-public class TransactionTypeModel {
-    private long id;
+public class BankModel {
+    private Long id;
     private String name;
 
-    public TransactionTypeModel() {
+    public BankModel() {
     }
 }

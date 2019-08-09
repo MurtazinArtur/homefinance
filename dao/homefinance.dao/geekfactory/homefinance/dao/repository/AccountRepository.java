@@ -19,7 +19,7 @@ public class AccountRepository implements Repository<AccountModel> {
     private ConnectionSupplier connectionSupplier = new ConnectionSupplier();
 
     @Override
-    public Optional<AccountModel> findById(long id) {
+    public Optional<AccountModel> findById(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
             try {
@@ -75,7 +75,7 @@ public class AccountRepository implements Repository<AccountModel> {
     }
 
     @Override
-    public boolean remove(long id) {
+    public boolean remove(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
             try {
@@ -104,7 +104,7 @@ public class AccountRepository implements Repository<AccountModel> {
                         connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, model.getName());
                 preparedStatement.setBigDecimal(2, model.getAmount());
-                preparedStatement.setInt(3, model.getCurrencyModel().getId().intValue());
+                preparedStatement.setLong(3, model.getCurrencyModel().getId().intValue());
                 preparedStatement.setString(4, String.valueOf(model.getAccountType()));
                 preparedStatement.executeUpdate();
                 ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -123,7 +123,7 @@ public class AccountRepository implements Repository<AccountModel> {
     }
 
     @Override
-    public void update(AccountModel model, long idRow) {
+    public void update(AccountModel model, Long idRow) {
         try {
             Connection connection = connectionSupplier.getConnection();
             try {

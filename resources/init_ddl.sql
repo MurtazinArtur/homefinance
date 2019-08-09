@@ -20,10 +20,11 @@ CREATE TABLE account_tbl
 CREATE TABLE category_tbl
 (
     id   INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    name VARCHAR(50)                    NOT NULL
+    name VARCHAR(50)                    NOT NULL,
+    parent_category INT
 );
 
-CREATE TABLE transaction_type_tbl
+CREATE TABLE bank_tbl
 (
     id   INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     name VARCHAR(50)
@@ -36,12 +37,12 @@ CREATE TABLE transaction_tbl
     date        DATE                           NOT NULL,
     source      VARCHAR(50),
     category_id INT                            NOT NULL,
-    type_id     INT                            NOT NULL,
+    bank_id     INT                            NOT NULL,
     account_id  INT                            NOT NULL,
     currency_id INT                            NOT NULL,
 
     CONSTRAINT category_fk FOREIGN KEY (category_id) REFERENCES category_tbl (id),
-    CONSTRAINT type_fk FOREIGN KEY (type_id) REFERENCES transaction_type_tbl (id),
+    CONSTRAINT bank_fk FOREIGN KEY (bank_id) REFERENCES bank_tbl (id),
     CONSTRAINT account_fk FOREIGN KEY (account_id) REFERENCES account_tbl (id),
     CONSTRAINT currency_transaction_fk FOREIGN KEY (currency_id) REFERENCES currency_tbl (id)
 );

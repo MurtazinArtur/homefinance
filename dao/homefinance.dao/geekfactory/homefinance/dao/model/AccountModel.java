@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @ToString
 @AllArgsConstructor
 public class AccountModel {
-    private long id;
+    private Long id;
     private CurrencyModel currencyModel;
     private String name;
     private AccountType accountType;

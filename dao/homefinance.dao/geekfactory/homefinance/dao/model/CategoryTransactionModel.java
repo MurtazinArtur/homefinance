@@ -5,16 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Collection;
+import java.util.Optional;
 
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 public class CategoryTransactionModel {
-    private long id;
+    private Long id;
     private String name;
     private CategoryTransactionModel parentCategory;
+
+    public CategoryTransactionModel(Optional<CategoryTransactionModel> byId) {
+    }
 
     public CategoryTransactionModel() {
     }
