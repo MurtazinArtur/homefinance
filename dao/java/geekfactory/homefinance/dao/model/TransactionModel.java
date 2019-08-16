@@ -8,6 +8,7 @@ import java.util.Collection;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class TransactionModel {
     private Long id;
     private BigDecimal amount;
