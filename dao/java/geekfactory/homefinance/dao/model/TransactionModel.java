@@ -1,18 +1,13 @@
 package geekfactory.homefinance.dao.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
+@Data
+@NoArgsConstructor
 public class TransactionModel {
     private Long id;
     private BigDecimal amount;
@@ -22,7 +17,4 @@ public class TransactionModel {
     private BankModel bank;
     private AccountModel account;
     private CurrencyModel currency;
-
-    public TransactionModel() {
-    }
 }

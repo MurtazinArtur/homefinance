@@ -1,24 +1,16 @@
 package geekfactory.homefinance.dao.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Optional;
 
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
+@Data
+@NoArgsConstructor
 public class CategoryTransactionModel {
     private Long id;
     private String name;
     private CategoryTransactionModel parentCategory;
 
     public CategoryTransactionModel(Optional<CategoryTransactionModel> byId) {
-    }
-
-    public CategoryTransactionModel() {
     }
 }
