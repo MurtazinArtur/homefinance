@@ -20,9 +20,7 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
     public Optional<CurrencyModel> findById(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(FIND_BY_ID);
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID);
                 preparedStatement.setLong(1, id);
                 ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -37,9 +35,6 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
 
             } catch (SQLException e) {
                 throw new HomeFinanceDaoException("Error find " + id, e);
-            }
-        } catch (HomeFinanceDaoException e) {
-            throw new HomeFinanceDaoException("Error find " + id, e);
         }
         return Optional.empty();
     }
@@ -49,18 +44,14 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
         Collection<CurrencyModel> listCurrency = new ArrayList<>();
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
-                ResultSet resultSet = preparedStatement.executeQuery();
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
+            ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
                     listCurrency.add(new CurrencyModel(resultSet.getLong(1), resultSet.getString(2),
                             resultSet.getString(3), resultSet.getString(4)));
                 }
             } catch (SQLException e) {
                 throw new HomeFinanceDaoException("Error find", e);
-            }
-        } catch (HomeFinanceDaoException e) {
-            throw new HomeFinanceDaoException("Error find", e);
         }
         return listCurrency;
     }
@@ -69,19 +60,13 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
     public boolean remove(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(REMOVE);
+            PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
                 connection.commit();
-                return true;
+            return true;
 
             } catch (SQLException e) {
-                connection.rollback();
-                throw new HomeFinanceDaoException("Error delete", e);
-            }
-        } catch (SQLException e) {
             throw new HomeFinanceDaoException("Error delete", e);
         }
     }
@@ -90,9 +75,8 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
     public void save(CurrencyModel model) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, model.getName());
                 preparedStatement.setString(2, model.getCode());
                 preparedStatement.setString(3, model.getSymbol());
@@ -104,10 +88,6 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
                 connection.commit();
 
             } catch (SQLException e) {
-                connection.rollback();
-                throw new HomeFinanceDaoException("Error save " + model, e);
-            }
-        } catch (HomeFinanceDaoException | SQLException e) {
             throw new HomeFinanceDaoException("Error save " + model, e);
         }
     }
@@ -116,9 +96,8 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
     public void update(CurrencyModel model, Long idRow) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(UPDATE);
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(UPDATE);
                 model.setId(idRow);
                 preparedStatement.setString(1, model.getName());
                 preparedStatement.setString(2, model.getCode());
@@ -128,10 +107,6 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
                 connection.commit();
 
             } catch (SQLException e) {
-                connection.rollback();
-                throw new HomeFinanceDaoException("Error update " + model, e);
-            }
-        } catch (SQLException e) {
             throw new HomeFinanceDaoException("Error update " + model, e);
         }
     }

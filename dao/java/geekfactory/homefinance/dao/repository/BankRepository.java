@@ -20,9 +20,7 @@ public class BankRepository implements Repository<BankModel>{
     public Optional<BankModel> findById(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(FIND_BY_ID);
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID);
                 preparedStatement.setLong(1, id);
                 ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -35,9 +33,6 @@ public class BankRepository implements Repository<BankModel>{
 
             } catch (SQLException e) {
                 throw new HomeFinanceDaoException("Error find " + id, e);
-            }
-        } catch (HomeFinanceDaoException e) {
-            throw new HomeFinanceDaoException("Error find " + id, e);
         }
         return Optional.empty();
     }
@@ -47,17 +42,13 @@ public class BankRepository implements Repository<BankModel>{
         Collection<BankModel> listCategory = new ArrayList<>();
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
-                ResultSet resultSet = preparedStatement.executeQuery();
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
+            ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
                     listCategory.add(new BankModel(resultSet.getLong(1), resultSet.getString(2)));
                 }
             } catch (SQLException e) {
                 throw new HomeFinanceDaoException("Error find", e);
-            }
-        } catch (HomeFinanceDaoException e) {
-            throw new HomeFinanceDaoException("Error find", e);
         }
         return listCategory;
     }
@@ -66,20 +57,14 @@ public class BankRepository implements Repository<BankModel>{
     public boolean remove(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(REMOVE);
+            PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
                 connection.commit();
                 return true;
 
             } catch (SQLException e) {
-                connection.rollback();
-                throw new HomeFinanceDaoException("Error delete", e);
-            }
-        } catch (SQLException e) {
-            throw new HomeFinanceDaoException("Error delete ", e);
+            throw new HomeFinanceDaoException("Error delete", e);
         }
     }
 
@@ -87,9 +72,7 @@ public class BankRepository implements Repository<BankModel>{
     public void save(BankModel model) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, model.getName());
                 preparedStatement.executeUpdate();
                 ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -97,12 +80,7 @@ public class BankRepository implements Repository<BankModel>{
                     model.setId(resultSet.getLong(1));
                 }
                 connection.commit();
-
             } catch (SQLException e) {
-                connection.rollback();
-                throw new HomeFinanceDaoException("Error save " + model, e);
-            }
-        } catch (SQLException e) {
             throw new HomeFinanceDaoException("Error save " + model, e);
         }
     }
@@ -111,18 +89,12 @@ public class BankRepository implements Repository<BankModel>{
     public void update(BankModel model, Long idRow) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(UPDATE);
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
                 preparedStatement.setString(1, model.getName());
                 preparedStatement.setLong(2, idRow);
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-            } catch (SQLException e) {
-                connection.rollback();
-                throw new HomeFinanceDaoException("Error update " + model, e);
-            }
         } catch (SQLException e) {
             throw new HomeFinanceDaoException("Error update " + model, e);
         }

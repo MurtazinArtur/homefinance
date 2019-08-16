@@ -25,21 +25,15 @@ public class TransactionRepository implements Repository <TransactionModel>{
     public Optional<TransactionModel> findById(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(FIND_BY_ID);
-                preparedStatement.setLong(1, id);
-                ResultSet resultSet = preparedStatement.executeQuery();
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID);
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
                 if (resultSet.next()) {
                     return Optional.of(createModel(resultSet));
                 }
-
             } catch (SQLException e) {
                 throw new HomeFinanceDaoException("Error find " + id, e);
-            }
-        } catch (HomeFinanceDaoException e) {
-            throw new HomeFinanceDaoException("Error find " + id, e);
         }
         return Optional.empty();
     }
@@ -50,17 +44,13 @@ public class TransactionRepository implements Repository <TransactionModel>{
         Collection<TransactionModel> listTransaction = new ArrayList<>();
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
-                ResultSet resultSet = preparedStatement.executeQuery();
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
+            ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
                     listTransaction.add(createModel(resultSet));
                 }
             } catch (SQLException e) {
                 throw new HomeFinanceDaoException("Error find", e);
-            }
-        } catch (HomeFinanceDaoException e) {
-            throw new HomeFinanceDaoException("Error find", e);
         }
         return listTransaction;
     }
@@ -69,20 +59,14 @@ public class TransactionRepository implements Repository <TransactionModel>{
     public boolean remove(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(REMOVE);
+            PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
                 connection.commit();
                 return true;
 
             } catch (SQLException e) {
-                connection.rollback();
-                throw new HomeFinanceDaoException("Error delete", e);
-            }
-        } catch (SQLException e) {
-            throw new HomeFinanceDaoException("Error delete ", e);
+            throw new HomeFinanceDaoException("Error delete", e);
         }
     }
 
@@ -91,9 +75,7 @@ public class TransactionRepository implements Repository <TransactionModel>{
         try {
             Connection connection = connectionSupplier.getConnection();
             Collection<CategoryTransactionModel> heshSetCategory = new HashSet<>();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setBigDecimal(1, model.getAmount());
                 preparedStatement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
                 preparedStatement.setString(3, model.getSource());
@@ -122,10 +104,6 @@ public class TransactionRepository implements Repository <TransactionModel>{
                     heshSetCategory.add(putCategory(connection, putPreparedStatement, model.getId(), setCategory.getId()));
                 }
             } catch (SQLException e) {
-                connection.rollback();
-                throw new HomeFinanceDaoException("Error save " + model, e);
-            }
-        } catch (SQLException e) {
             throw new HomeFinanceDaoException("Error save " + model, e);
         }
     }
@@ -135,20 +113,13 @@ public class TransactionRepository implements Repository <TransactionModel>{
         if (model != null) {
             try {
                 Connection connection = connectionSupplier.getConnection();
-                try {
-                    PreparedStatement preparedStatement =
-                            connection.prepareStatement(UPDATE);
+                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
                     preparedStatement.setLong(6, idRow);
-
                     preparedStatement.executeUpdate();
                     connection.commit();
 
                 } catch (SQLException e) {
-                    connection.rollback();
                     throw new HomeFinanceDaoException("Error update " + model, e);
-                }
-            } catch (SQLException e) {
-                throw new HomeFinanceDaoException("Error update " + model, e);
             }
         }
     }
@@ -174,8 +145,7 @@ public class TransactionRepository implements Repository <TransactionModel>{
         HashSet<CategoryTransactionModel> categoryTransactionHashSet = new HashSet<>();
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(FIND_CATEGORY_BY_ID);
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_CATEGORY_BY_ID);
                 preparedStatement.setLong(1, transactionId);
                 ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -187,9 +157,6 @@ public class TransactionRepository implements Repository <TransactionModel>{
                 }
             } catch (SQLException e) {
                 throw new HomeFinanceDaoException("Error find", e);
-            }
-        } catch (HomeFinanceDaoException e) {
-            throw new HomeFinanceDaoException("Error find", e);
         }
         return categoryTransactionHashSet;
     }
@@ -201,11 +168,6 @@ public class TransactionRepository implements Repository <TransactionModel>{
             putPreparedStatement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                throw new HomeFinanceDaoException("Error paste data in table", ex);
-            }
             throw new HomeFinanceDaoException("Error paste data in table", e);
         }
         CategoryTransactionRepository categoryTransactionRepository = new CategoryTransactionRepository();

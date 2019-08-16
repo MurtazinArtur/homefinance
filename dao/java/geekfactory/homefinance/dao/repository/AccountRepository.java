@@ -15,16 +15,16 @@ public class AccountRepository implements Repository<AccountModel> {
     private final static String FIND_BY_ID = "SELECT id, name, amount, currency_id, account_type FROM account_tbl WHERE id = ?";
     private final static String FIND_ALL = "SELECT id, name, amount, currency_id, account_type FROM account_tbl";
     private final static String REMOVE = "DELETE FROM account_tbl WHERE id = ?";
-    private final static String UPDATE = "UPDATE account_tbl set name = ?, amount = ?, currency_id = ?, account_type = ? WHERE id = ?";
+    private final static String UPDATE = "UPDATE account_tbl SET name = ?, amount = ?, currency_id = ?, account_type = ? WHERE id = ?";
     private ConnectionSupplier connectionSupplier = new ConnectionSupplier();
+    private CurrencyRepository currencyRepository = new CurrencyRepository();
 
     @Override
     public Optional<AccountModel> findById(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(FIND_BY_ID);
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(FIND_BY_ID);
                 preparedStatement.setLong(1, id);
                 ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -33,31 +33,24 @@ public class AccountRepository implements Repository<AccountModel> {
                     model.setId(resultSet.getLong(1));
                     model.setName(resultSet.getString(2));
                     model.setAmount(resultSet.getBigDecimal(3));
-                    CurrencyRepository currencyRepository = new CurrencyRepository();
                     Optional<CurrencyModel> currencyModel = currencyRepository.findById(resultSet.getLong(4));
                     model.setCurrencyModel(currencyModel.get());
                     model.setAccountType(AccountType.valueOf(resultSet.getString(5)));
                     return Optional.of(model);
                 }
-
-            } catch (SQLException e) {
+        } catch (SQLException e) {
                 throw new HomeFinanceDaoException("Error find " + id, e);
             }
-        } catch (HomeFinanceDaoException e) {
-            throw new HomeFinanceDaoException("Error find " + id, e);
-        }
         return Optional.empty();
     }
 
     @Override
     public Collection<AccountModel> findAll() {
         Collection<AccountModel> listCategory = new ArrayList<>();
-        CurrencyRepository currencyRepository = new CurrencyRepository();
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
-                ResultSet resultSet = preparedStatement.executeQuery();
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
+            ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
                     Optional<CurrencyModel> currencyModel = currencyRepository.findById(resultSet.getLong(4));
                     listCategory.add(new AccountModel(resultSet.getLong(1),
@@ -68,9 +61,6 @@ public class AccountRepository implements Repository<AccountModel> {
             } catch (SQLException e) {
                 throw new HomeFinanceDaoException("Error find", e);
             }
-        } catch (HomeFinanceDaoException e) {
-            throw new HomeFinanceDaoException("Error find", e);
-        }
         return listCategory;
     }
 
@@ -78,18 +68,12 @@ public class AccountRepository implements Repository<AccountModel> {
     public boolean remove(Long id) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(REMOVE);
+            PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
                 connection.commit();
                 return true;
 
-            } catch (SQLException e) {
-                connection.rollback();
-                throw new HomeFinanceDaoException("Error delete", e);
-            }
         } catch (SQLException e) {
             throw new HomeFinanceDaoException("Error delete", e);
         }
@@ -99,9 +83,7 @@ public class AccountRepository implements Repository<AccountModel> {
     public void save(AccountModel model) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, model.getName());
                 preparedStatement.setBigDecimal(2, model.getAmount());
                 preparedStatement.setLong(3, model.getCurrencyModel().getId().intValue());
@@ -113,11 +95,7 @@ public class AccountRepository implements Repository<AccountModel> {
                 }
                 connection.commit();
 
-            } catch (SQLException e) {
-                connection.rollback();
-                throw new HomeFinanceDaoException("Error save " + model, e);
-            }
-        } catch (HomeFinanceDaoException | SQLException e) {
+        } catch (SQLException e) {
             throw new HomeFinanceDaoException("Error save " + model, e);
         }
     }
@@ -126,9 +104,7 @@ public class AccountRepository implements Repository<AccountModel> {
     public void update(AccountModel model, Long idRow) {
         try {
             Connection connection = connectionSupplier.getConnection();
-            try {
-                PreparedStatement preparedStatement =
-                        connection.prepareStatement(UPDATE);
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
                 model.setId(idRow);
                 preparedStatement.setString(1, model.getName());
                 preparedStatement.setBigDecimal(2, model.getAmount());
@@ -138,10 +114,6 @@ public class AccountRepository implements Repository<AccountModel> {
                 preparedStatement.executeUpdate();
                 connection.commit();
 
-            } catch (SQLException e) {
-                connection.rollback();
-                throw new HomeFinanceDaoException("Error update " + model, e);
-            }
         } catch (SQLException e) {
             throw new HomeFinanceDaoException("Error update " + model, e);
         }
