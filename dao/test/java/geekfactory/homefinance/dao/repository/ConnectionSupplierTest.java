@@ -11,7 +11,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class ConnectionSupplier {
+public class ConnectionSupplierTest {
 
     public Connection getConnection() throws HomeFinanceDaoException {
         try {
@@ -24,9 +24,9 @@ public class ConnectionSupplier {
         }
     }
 
-    private Connection connectDb() throws IOException, SQLException {
+    public Connection connectDb() throws IOException, SQLException {
         Properties props = new Properties();
-        try (InputStream in = Files.newInputStream(Paths.get("dbConnectionProperties"))) {
+        try (InputStream in = Files.newInputStream(Paths.get("C:\\Users\\Work\\IdeaProjects\\GeekFactory_Web04_Murtazin\\dao\\test\\resources\\dbConnectionProperties"))) {
             props.load(in);
         }
         String url = props.getProperty("dburl");
@@ -36,3 +36,4 @@ public class ConnectionSupplier {
         return DriverManager.getConnection(url, username, password);
     }
 }
+
