@@ -13,10 +13,11 @@ public class Main {
         CategoryTransactionRepository categoryTransactionRepository = new CategoryTransactionRepository();
         CategoryTransactionModel categoryTransactionModel = new CategoryTransactionModel();
         CategoryTransactionModel parentCategoryTransactionModel = new CategoryTransactionModel();
-        parentCategoryTransactionModel.setName("parentTest");
+        //parentCategoryTransactionModel.setName("parentTest");
         categoryTransactionModel.setName("Test");
-        categoryTransactionModel.setParentCategory(categoryTransactionRepository.findById(1L).get());
-       // categoryTransactionRepository.save(categoryTransactionModel);
+        categoryTransactionModel.setParentCategory(null);
+        //categoryTransactionModel.setParentCategory(categoryTransactionRepository.findById(1L).get());
+        categoryTransactionRepository.save(categoryTransactionModel);
         createTransaction();
     }
     private static void createTransaction(){

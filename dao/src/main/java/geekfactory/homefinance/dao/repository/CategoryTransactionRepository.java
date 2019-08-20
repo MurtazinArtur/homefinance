@@ -90,6 +90,8 @@ public class CategoryTransactionRepository implements Repository<CategoryTransac
                 preparedStatement.setString(1, model.getName());
                 if (model.getParentCategory() != null) {
                     preparedStatement.setLong(2, model.getParentCategory().getId());
+                }else{
+                    preparedStatement.setNull(2, Types.INTEGER);
                 }
                 preparedStatement.executeUpdate();
                 ResultSet resultSet = preparedStatement.getGeneratedKeys();
