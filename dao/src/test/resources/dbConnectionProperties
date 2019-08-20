@@ -1,3 +1,0 @@
-dburl = "jdbc:mysql://localhost:3306/home_finance?useSSL=false&serverTimezone=UTC";
-dbuser = "root";
-dbpassword = "12WARrior";

@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 public class AccountRepository implements Repository<AccountModel> {
-    private final static String INIT_DB = "C:\\Users\\Work\\IdeaProjects\\GeekFactory_Web04_Murtazin\\resources\\dbConnectionProperties";
+    private final static String INIT_DB = "C:\\Users\\Work\\IdeaProjects\\GeekFactory_Web04_Murtazin\\resources\\dbConnectionProperties.properties.properties";
     private final static String INSERT = "INSERT INTO account_tbl(name, amount, currency_id, account_type) VALUES (?, ?, ?, ?)";
     private final static String FIND_BY_ID = "SELECT id, name, amount, currency_id, account_type FROM account_tbl WHERE id = ?";
     private final static String FIND_ALL = "SELECT id, name, amount, currency_id, account_type FROM account_tbl";

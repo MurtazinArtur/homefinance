@@ -12,34 +12,33 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionSupplier {
+    private Connection connection = null;
 
     public Connection getConnection() throws HomeFinanceDaoException {
         try {
-            Connection connection = DriverManager.getConnection("jdbc:h2:~/test");
+            try (InputStream is = this.getClass().getResourceAsStream("/dbConnectionProperties.properties")) {
+                Properties properties = new Properties();
+                properties.load(is);
+                String url = properties.getProperty("dburl");
+                String user = properties.getProperty("dbuser");
+                String password = properties.getProperty("dbpassword");
+
+                connection = DriverManager.getConnection(url, user, password);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             assert connection != null;
             connection.setAutoCommit(false);
-            return connection;
         } catch (SQLException e) {
-            throw new HomeFinanceDaoException("Error connection on DataBase", e);
+            throw new HomeFinanceDaoException(e);
         }
+        return connection;
     }
-
-    public Connection connectDb(String path) throws IOException, SQLException {
-        Properties props = new Properties();
-        try (InputStream in = Files.newInputStream(Paths.get(path))) {
-            props.load(in);
-        }
-        String url = props.getProperty("dburl");
-        String username = props.getProperty("dbuser");
-        String password = props.getProperty("dbpassword");
-
-        return DriverManager.getConnection(url, username, password);
-    }
-    public void getDisconnect(){
+    public void getDisconnection() {
         try {
-            getConnection().close();
+            connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new HomeFinanceDaoException(e);
         }
     }
 }

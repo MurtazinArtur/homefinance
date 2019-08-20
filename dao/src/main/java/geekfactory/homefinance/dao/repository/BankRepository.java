@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 public class BankRepository implements Repository<BankModel>{
-    private final static String INIT_DB = "C:\\Users\\Work\\IdeaProjects\\GeekFactory_Web04_Murtazin\\resources\\dbConnectionProperties";
+    private final static String INIT_DB = "C:\\Users\\Work\\IdeaProjects\\GeekFactory_Web04_Murtazin\\resources\\dbConnectionProperties.properties.properties";
     private final static String INSERT = "INSERT INTO bank_tbl(name) VALUES (?)";
     private final static String FIND_BY_ID = "SELECT id, name FROM bank_tbl WHERE id = ?";
     private final static String FIND_ALL = "SELECT id, name FROM bank_tbl";
