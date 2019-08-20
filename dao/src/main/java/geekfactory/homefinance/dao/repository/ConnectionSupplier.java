@@ -15,18 +15,18 @@ public class ConnectionSupplier {
 
     public Connection getConnection() throws HomeFinanceDaoException {
         try {
-            Connection connection = connectDb();
+            Connection connection = DriverManager.getConnection("jdbc:h2:~/test");
             assert connection != null;
             connection.setAutoCommit(false);
             return connection;
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             throw new HomeFinanceDaoException("Error connection on DataBase", e);
         }
     }
 
-    private Connection connectDb() throws IOException, SQLException {
+    public Connection connectDb(String path) throws IOException, SQLException {
         Properties props = new Properties();
-        try (InputStream in = Files.newInputStream(Paths.get("dbConnectionProperties"))) {
+        try (InputStream in = Files.newInputStream(Paths.get(path))) {
             props.load(in);
         }
         String url = props.getProperty("dburl");
@@ -34,5 +34,12 @@ public class ConnectionSupplier {
         String password = props.getProperty("dbpassword");
 
         return DriverManager.getConnection(url, username, password);
+    }
+    public void getDisconnect(){
+        try {
+            getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

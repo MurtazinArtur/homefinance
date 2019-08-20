@@ -1,3 +1,0 @@
-dburl = jdbc:h2:~/test
-dbuser
-dbpassword

@@ -6,18 +6,20 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>dao</module>
         <module>service</module>
-        <module>console_ui</module>
+        <module>dao</module>
     </modules>
 
     <properties>
-            <lombok>1.16.20</lombok>
-            <mysql>8.0.11</mysql>
-            <junit>5.5.1</junit>
-            <mockito>2.24.0</mockito>
-            <h2>1.4.199</h2>
-            <HikariCP>3.3.1</HikariCP>
+        <lombok>1.16.20</lombok>
+        <mysql>8.0.11</mysql>
+        <junitjupiter>5.5.1</junitjupiter>
+        <compiler>3.5.1</compiler>
+        <junitplatform>1.1.0</junitplatform>
+        <surefire-plugin>2.22.1</surefire-plugin>
+        <mockito>2.24.0</mockito>
+        <source>1.8</source>
+        <h2>1.4.199</h2>
     </properties>
 
     <dependencyManagement>
@@ -34,44 +36,27 @@
                 <version>${mysql}</version>
             </dependency>
             <dependency>
-                <groupId>org.junit.platform</groupId>
-                <artifactId>junit-platform-surefire-provider</artifactId>
-                <version>2.22.0</version>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
-                <version>${junit}</version>
+                <version>${junitjupiter}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
-                <version>${junit}</version>
+                <version>${junitjupiter}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-params</artifactId>
-                <version>${junit}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.platform</groupId>
-                <artifactId>junit-platform-runner</artifactId>
-                <version>1.1.0</version>
+                <version>${junitjupiter}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.platform</groupId>
                 <artifactId>junit-platform-launcher</artifactId>
-                <version>1.1.0</version>
+                <version>${junitplatform}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -81,20 +66,10 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.1</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>${h2}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.zaxxer</groupId>
-                <artifactId>HikariCP</artifactId>
-                <version>${HikariCP}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -102,28 +77,28 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.maven.apache.plugins</groupId>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>${compiler}</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${source}</source>
+                    <target>${source}</target>
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.maven.apache.plugins</groupId>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>${surefire-plugin}</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.platform</groupId>
                         <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>2.22.0</version>
+                        <version>${junitplatform}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.junit.jupiter</groupId>
                         <artifactId>junit-jupiter-engine</artifactId>
-                        <version>${junit}</version>
+                        <version>${junitjupiter}</version>
                     </dependency>
                 </dependencies>
             </plugin>

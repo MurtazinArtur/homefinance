@@ -1,7 +1,7 @@
 package geekfactory.homefinance.dao.repository;
 
-import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
+import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
 import geekfactory.homefinance.dao.model.TransactionModel;
 
 import java.sql.*;
@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Optional;
 
 public class TransactionRepository implements Repository <TransactionModel>{
+    private final static String INIT_DB = "C:\\Users\\Work\\IdeaProjects\\GeekFactory_Web04_Murtazin\\resources\\dbConnectionProperties";
     private final static String INSERT = "INSERT INTO transaction_tbl(amount, date, source, bank_id, account_id, currency_id) VALUES (?, ?, ?, ?, ?, ?)";
     private final static String INSERT_TRANSACTION_CATEGORY = "INSERT INTO transaction_category_tbl(transaction_id, category_id) VALUES (?, ?)";
     private final static String FIND_BY_ID = "SELECT id, amount, date, source, bank_id, account_id, currency_id FROM transaction_tbl WHERE id = ?";

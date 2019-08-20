@@ -3,21 +3,18 @@ package geekfactory.homefinance.dao.repository;
 import geekfactory.homefinance.dao.model.AccountModel;
 import geekfactory.homefinance.dao.model.AccountType;
 import geekfactory.homefinance.dao.model.CurrencyModel;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.*;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class AccountRepositoryTest {
-    private static ConnectionSupplierTest connectionSupplierTest = new ConnectionSupplierTest();
+public class AccountRepositoryTest  {
+    private static final String CONNECTION_FILE = "C:\\Users\\Work\\IdeaProjects\\GeekFactory_Web04_Murtazin\\dao\\test\\resources\\dbConnectionProperties";
+    private static ConnectionSupplier connectionSupplierTest = new ConnectionSupplier();
     private AccountRepository accountRepository = new AccountRepository();
     private CurrencyRepository currencyRepository = new CurrencyRepository();
     CurrencyModel currencyModel = new CurrencyModel();
@@ -26,24 +23,12 @@ public class AccountRepositoryTest {
     AccountModel model2 = new AccountModel();
 
     @BeforeAll
-    static void beforeAll(){
+   public void beforeAll() {
         connectionSupplierTest.getConnection();
-        try {
-            connectionSupplierTest.connectDb();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @BeforeEach
-    void beforeEach(){
-
-    }
-
-    @Before
-     public void setUp() throws Exception{
+    public void beforeEach(){
         currencyModel.setName("Dollar");
         model.setName("test");
         model.setAccountType(AccountType.CASH);
@@ -62,16 +47,16 @@ public class AccountRepositoryTest {
         model2.setAmount(BigDecimal.valueOf(1));
         currencyRepository.save(currencyModel);
         model2.setCurrencyModel(currencyRepository.findById((long) 1).orElse(null));
-
-
     }
+
     @Test
     void TestContext(){
         assertNotNull(accountRepository);
     }
+
     @Test
     @DisplayName("running save and findById test")
-    void testSaveAndFind(){
+    public void testSaveAndFind(){
         currencyRepository.save(currencyModel);
         model.setCurrencyModel(currencyRepository.findById((long) 1).orElse(null));
         accountRepository.save(model);
@@ -81,7 +66,7 @@ public class AccountRepositoryTest {
     @Test
     @DisplayName("running update test")
     void testUpdate(){
-        assertNotNull(model);
+        Assertions.assertNotNull(model);
         AccountModel accountUpdate = accountRepository.findById((long) 1).orElse(null);
         accountUpdate.setName("testUpdate");
         accountRepository.update(accountUpdate,(long) 1);
@@ -98,12 +83,12 @@ public class AccountRepositoryTest {
         actualList.add(model);
         actualList.add(model1);
         actualList.add(model2);
-        Assert.assertEquals(expectedList, actualList);
+        assertEquals(expectedList, actualList);
 
         int expected = expectedList.size();
         int actual = 3;
-        Assert.assertEquals(expected, actual);
-        Assert.assertNotNull(expectedList);
+        assertEquals(expected, actual);
+        assertNotNull(expectedList);
     }
 
 
