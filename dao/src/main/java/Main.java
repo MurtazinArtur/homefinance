@@ -17,7 +17,8 @@ public class Main {
         categoryTransactionModel.setName("Test");
         categoryTransactionModel.setParentCategory(null);
         //categoryTransactionModel.setParentCategory(categoryTransactionRepository.findById(1L).get());
-        categoryTransactionRepository.save(categoryTransactionModel);
+        //categoryTransactionRepository.save(categoryTransactionModel);
+        System.out.println(categoryTransactionRepository.remove(1L));
         createTransaction();
     }
     private static void createTransaction(){

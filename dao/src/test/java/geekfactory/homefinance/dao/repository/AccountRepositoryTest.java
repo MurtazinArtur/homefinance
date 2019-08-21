@@ -27,13 +27,32 @@ public class AccountRepositoryTest  {
     private static final String REMOVE_TABLE = "DROP TABLE account_tbl";
     private static ConnectionSupplier connectionSupplierTest = new ConnectionSupplier();
     private AccountRepository accountRepository = new AccountRepository();
-    private CurrencyRepository currencyRepository = new CurrencyRepository();
-    AccountModel model = new AccountModel();
-    AccountModel model1 = new AccountModel();
-    AccountModel model2 = new AccountModel();
+    private static CurrencyRepository currencyRepository = new CurrencyRepository();
+    private static AccountModel model = new AccountModel();
+    private static AccountModel model1 = new AccountModel();
+    private static AccountModel model2 = new AccountModel();
 
     @BeforeAll
    static void beforeAll() {
+        model.setName("test");
+        model.setAccountType(AccountType.CASH);
+        model.setAmount(BigDecimal.valueOf(1.00));
+        model.setCurrencyModel(currencyRepository.findById((long) 1).orElse(null));
+
+        model1.setName("test1");
+        model1.setAccountType(AccountType.CASH);
+        model1.setAmount(BigDecimal.valueOf(1.00));
+        model1.setCurrencyModel(currencyRepository.findById((long) 1).orElse(null));
+
+        model2.setName("test2");
+        model2.setAccountType(AccountType.CASH);
+        model2.setAmount(BigDecimal.valueOf(1.00));
+        model2.setCurrencyModel(currencyRepository.findById((long) 1).orElse(null));
+
+    }
+
+    @BeforeEach
+    void beforeEach(){
         Connection connection = connectionSupplierTest.getConnection();
         try {
             connection.prepareStatement(REMOVE_TABLE).executeUpdate();
@@ -41,25 +60,6 @@ public class AccountRepositoryTest  {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    @BeforeEach
-    void beforeEach(){
-
-        model.setName("test");
-        model.setAccountType(AccountType.CASH);
-        model.setAmount(BigDecimal.valueOf(1.00));
-        model.setCurrencyModel(currencyRepository.findById((long) 2).orElse(null));
-
-        model1.setName("test1");
-        model1.setAccountType(AccountType.CASH);
-        model1.setAmount(BigDecimal.valueOf(1.00));
-        model1.setCurrencyModel(currencyRepository.findById((long) 2).orElse(null));
-
-        model2.setName("test2");
-        model2.setAccountType(AccountType.CASH);
-        model2.setAmount(BigDecimal.valueOf(1.00));
-        model2.setCurrencyModel(currencyRepository.findById((long) 2).orElse(null));
     }
 
     @Test
@@ -71,17 +71,17 @@ public class AccountRepositoryTest  {
     @DisplayName("running save and findById test")
     void testSaveAndFind(){
         accountRepository.save(model);
-        assertEquals(model, accountRepository.findById((long) 4).get());
+        assertEquals(model, accountRepository.findById((long) 1).get());
     }
 
     @Test
     @DisplayName("running update test")
     void testUpdate(){
         Assertions.assertNotNull(model);
-        AccountModel accountUpdate = accountRepository.findById((long) 2).orElse(null);
+        AccountModel accountUpdate = accountRepository.findById((long) 1).orElse(null);
         accountUpdate.setName("testUpdate");
-        accountRepository.update(accountUpdate,(long) 2);
-        assertEquals(accountUpdate, accountRepository.findById((long) 2).get());
+        accountRepository.update(accountUpdate, (long) 1);
+        assertEquals(accountUpdate, accountRepository.findById((long) 1).get());
     }
 
     @Test
@@ -106,6 +106,9 @@ public class AccountRepositoryTest  {
     @Test
     @DisplayName("running remove test")
     void testRemove(){
+        accountRepository.save(model);
+        accountRepository.save(model1);
+        accountRepository.save(model2);
         AccountModel accountModel = accountRepository.findById((long) 1).orElse(null);
         accountRepository.remove(accountModel.getId());
         AccountModel removedModel = accountRepository.findById((long) 1).orElse(null);

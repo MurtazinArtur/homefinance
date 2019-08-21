@@ -1,7 +1,6 @@
 package geekfactory.homefinance.dao.repository;
 
 import geekfactory.homefinance.dao.model.BankModel;
-import geekfactory.homefinance.dao.model.CurrencyModel;
 import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
@@ -20,11 +19,19 @@ public class BankRepositoryTest {
     private static final String REMOVE_TABLE = "DROP TABLE bank_tbl";
     private static ConnectionSupplier connectionSupplierTest = new ConnectionSupplier();
     private BankRepository bankRepository = new BankRepository();
-    private BankModel model = new BankModel();
-    private BankModel model1 = new BankModel();
-    private BankModel model2 = new BankModel();
+    private static BankModel model = new BankModel();
+    private static BankModel model1 = new BankModel();
+    private static BankModel model2 = new BankModel();
     @BeforeAll
     static void beforeAll() {
+
+        model.setName("VTB");
+        model1.setName("VTB");
+        model2.setName("VTB");
+    }
+
+    @BeforeEach
+    void beforeEach(){
         Connection connection = connectionSupplierTest.getConnection();
         try {
             connection.prepareStatement(REMOVE_TABLE).executeUpdate();
@@ -34,17 +41,11 @@ public class BankRepositoryTest {
         }
     }
 
-    @BeforeEach
-    void beforeEach(){
-        model.setName("VTB");
-        model1.setName("VTB");
-        model2.setName("VTB");
-    }
-
     @AfterAll
     static void afterAll() {
         connectionSupplierTest.getDisconnection();
     }
+
     @Test
     void TestContext(){
         assertNotNull(bankRepository);
@@ -54,7 +55,7 @@ public class BankRepositoryTest {
     @DisplayName("running save and findById test")
     void testSaveAndFind() {
         bankRepository.save(model);
-        assertEquals(model, bankRepository.findById((long) 4).get());
+        assertEquals(model, bankRepository.findById((long) 1).get());
     }
 
     @Test
@@ -62,10 +63,10 @@ public class BankRepositoryTest {
     void testUpdate() {
         bankRepository.save(model);
         assertNotNull(model);
-        BankModel accountUpdate = bankRepository.findById((long) 4).orElse(null);
+        BankModel accountUpdate = bankRepository.findById((long) 1).orElse(null);
         accountUpdate.setName("testUpdate");
-        bankRepository.update(accountUpdate, (long) 4);
-        assertEquals(accountUpdate, bankRepository.findById((long) 4).get());
+        bankRepository.update(accountUpdate, (long) 1);
+        assertEquals(accountUpdate, bankRepository.findById((long) 1).get());
     }
     @Test
     @DisplayName("running findAll test")
@@ -90,6 +91,9 @@ public class BankRepositoryTest {
     @Test
     @DisplayName("running remove test")
     void testRemove() {
+        bankRepository.save(model);
+        bankRepository.save(model1);
+        bankRepository.save(model2);
         BankModel bankModel = bankRepository.findById((long) 1).orElse(null);
         bankRepository.remove(bankModel.getId());
         BankModel removedModel = bankRepository.findById((long) 1).orElse(null);

@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 public class CurrencyRepository implements Repository<CurrencyModel> {
-    private final static String INIT_DB = "C:\\Users\\Work\\IdeaProjects\\GeekFactory_Web04_Murtazin\\resources\\dbConnectionProperties.properties.properties";
     private final static String INSERT = "INSERT INTO currency_tbl(name, code, symbol) VALUES (?, ?, ?)";
     private final static String FIND_BY_ID = "SELECT id, name, code, symbol FROM currency_tbl WHERE id = ?";
     private final static String FIND_ALL = "SELECT id, name, code, symbol FROM currency_tbl";

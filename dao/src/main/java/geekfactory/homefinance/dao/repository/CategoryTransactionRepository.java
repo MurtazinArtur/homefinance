@@ -9,12 +9,12 @@ import java.util.HashSet;
 import java.util.Optional;
 
 public class CategoryTransactionRepository implements Repository<CategoryTransactionModel> {
-    private final static String INIT_DB = "C:\\Users\\Work\\IdeaProjects\\GeekFactory_Web04_Murtazin\\resources\\dbConnectionProperties.properties.properties";
     private final static String INSERT = "INSERT INTO category_tbl(name, parent_category) VALUES (?, ?)";
     private final static String FIND_BY_ID = "SELECT id, name, parent_category FROM category_tbl WHERE id = ?";
     private final static String FIND_ALL = "SELECT id, name, parent_category FROM category_tbl";
     private final static String REMOVE = "DELETE FROM category_tbl WHERE id = ?";
-    private final static String UPDATE = "UPDATE category_tbl set name = ?, parent_category = ? WHERE id = ?";
+    private final static String REMOVE_PARENT_CATEGORY = "UPDATE category_tbl SET parent_category = ? WHERE parent_category = ?";
+    private final static String UPDATE = "UPDATE category_tbl SET name = ?, parent_category = ? WHERE id = ?";
     private ConnectionSupplier connectionSupplier = new ConnectionSupplier();
 
     @Override
@@ -73,6 +73,10 @@ public class CategoryTransactionRepository implements Repository<CategoryTransac
             Connection connection = connectionSupplier.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
                 preparedStatement.setLong(1, id);
+                preparedStatement.executeUpdate();
+                preparedStatement = connection.prepareStatement(REMOVE_PARENT_CATEGORY);
+                preparedStatement.setNull(1, Types.INTEGER);
+                preparedStatement.setLong(2, id);
                 preparedStatement.executeUpdate();
                 connection.commit();
                 return true;

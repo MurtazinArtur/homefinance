@@ -21,28 +21,13 @@ public class CurrencyRepositoryTest {
     private static final String REMOVE_TABLE = "DROP TABLE currency_tbl";
     private static ConnectionSupplier connectionSupplierTest = new ConnectionSupplier();
     private CurrencyRepository currencyRepository = new CurrencyRepository();
-    CurrencyModel model = new CurrencyModel();
-    CurrencyModel model1 = new CurrencyModel();
-    CurrencyModel model2 = new CurrencyModel();
+    private static CurrencyModel model = new CurrencyModel();
+    private static CurrencyModel model1 = new CurrencyModel();
+    private static CurrencyModel model2 = new CurrencyModel();
 
     @BeforeAll
     static void beforeAll() {
-        Connection connection = connectionSupplierTest.getConnection();
-        try {
-            connection.prepareStatement(REMOVE_TABLE).executeUpdate();
-            connection.prepareStatement(CREATE_TBL).executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
-    @AfterAll
-    static void afterAll() {
-        connectionSupplierTest.getDisconnection();
-    }
-
-    @BeforeEach
-    void beforeEach() {
         model.setName("Dollar");
         model.setSymbol("D");
         model.setCode("USD");
@@ -55,6 +40,22 @@ public class CurrencyRepositoryTest {
         model2.setSymbol("D");
         model2.setCode("USD");
     }
+
+    @AfterAll
+    static void afterAll() {
+        connectionSupplierTest.getDisconnection();
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        Connection connection = connectionSupplierTest.getConnection();
+        try {
+            connection.prepareStatement(REMOVE_TABLE).executeUpdate();
+            connection.prepareStatement(CREATE_TBL).executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     @Test
     void TestContext(){
         Assertions.assertNotNull(currencyRepository);
@@ -64,7 +65,7 @@ public class CurrencyRepositoryTest {
     @DisplayName("running save and findById test")
     void testSaveAndFind() {
         currencyRepository.save(model);
-        assertEquals(model, currencyRepository.findById((long) 4).get());
+        assertEquals(model, currencyRepository.findById((long) 1).get());
     }
 
     @Test
@@ -72,10 +73,10 @@ public class CurrencyRepositoryTest {
     void testUpdate() {
         currencyRepository.save(model);
         Assertions.assertNotNull(model);
-        CurrencyModel accountUpdate = currencyRepository.findById((long) 4).orElse(null);
+        CurrencyModel accountUpdate = currencyRepository.findById((long) 1).orElse(null);
         accountUpdate.setName("testUpdate");
-        currencyRepository.update(accountUpdate, (long) 4);
-        assertEquals(accountUpdate, currencyRepository.findById((long) 4).get());
+        currencyRepository.update(accountUpdate, (long) 1);
+        assertEquals(accountUpdate, currencyRepository.findById((long) 1).get());
     }
     @Test
     @DisplayName("running findAll test")
@@ -100,6 +101,9 @@ public class CurrencyRepositoryTest {
     @Test
     @DisplayName("running remove test")
     void testRemove() {
+        currencyRepository.save(model);
+        currencyRepository.save(model1);
+        currencyRepository.save(model2);
         CurrencyModel currencyModel = currencyRepository.findById((long) 1).orElse(null);
         currencyRepository.remove(currencyModel.getId());
         CurrencyModel removedModel = currencyRepository.findById((long) 1).orElse(null);
