@@ -2,6 +2,7 @@ import geekfactory.homefinance.dao.model.*;
 import geekfactory.homefinance.dao.repository.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,7 +24,7 @@ public class Main {
         CurrencyRepository currencyRepository = new CurrencyRepository();
         Optional<CurrencyModel> currencyModel = currencyRepository.findById(1L);
         transactionModel.setAmount(BigDecimal.valueOf(35.18));
-        transactionModel.setDate(LocalDateTime.now());
+        transactionModel.setDate(LocalDate.now());
         transactionModel.setSource("Testing Record");
         transactionModel.setBank(bankModel.get());
         transactionModel.setAccount(accountModel.get());

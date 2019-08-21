@@ -3,7 +3,7 @@ package geekfactory.homefinance.dao.model;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Collection;
 
 @Data
@@ -12,7 +12,7 @@ import java.util.Collection;
 public class TransactionModel {
     private Long id;
     private BigDecimal amount;
-    private LocalDateTime date;
+    private LocalDate date;
     private String source;
     private Collection<CategoryTransactionModel> category;
     private BankModel bank;

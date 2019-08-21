@@ -2,6 +2,7 @@ package geekfactory.homefinance.dao.repository;
 
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
 import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
+import geekfactory.homefinance.dao.model.CurrencyModel;
 import geekfactory.homefinance.dao.model.TransactionModel;
 
 import java.sql.*;
@@ -33,7 +34,7 @@ public class TransactionRepository implements Repository <TransactionModel>{
                     return Optional.of(createModel(resultSet));
                 }
             } catch (SQLException e) {
-                throw new HomeFinanceDaoException("Error find " + id, e);
+                throw new HomeFinanceDaoException("Error find by id" + id, e);
         }
         return Optional.empty();
     }
@@ -50,7 +51,7 @@ public class TransactionRepository implements Repository <TransactionModel>{
                     listTransaction.add(createModel(resultSet));
                 }
             } catch (SQLException e) {
-                throw new HomeFinanceDaoException("Error find", e);
+                throw new HomeFinanceDaoException("Error find all", e);
         }
         return listTransaction;
     }
@@ -114,8 +115,15 @@ public class TransactionRepository implements Repository <TransactionModel>{
             try {
                 Connection connection = connectionSupplier.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
-                    preparedStatement.setLong(6, idRow);
-                    preparedStatement.executeUpdate();
+                model.setId(idRow);
+                preparedStatement.setBigDecimal(1, model.getAmount());
+                preparedStatement.setDate(2, Date.valueOf(model.getDate()));
+                preparedStatement.setString(3, model.getSource());
+                preparedStatement.setLong(4, model.getBank().getId());
+                preparedStatement.setLong(5, model.getAccount().getId());
+                preparedStatement.setLong(6, model.getCurrency().getId());
+                preparedStatement.setLong(7, idRow);
+                preparedStatement.executeUpdate();
                     connection.commit();
 
                 } catch (SQLException e) {
@@ -127,17 +135,20 @@ public class TransactionRepository implements Repository <TransactionModel>{
     private TransactionModel createModel(ResultSet resultSet) throws SQLException {
         BankRepository bankRepository = new BankRepository();
         AccountRepository accountRepository = new AccountRepository();
+        CurrencyRepository currencyRepository = new CurrencyRepository();
         TransactionModel model = new TransactionModel();
 
         model.setId(resultSet.getLong(1));
         model.setAmount(resultSet.getBigDecimal(2));
-        model.setDate(resultSet.getTimestamp(3).toLocalDateTime());
+        model.setDate(resultSet.getTimestamp(3).toLocalDateTime().toLocalDate());
         model.setSource(resultSet.getString(4));
-        model.setCategory(getCategories(resultSet.getLong(5)));
+        model.setCategory(getCategories(resultSet.getLong(1)));
         model.setBank((bankRepository.findById
-                (resultSet.getLong(6)).get()));
+                (resultSet.getLong(5)).get()));
         model.setAccount((accountRepository.findById
-                (resultSet.getLong(7)).get()));
+                (resultSet.getLong(6)).get()));
+        model.setCurrency(currencyRepository.findById
+                (resultSet.getLong(7)).get());
         return model;
     }
 
