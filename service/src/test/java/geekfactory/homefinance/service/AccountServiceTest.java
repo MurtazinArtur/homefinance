@@ -18,18 +18,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
-public class AccountServiceTest extends Mockito{
+public class AccountServiceTest extends Mockito {
     private static ConnectionSupplier connectionSupplier = new ConnectionSupplier();
-    private AccountModel accountModel = new AccountModel();
-
     @Spy
     AccountService spy;
-
+    private AccountModel accountModel = new AccountModel();
     @Mock
     private AccountRepository accountRepositoryMock;
 
@@ -49,8 +46,6 @@ public class AccountServiceTest extends Mockito{
         accountModel.setAmount(BigDecimal.valueOf(1));
         accountModel.setAccountType(AccountType.CASH);
         accountModel.setCurrencyModel(currencyRepository.findById((long) 1).orElse(null));
-
-
     }
 
     @Test
@@ -58,14 +53,14 @@ public class AccountServiceTest extends Mockito{
         when(accountService.findById(anyLong())).thenReturn(Optional.ofNullable(accountModel));
         assertNotNull(accountService);
         assertEquals(accountModel, accountService.findById((long) 5).get());
-       // assertNotEquals(accountModel, accountService.findById((long) 6).get());
+        // assertNotEquals(accountModel, accountService.findById((long) 6).get());
 
         assertNotNull(accountRepositoryMock);
         verify(accountRepositoryMock, times(1)).findById(anyLong());
         verify(accountRepositoryMock, never()).findAll();
         verify(accountRepositoryMock, never()).save(accountModel);
         verify(accountRepositoryMock, never()).remove(accountModel.getId());
-       // verify(accountRepositoryMock, never()).update(accountModel, anyLong());
+        // verify(accountRepositoryMock, never()).update(accountModel, anyLong());
     }
 
     @Test
@@ -73,13 +68,13 @@ public class AccountServiceTest extends Mockito{
         when(accountRepositoryMock.findById(anyLong())).thenReturn(Optional.ofNullable(accountModel));
         assertNotNull(accountRepositoryMock);
         assertEquals(accountModel, accountRepositoryMock.findById((long) 5).get());
-       // assertNotEquals(accountModel, accountRepositoryMock.findById((long) 5).get());
+        // assertNotEquals(accountModel, accountRepositoryMock.findById((long) 5).get());
 
         verify(accountRepositoryMock, times(1)).findById(anyLong());
     }
 
     @Test
-    void testWithSpy(){
+    void testWithSpy() {
         when(spy.findById(anyLong())).thenReturn(Optional.ofNullable(accountModel));
 
         assertEquals(accountModel, spy.findById((long) 5).get());
