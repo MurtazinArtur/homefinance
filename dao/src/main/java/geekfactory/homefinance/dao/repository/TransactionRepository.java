@@ -182,6 +182,6 @@ public class TransactionRepository implements Repository <TransactionModel>{
             throw new HomeFinanceDaoException("Error paste data in table", e);
         }
         CategoryTransactionRepository categoryTransactionRepository = new CategoryTransactionRepository();
-        return new CategoryTransactionModel(categoryTransactionRepository.findById(idCategory));
+        return null;//new CategoryTransactionModel(categoryTransactionRepository.findById(idCategory));
     }
 }

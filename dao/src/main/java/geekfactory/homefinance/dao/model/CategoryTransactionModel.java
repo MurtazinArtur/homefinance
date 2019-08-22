@@ -12,6 +12,4 @@ public class CategoryTransactionModel {
     private String name;
     private CategoryTransactionModel parentCategory;
 
-    public CategoryTransactionModel(Optional<CategoryTransactionModel> byId) {
-    }
 }

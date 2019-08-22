@@ -30,8 +30,8 @@ public class CategoryTransactionRepository implements Repository<CategoryTransac
                     model.setId(resultSet.getLong(1));
                     model.setName(resultSet.getString(2));
                     if (resultSet.getString(3) != null) {
-                        Optional<CategoryTransactionModel> parentCategory = findById(resultSet.getLong(3));
-                        model.setParentCategory(parentCategory.get());
+                        CategoryTransactionModel parentCategory = findById(resultSet.getLong(3)).get();
+                        model.setParentCategory(parentCategory);
                     }else {
                        model.setParentCategory(null);
                     }

@@ -77,6 +77,7 @@ public class AccountRepositoryTest  {
     @Test
     @DisplayName("running update test")
     void testUpdate(){
+        accountRepository.save(model);
         Assertions.assertNotNull(model);
         AccountModel accountUpdate = accountRepository.findById((long) 1).orElse(null);
         accountUpdate.setName("testUpdate");

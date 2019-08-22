@@ -25,19 +25,14 @@ public class CategoryTransactionRepositoryTest {
     private static CategoryTransactionRepository categoryTransactionRepository = new CategoryTransactionRepository();
     private static CategoryTransactionModel model = new CategoryTransactionModel();
     private static CategoryTransactionModel model1 = new CategoryTransactionModel();
-    private static CategoryTransactionModel model2 = new CategoryTransactionModel();
 
     @BeforeAll
     static void beforeAll() {
         model.setName("test");
-        model.setParentCategory(categoryTransactionRepository.findById((long) 1).orElse(null));
+        model.setParentCategory(null);
 
         model1.setName("test1");
         model1.setParentCategory(categoryTransactionRepository.findById((long) 1).orElse(null));
-
-        model2.setName("test2");
-        model2.setParentCategory(categoryTransactionRepository.findById((long) 1).orElse(null));
-
     }
 
     @BeforeEach
@@ -79,16 +74,14 @@ public class CategoryTransactionRepositoryTest {
     void testFindAll(){
         categoryTransactionRepository.save(model);
         categoryTransactionRepository.save(model1);
-        categoryTransactionRepository.save(model2);
         Collection<CategoryTransactionModel> expectedList = (categoryTransactionRepository.findAll());
         Collection<CategoryTransactionModel> actualList = new HashSet<>();
         actualList.add(model);
         actualList.add(model1);
-        actualList.add(model2);
         assertEquals(expectedList, actualList);
 
         int expected = expectedList.size();
-        int actual = 3;
+        int actual = 2;
         assertEquals(expected, actual);
         assertNotNull(expectedList);
     }
@@ -98,7 +91,6 @@ public class CategoryTransactionRepositoryTest {
     void testRemove(){
         categoryTransactionRepository.save(model);
         categoryTransactionRepository.save(model1);
-        categoryTransactionRepository.save(model2);
         CategoryTransactionModel categoryTransactionModel = categoryTransactionRepository.findById((long) 1).orElse(null);
         categoryTransactionRepository.remove(categoryTransactionModel.getId());
         CategoryTransactionModel removedModel = categoryTransactionRepository.findById((long) 1).orElse(null);
