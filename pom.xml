@@ -8,6 +8,7 @@
     <modules>
         <module>service</module>
         <module>dao</module>
+        <module>web</module>
     </modules>
 
     <properties>
@@ -17,7 +18,8 @@
         <compiler>3.5.1</compiler>
         <junitplatform>1.1.0</junitplatform>
         <surefire-plugin>2.22.1</surefire-plugin>
-        <mockito>2.24.0</mockito>
+        <servlet>3.1.0</servlet>
+        <mockito>3.0.0</mockito>
         <source>1.8</source>
         <h2>1.4.199</h2>
     </properties>
@@ -34,6 +36,11 @@
                 <groupId>myaql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${servlet}</version>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
@@ -62,12 +69,6 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
-                <version>${mockito}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
                 <version>${mockito}</version>
                 <scope>test</scope>
             </dependency>

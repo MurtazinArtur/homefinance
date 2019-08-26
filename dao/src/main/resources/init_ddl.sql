@@ -10,7 +10,6 @@ CREATE TABLE account_tbl
 (
     id           INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     name         VARCHAR(50)                    NOT NULL,
-    amount       DECIMAL(15, 2)                 NOT NULL,
     currency_id  INT                            NOT NULL,
     account_type VARCHAR(50)                    NOT NULL,
 
