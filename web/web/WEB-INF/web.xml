@@ -14,7 +14,7 @@
     <servlet>
         <servlet-name>transactionServlet</servlet-name>
         <servlet-class>
-            geekfactory.homefinance.web.servlet.transactionServlet
+            geekfactory.homefinance.web.servlet.TransactionServlet
         </servlet-class>
     </servlet>
     <servlet>

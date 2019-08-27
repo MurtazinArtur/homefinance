@@ -2,7 +2,6 @@ package geekfactory.homefinance.dao.repository;
 
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
 import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
-import geekfactory.homefinance.dao.model.CurrencyModel;
 import geekfactory.homefinance.dao.model.TransactionModel;
 
 import java.sql.*;
