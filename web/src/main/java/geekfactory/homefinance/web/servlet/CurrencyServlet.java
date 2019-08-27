@@ -17,7 +17,8 @@ public class CurrencyServlet extends HttpServlet {
         CurrencyService currencyService = new CurrencyService();
         Collection<CurrencyModel> models = currencyService.findAll();
         for (CurrencyModel model : models) {
-            resp.getOutputStream().write(("<h1>" + model + "<br>" + "</h1>").getBytes());
+            resp.getOutputStream().write(("<h1>" + "Виды валют" + "<br>" + "</h1>").getBytes());
+            resp.getOutputStream().write(("<body>" + "<b1>" + model + "<br>" + "</b1>" + "</body>").getBytes());
         }
     }
 }

@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
 public class MockTest {
 
     @Test
-    void testMOck(){
+   public void testMOck(){
         System.out.println("Mock Test is running");
     }
 }
