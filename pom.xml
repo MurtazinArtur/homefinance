@@ -13,7 +13,7 @@
 
     <properties>
         <lombok>1.16.20</lombok>
-        <mysql>8.0.11</mysql>
+        <mysql>8.0.17</mysql>
         <junitjupiter>5.5.1</junitjupiter>
         <compiler>3.5.1</compiler>
         <junitplatform>1.1.0</junitplatform>
@@ -69,6 +69,12 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
+                <version>${mockito}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
                 <version>${mockito}</version>
                 <scope>test</scope>
             </dependency>

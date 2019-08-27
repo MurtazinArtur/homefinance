@@ -4,6 +4,7 @@ import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,7 +21,19 @@ public class ConnectionSupplier {
                 String url = properties.getProperty("dburl");
                 String user = properties.getProperty("dbuser");
                 String password = properties.getProperty("dbpassword");
-
+                try {
+                    Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
                 connection = DriverManager.getConnection(url, user, password);
             } catch (IOException e) {
                 e.printStackTrace();
