@@ -7,7 +7,15 @@ import java.util.Collection;
 import java.util.Optional;
 
 public class CurrencyService implements Service<CurrencyModel> {
-    CurrencyRepository currencyRepository = new CurrencyRepository();
+    private CurrencyRepository currencyRepository = new CurrencyRepository();
+
+    public CurrencyRepository getCurrencyRepository() {
+        return currencyRepository;
+    }
+
+    public void setCurrencyRepository(CurrencyRepository currencyRepository) {
+        this.currencyRepository = currencyRepository;
+    }
 
     @Override
     public Optional<CurrencyModel> findById(long id) {

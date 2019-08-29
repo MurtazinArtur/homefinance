@@ -7,7 +7,15 @@ import java.util.Collection;
 import java.util.Optional;
 
 public class BankService implements Service<BankModel> {
-    BankRepository bankRepository = new BankRepository();
+    private BankRepository bankRepository = new BankRepository();
+
+    public void setBankRepository(BankRepository bankRepository) {
+        this.bankRepository = bankRepository;
+    }
+
+    public BankRepository getBankRepository() {
+        return bankRepository;
+    }
 
     @Override
     public Optional<BankModel> findById(long id) {

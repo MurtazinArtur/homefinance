@@ -1,7 +1,6 @@
 package geekfactory.homefinance.dao.repository;
 
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,7 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CategoryTransactionRepositoryTest {
+class CategoryTransactionRepositoryTest {
     private static final String CREATE_TBL = "CREATE TABLE category_tbl\n" +
             "(\n" +
             "    id   INT AUTO_INCREMENT PRIMARY KEY NOT NULL,\n" +
@@ -21,29 +20,17 @@ public class CategoryTransactionRepositoryTest {
             "    parent_category INT\n" +
             ")";
     private static final String REMOVE_TABLE = "DROP TABLE category_tbl";
-    private static ConnectionSupplier connectionSupplierTest = new ConnectionSupplier();
-    private static CategoryTransactionRepository categoryTransactionRepository = new CategoryTransactionRepository();
-    private static CategoryTransactionModel model = new CategoryTransactionModel();
-    private static CategoryTransactionModel model1 = new CategoryTransactionModel();
-
-    @BeforeAll
-    static void beforeAll() {
-        model.setName("test");
-        model.setParentCategory(null);
-
-        model1.setName("test1");
-        model1.setParentCategory(categoryTransactionRepository.findById((long) 1).orElse(null));
-    }
+    private ConnectionSupplier connectionSupplierTest = new ConnectionSupplier();
+    private CategoryTransactionRepository categoryTransactionRepository = new CategoryTransactionRepository();
+    private CategoryTransactionModel model = createModel();
+    private CategoryTransactionModel model2 = createModel();
+    private CategoryTransactionModel model3 = createModel();
 
     @BeforeEach
-    void beforeEach() {
+    void beforeEach() throws SQLException {
         Connection connection = connectionSupplierTest.getConnection();
-        try {
             connection.prepareStatement(REMOVE_TABLE).executeUpdate();
             connection.prepareStatement(CREATE_TBL).executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
@@ -55,45 +42,63 @@ public class CategoryTransactionRepositoryTest {
     @DisplayName("running save and findById test")
     void testSaveAndFind(){
         categoryTransactionRepository.save(model);
-        assertEquals(model, categoryTransactionRepository.findById((long) 1).get());
+
+        assertEquals(model, categoryTransactionRepository.findById(1L).get());
     }
 
     @Test
     @DisplayName("running update test")
     void testUpdate(){
         categoryTransactionRepository.save(model);
-        assertNotNull(model);
-        CategoryTransactionModel categoryTransactionUpdate = categoryTransactionRepository.findById((long) 1).orElse(null);
+
+        CategoryTransactionModel categoryTransactionUpdate = categoryTransactionRepository.findById(1L).orElse(null);
         categoryTransactionUpdate.setName("testUpdate");
-        categoryTransactionRepository.update(categoryTransactionUpdate, (long) 1);
-        assertEquals(categoryTransactionUpdate, categoryTransactionRepository.findById((long) 1).get());
+        categoryTransactionRepository.update(categoryTransactionUpdate, 1L);
+
+        assertEquals(categoryTransactionUpdate, categoryTransactionRepository.findById(1L).get());
     }
 
     @Test
     @DisplayName("running findAll test")
     void testFindAll(){
         categoryTransactionRepository.save(model);
-        categoryTransactionRepository.save(model1);
+        categoryTransactionRepository.save(model2);
+        categoryTransactionRepository.save(model3);
         Collection<CategoryTransactionModel> expectedList = (categoryTransactionRepository.findAll());
+
         Collection<CategoryTransactionModel> actualList = new HashSet<>();
         actualList.add(model);
-        actualList.add(model1);
+        actualList.add(model2);
+        actualList.add(model3);
+
         assertEquals(expectedList, actualList);
 
         int expected = expectedList.size();
-        int actual = 2;
+        int actual = 3;
+
         assertEquals(expected, actual);
-        assertNotNull(expectedList);
     }
 
     @Test
     @DisplayName("running remove test")
     void testRemove(){
-        categoryTransactionRepository.save(model);
-        categoryTransactionRepository.save(model1);
-        CategoryTransactionModel categoryTransactionModel = categoryTransactionRepository.findById((long) 1).orElse(null);
+
+        for (int i = 0; i < 3; i++) {
+            categoryTransactionRepository.save(model);
+        }
+
+        CategoryTransactionModel categoryTransactionModel = categoryTransactionRepository.findById(1L).orElse(null);
         categoryTransactionRepository.remove(categoryTransactionModel.getId());
-        CategoryTransactionModel removedModel = categoryTransactionRepository.findById((long) 1).orElse(null);
+        CategoryTransactionModel removedModel = categoryTransactionRepository.findById(1L).orElse(null);
+
         assertNull(removedModel);
+    }
+
+    private CategoryTransactionModel createModel() {
+        CategoryTransactionModel model = new CategoryTransactionModel();
+        model.setName("test1");
+        model.setParentCategory(null);
+
+        return model;
     }
 }

@@ -7,7 +7,15 @@ import java.util.Collection;
 import java.util.Optional;
 
 public class AccountService implements Service<AccountModel> {
-    AccountRepository accountRepository = new AccountRepository();
+    private AccountRepository accountRepository = new AccountRepository();
+
+    public AccountRepository getAccountRepository() {
+        return accountRepository;
+    }
+
+    public void setAccountRepository(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     @Override
     public Optional<AccountModel> findById(long id) {

@@ -7,7 +7,15 @@ import java.util.Collection;
 import java.util.Optional;
 
 public class CategoryService implements Service<CategoryTransactionModel> {
-    CategoryTransactionRepository categoryTransactionRepository = new CategoryTransactionRepository();
+    private CategoryTransactionRepository categoryTransactionRepository = new CategoryTransactionRepository();
+
+    public CategoryTransactionRepository getCategoryTransactionRepository() {
+        return categoryTransactionRepository;
+    }
+
+    public void setCategoryTransactionRepository(CategoryTransactionRepository categoryTransactionRepository) {
+        this.categoryTransactionRepository = categoryTransactionRepository;
+    }
 
     @Override
     public Optional<CategoryTransactionModel> findById(long id) {

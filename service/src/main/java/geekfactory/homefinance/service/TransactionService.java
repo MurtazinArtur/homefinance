@@ -7,7 +7,15 @@ import java.util.Collection;
 import java.util.Optional;
 
 public class TransactionService implements Service<TransactionModel> {
-    TransactionRepository transactionRepository = new TransactionRepository();
+    private TransactionRepository transactionRepository = new TransactionRepository();
+
+    public TransactionRepository getTransactionRepository() {
+        return transactionRepository;
+    }
+
+    public void setTransactionRepository(TransactionRepository transactionRepository) {
+        this.transactionRepository = transactionRepository;
+    }
 
     @Override
     public Optional<TransactionModel> findById(long id) {

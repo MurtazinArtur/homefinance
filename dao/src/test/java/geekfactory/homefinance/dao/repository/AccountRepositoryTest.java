@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AccountRepositoryTest  {
+class AccountRepositoryTest {
 
     private static final String CREATE_TBL = "CREATE TABLE account_tbl\n" +
             "(\n" +
@@ -25,41 +25,17 @@ public class AccountRepositoryTest  {
             "    CONSTRAINT currency_fk FOREIGN KEY (currency_id) REFERENCES currency_tbl (id)\n" +
             ")";
     private static final String REMOVE_TABLE = "DROP TABLE account_tbl";
-    private static ConnectionSupplier connectionSupplierTest = new ConnectionSupplier();
+    private ConnectionSupplier connectionSupplierTest = new ConnectionSupplier();
     private AccountRepository accountRepository = new AccountRepository();
-    private static CurrencyRepository currencyRepository = new CurrencyRepository();
-    private static AccountModel model = new AccountModel();
-    private static AccountModel model1 = new AccountModel();
-    private static AccountModel model2 = new AccountModel();
-
-    @BeforeAll
-   static void beforeAll() {
-        model.setName("test");
-        model.setAccountType(AccountType.CASH);
-        model.setAmount(BigDecimal.valueOf(1.00));
-        model.setCurrencyModel(currencyRepository.findById((long) 1).orElse(null));
-
-        model1.setName("test1");
-        model1.setAccountType(AccountType.CASH);
-        model1.setAmount(BigDecimal.valueOf(1.00));
-        model1.setCurrencyModel(currencyRepository.findById((long) 1).orElse(null));
-
-        model2.setName("test2");
-        model2.setAccountType(AccountType.CASH);
-        model2.setAmount(BigDecimal.valueOf(1.00));
-        model2.setCurrencyModel(currencyRepository.findById((long) 1).orElse(null));
-
-    }
-
+    private CurrencyRepository currencyRepository = new CurrencyRepository();
+    private AccountModel model = createModel();
+    private AccountModel model2 = createModel();
+    private AccountModel model3 = createModel();
     @BeforeEach
-    void beforeEach(){
+    void beforeEach() throws SQLException {
         Connection connection = connectionSupplierTest.getConnection();
-        try {
             connection.prepareStatement(REMOVE_TABLE).executeUpdate();
             connection.prepareStatement(CREATE_TBL).executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
@@ -71,48 +47,64 @@ public class AccountRepositoryTest  {
     @DisplayName("running save and findById test")
     void testSaveAndFind(){
         accountRepository.save(model);
-        assertEquals(model, accountRepository.findById((long) 1).get());
+
+        assertEquals(model, accountRepository.findById(1L).get());
     }
 
     @Test
     @DisplayName("running update test")
     void testUpdate(){
         accountRepository.save(model);
-        Assertions.assertNotNull(model);
-        AccountModel accountUpdate = accountRepository.findById((long) 1).orElse(null);
+
+        AccountModel accountUpdate = accountRepository.findById(1L).orElse(null);
         accountUpdate.setName("testUpdate");
-        accountRepository.update(accountUpdate, (long) 1);
-        assertEquals(accountUpdate, accountRepository.findById((long) 1).get());
+        accountRepository.update(accountUpdate, 1L);
+
+        assertEquals(accountUpdate, accountRepository.findById(1L).get());
     }
 
     @Test
     @DisplayName("running findAll test")
     void testFindAll(){
         accountRepository.save(model);
-        accountRepository.save(model1);
         accountRepository.save(model2);
+        accountRepository.save(model3);
         List<AccountModel> expectedList = (List<AccountModel>) accountRepository.findAll();
+
         List<AccountModel> actualList = new ArrayList<>();
         actualList.add(model);
-        actualList.add(model1);
         actualList.add(model2);
+        actualList.add(model3);
+
         assertEquals(expectedList, actualList);
 
         int expected = expectedList.size();
         int actual = 3;
+
         assertEquals(expected, actual);
-        assertNotNull(expectedList);
     }
 
     @Test
     @DisplayName("running remove test")
     void testRemove(){
-        accountRepository.save(model);
-        accountRepository.save(model1);
-        accountRepository.save(model2);
-        AccountModel accountModel = accountRepository.findById((long) 1).orElse(null);
+        for (int i = 0; i < 3; i++) {
+            accountRepository.save(model);
+        }
+
+        AccountModel accountModel = accountRepository.findById(1L).orElse(null);
         accountRepository.remove(accountModel.getId());
-        AccountModel removedModel = accountRepository.findById((long) 1).orElse(null);
+        AccountModel removedModel = accountRepository.findById(1L).orElse(null);
+
         assertNull(removedModel);
+    }
+
+    private AccountModel createModel() {
+        AccountModel model = new AccountModel();
+        model.setName("test");
+        model.setAccountType(AccountType.CASH);
+        model.setAmount(BigDecimal.valueOf(1.00));
+        model.setCurrencyModel(currencyRepository.findById(1L).orElse(null));
+
+        return model;
     }
 }

@@ -1,15 +1,12 @@
 package geekfactory.homefinance.service;
 
 import geekfactory.homefinance.dao.model.TransactionModel;
-import geekfactory.homefinance.dao.repository.*;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import geekfactory.homefinance.dao.repository.AccountRepository;
+import geekfactory.homefinance.dao.repository.BankRepository;
+import geekfactory.homefinance.dao.repository.CurrencyRepository;
+import geekfactory.homefinance.dao.repository.TransactionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -18,69 +15,40 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TransactionServiceTest extends Mockito {
-    private static ConnectionSupplier connectionSupplier = new ConnectionSupplier();
-    @Spy
-    TransactionService spy;
-    private TransactionModel transactionModel = new TransactionModel();
-    @Mock
-    private TransactionRepository transactionRepositoryMock;
-
-    @InjectMocks
-    private TransactionService transactionService;
-
-    @BeforeAll
-    static void beforeAll() {
-        connectionSupplier.getConnection();
-    }
-
-    @BeforeEach
-    void beforeEach() {
-        BankRepository bankRepository = new BankRepository();
-        AccountRepository accountRepository = new AccountRepository();
-        CurrencyRepository currencyRepository = new CurrencyRepository();
-
-        transactionModel.setId((long) 5);
-        transactionModel.setAmount(BigDecimal.valueOf(3.15));
-        transactionModel.setDate(LocalDate.now());
-        transactionModel.setSource("TestSource");
-        transactionModel.setBank(bankRepository.findById((long) 1).get());
-        transactionModel.setAccount(accountRepository.findById((long) 1).get());
-        transactionModel.setCurrency(currencyRepository.findById((long) 1).get());
-    }
+public class TransactionServiceTest {
 
     @Test
     void testAccountService() {
-        when(transactionService.findById(anyLong())).thenReturn(Optional.ofNullable(transactionModel));
+        TransactionService transactionService = new TransactionService();
+        transactionService.setTransactionRepository(mock(TransactionRepository.class));
+
+        when(transactionService.findById(anyLong())).thenReturn(Optional.ofNullable(createModel()));
+
         assertNotNull(transactionService);
-        assertEquals(transactionModel, transactionService.findById((long) 5).get());
-        // assertNotEquals(accountModel, accountService.findById((long) 6).get());
+        assertNotNull(transactionService.getTransactionRepository());
+        assertEquals(createModel(), transactionService.findById(5L).get());
 
-        assertNotNull(transactionRepositoryMock);
-        verify(transactionRepositoryMock, times(1)).findById(anyLong());
-        verify(transactionRepositoryMock, never()).findAll();
-        verify(transactionRepositoryMock, never()).save(transactionModel);
-        verify(transactionRepositoryMock, never()).remove(transactionModel.getId());
-        // verify(accountRepositoryMock, never()).update(accountModel, anyLong());
+        verify(transactionService.getTransactionRepository(), times(1)).findById(anyLong());
+        verify(transactionService.getTransactionRepository(), never()).findAll();
+        verify(transactionService.getTransactionRepository(), never()).save(createModel());
+        verify(transactionService.getTransactionRepository(), never()).remove(createModel().getId());
+        verify(transactionService.getTransactionRepository(), never()).update(eq(createModel()), anyLong());
     }
 
-    @Test
-    void testServiceMock() {
-        when(transactionRepositoryMock.findById(anyLong())).thenReturn(Optional.ofNullable(transactionModel));
-        assertNotNull(transactionRepositoryMock);
-        assertEquals(transactionModel, transactionRepositoryMock.findById((long) 5).get());
-        // assertNotEquals(accountModel, accountRepositoryMock.findById((long) 5).get());
+    private TransactionModel createModel() {
+        TransactionModel transactionModel = new TransactionModel();
+        transactionModel.setId(5L);
+        transactionModel.setAmount(BigDecimal.valueOf(3.15));
+        transactionModel.setDate(LocalDate.now());
+        transactionModel.setSource("TestSource");
+        transactionModel.setBank(new BankRepository().findById(1L).get());
+        transactionModel.setAccount(new AccountRepository().findById(1L).get());
+        transactionModel.setCurrency(new CurrencyRepository().findById(1L).get());
 
-        verify(transactionRepositoryMock, times(1)).findById(anyLong());
+        return transactionModel;
     }
-
-    @Test
-    void testWithSpy() {
-        when(spy.findById(anyLong())).thenReturn(Optional.ofNullable(transactionModel));
-
-        assertEquals(transactionModel, spy.findById((long) 5).get());
-    }
-
 }
