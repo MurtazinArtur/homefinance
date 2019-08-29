@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 public class TransactionServiceTest {
 
     @Test
-    void testAccountService() {
+    public void testAccountService() {
         TransactionService transactionService = new TransactionService();
         transactionService.setTransactionRepository(mock(TransactionRepository.class));
 

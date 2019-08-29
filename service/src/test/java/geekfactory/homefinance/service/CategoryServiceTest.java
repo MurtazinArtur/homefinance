@@ -34,11 +34,11 @@ public class CategoryServiceTest {
     }
 
     private CategoryTransactionModel createModel() {
-        CategoryTransactionModel model = new CategoryTransactionModel();
-        model.setId(2L);
-        model.setName("testModel");
-        model.setParentCategory(new CategoryTransactionRepository().findById(1L).orElse(null));
+        CategoryTransactionModel categoryTransactionModel = new CategoryTransactionModel();
+        categoryTransactionModel.setId(2L);
+        categoryTransactionModel.setName("testModel");
+        categoryTransactionModel.setParentCategory(new CategoryTransactionRepository().findById(1L).orElse(null));
 
-        return model;
+        return categoryTransactionModel;
     }
 }

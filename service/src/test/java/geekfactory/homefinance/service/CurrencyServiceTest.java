@@ -17,8 +17,8 @@ import static org.mockito.Mockito.*;
 public class CurrencyServiceTest {
 
     @Test
-    void testAccountService() {
-        CurrencyService currencyService = mock(CurrencyService.class);
+    public void testAccountService() {
+        CurrencyService currencyService = new CurrencyService();
         currencyService.setCurrencyRepository(mock(CurrencyRepository.class));
 
         when(currencyService.findById(anyLong())).thenReturn(Optional.ofNullable(createModel()));
