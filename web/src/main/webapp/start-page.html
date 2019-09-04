@@ -14,28 +14,26 @@
             background: #FF6347;
         }
     </style>
+    <link rel="stylesheet" type="text/css" href="http://localhost:8080/web-1.0-SNAPSHOT/resources/css/menu.css">
     <meta charset="UTF-8">
     <title>HomeFinance</title>
 </head>
 <body>
-<b1>HomeFinance<br><br></b1>
+<input type="checkbox" id="nav-toggle" hidden>
+<nav class="nav">
+    <label for="nav-toggle" class="nav-toggle" onclick=""></label>
+    <h2 class="logo">
+        <a href="//dbmast.ru/">DBmast.ru</a>
+    </h2>
+    <ul>
+        <li><a href="http://localhost:8080/web-1.0-SNAPSHOT/currencies">Виды Валют</a>
+        <li><a href="http://localhost:8080/web-1.0-SNAPSHOT/accounts">Счета</a>
+        <li><a href="http://localhost:8080/web-1.0-SNAPSHOT/banks">Банки</a>
+        <li><a href="http://localhost:8080/web-1.0-SNAPSHOT/categories">Категории Платежей</a>
+        <li><a href="http://localhost:8080/web-1.0-SNAPSHOT/transaction">Транзакции</a>
+    </ul>
+</nav>
+<div class="mask-content"></div>
 
-<a href="http://localhost:8080/web-1.0-SNAPSHOT/currencies">
-    <button class="knopka">Виды Валют</button>
-</a>
-<br>
-<a href="http://localhost:8080/web-1.0-SNAPSHOT/accounts">
-    <button class="knopka">Счета</button>
-</a>
-<br>
-<a href="http://localhost:8080/web-1.0-SNAPSHOT/banks">
-    <button class="knopka">Банки</button>
-</a>
-<br>
-<a href="http://localhost:8080/web-1.0-SNAPSHOT/categories">
-    <button class="knopka">Категории Платежей</button>
-</a>
-<br>
-<a href="http://localhost:8080/web-1.0-SNAPSHOT/transaction"><button class="knopka">Транзакции</button></a>
 </body>
 </html>

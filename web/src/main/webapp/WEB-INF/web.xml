@@ -31,6 +31,10 @@
         </servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>CurrencyList</servlet-name>
+        <jsp-file>/jsp/jstl/currency_list.jsp</jsp-file>
+    </servlet>
+    <servlet>
         <servlet-name>servletConfigServlet</servlet-name>
         <servlet-class>
             geekfactory.homefinance.web.servlet.ServletConfigServlet
@@ -64,11 +68,15 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>currencyServlet</servlet-name>
-        <url-pattern>/currencies</url-pattern>
+       <url-pattern>/currencies</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>transactionServlet</servlet-name>
         <url-pattern>/transaction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CurrencyList</servlet-name>
+        <url-pattern>/currency_list</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>servletConfigServlet</servlet-name>

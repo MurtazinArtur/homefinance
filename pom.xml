@@ -19,6 +19,7 @@
         <junitplatform>1.1.0</junitplatform>
         <surefire-plugin>2.22.1</surefire-plugin>
         <servlet>3.1.0</servlet>
+        <jstl>1.2</jstl>
         <mockito>3.0.0</mockito>
         <source>1.8</source>
         <h2>1.4.199</h2>
@@ -41,6 +42,11 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>${jstl}</version>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>

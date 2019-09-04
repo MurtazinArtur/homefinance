@@ -9,16 +9,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Optional;
 
 public class CurrencyServlet extends HttpServlet {
-
+    private CurrencyService currencyService = new CurrencyService();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CurrencyService currencyService = new CurrencyService();
         Collection<CurrencyModel> models = currencyService.findAll();
-        for (CurrencyModel model : models) {
-            resp.getOutputStream().write(("<h1>" + "Виды валют" + "<br>" + "</h1>").getBytes());
-            resp.getOutputStream().write(("<body>" + "<b1>" + model + "<br>" + "</b1>" + "</body>").getBytes());
-        }
+        req.setAttribute("currencies", models);
+        req.getRequestDispatcher("jsp/jstl/currency_list.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
     }
 }

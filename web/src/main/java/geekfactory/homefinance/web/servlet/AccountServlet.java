@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Optional;
 
 public class AccountServlet extends HttpServlet {
 
@@ -16,8 +17,5 @@ public class AccountServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         AccountService accountService = new AccountService();
         Collection<AccountModel> models = accountService.findAll();
-        for (AccountModel model : models) {
-            resp.getOutputStream().write(("<h1>" + model + "<br>" + "</h1>").getBytes());
-        }
     }
 }
