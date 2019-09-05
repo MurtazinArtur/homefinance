@@ -1,3 +1,5 @@
+<%@ page import="geekfactory.homefinance.service.CurrencyService" %>
+<%@ page import="geekfactory.homefinance.dao.model.CurrencyModel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
@@ -17,7 +19,7 @@
         <a href="//dbmast.ru/">DBmast.ru</a>
     </h2>
 <ul>
-    <li><a href="<c:url value="//jsp/jstl/currency_list.jsp" />">Виды Валют</a>
+    <li><a href="<c:url value="/currency_list" />">Виды Валют</a>
     <li><a href="<c:url value="/accounts" />">Счета</a>
     <li><a href="<c:url value="/banks" />">Банки</a>
     <li><a href="<c:url value="/categories" />">Категории Платежей</a>
@@ -27,7 +29,7 @@
 <div class="mask-content"></div>
 
 <a href="#x" class="overlay" id="form1"></a>
-<form class="modal" action="<c:url value="/jsp/jstl/currency_list.jsp" />" method="post">
+<form class="modal" action="<c:url value="/currency_list" />" method="post">
     <input name="currency_name" type="text" onkeyup="var yratext=/['0-9',':']/;
     if(yratext.test(this.value)) this.value=''" placeholder="Введите наименование валюты:"
            class="name" required/>
@@ -39,7 +41,7 @@
            class="name" required/>
     <input name="submit" class="btn" type="submit" value="Отправить"/>
 </form>
-<h1>Список Валют</h1>
+<h1><p align="center">Список Валют</p></h1>
 <table class="table table-hover">
     <thead>
     <tr>
@@ -58,7 +60,8 @@
     </c:forEach>
     </tbody>
 </table>
-<div style="float:left; width:150px; margin-right: 50px; margin-left:150px">
+
+        <div style="float:left; width:150px; margin-right: 50px; margin-left:150px">
     <a href="#form1" class="bott">Создать</a></div>
 <div style="float:left; width:150px; margin-right: 50px;">
     <a href="#" class="bott">Удалить</a></div>

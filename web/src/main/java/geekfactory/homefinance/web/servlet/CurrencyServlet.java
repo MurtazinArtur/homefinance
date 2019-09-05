@@ -2,6 +2,9 @@ package geekfactory.homefinance.web.servlet;
 
 import geekfactory.homefinance.dao.model.CurrencyModel;
 import geekfactory.homefinance.service.CurrencyService;
+import geekfactory.homefinance.web.servlet.thymeleaf.config.TemplateEngineUtil;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +19,9 @@ public class CurrencyServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Collection<CurrencyModel> models = currencyService.findAll();
+        //TemplateEngine templateEngine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+        //WebContext contex = new WebContext(req, resp, req.getServletContext());
+        //templateEngine.process("menu", contex, resp.getWriter());
         req.setAttribute("currencies", models);
         req.getRequestDispatcher("jsp/jstl/currency_list.jsp").forward(req, resp);
     }
