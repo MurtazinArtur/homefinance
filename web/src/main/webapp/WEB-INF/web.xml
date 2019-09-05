@@ -13,16 +13,8 @@
         <servlet-class>geekfactory.homefinance.web.servlet.AccountServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>bankServlet</servlet-name>
-        <servlet-class>geekfactory.homefinance.web.servlet.BankServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>categoryServlet</servlet-name>
         <servlet-class>geekfactory.homefinance.web.servlet.CategoryServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>currencyServlet</servlet-name>
-        <servlet-class>geekfactory.homefinance.web.servlet.CurrencyServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>transactionServlet</servlet-name>
@@ -33,6 +25,10 @@
     <servlet>
         <servlet-name>CurrencyList</servlet-name>
         <jsp-file>/jsp/jstl/currency_list.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>BankList</servlet-name>
+        <jsp-file>/jsp/jstl/bank_list.jsp</jsp-file>
     </servlet>
     <servlet>
         <servlet-name>servletConfigServlet</servlet-name>
@@ -59,16 +55,12 @@
         <url-pattern>/accounts</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>bankServlet</servlet-name>
-        <url-pattern>/banks</url-pattern>
+        <servlet-name>BankList</servlet-name>
+        <url-pattern>/bank_list</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>categoryServlet</servlet-name>
         <url-pattern>/categories</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>currencyServlet</servlet-name>
-       <url-pattern>/currencies</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>transactionServlet</servlet-name>

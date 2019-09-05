@@ -16,8 +16,22 @@ public class BankServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         BankService bankService = new BankService();
         Collection<BankModel> models = bankService.findAll();
-        for (BankModel model : models) {
-            resp.getOutputStream().write(("<h1>" + model + "<br>" + "</h1>").getBytes());
-        }
+        req.setAttribute("banks", models);
+        req.getRequestDispatcher("jsp/jstl/bank_list.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
     }
 }
