@@ -16,8 +16,22 @@ public class TransactionServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         TransactionService transactionService = new TransactionService();
         Collection<TransactionModel> models = transactionService.findAll();
-        for (TransactionModel model : models) {
-            resp.getOutputStream().write(("<h1>" + model + "<br>" + "</h1>").getBytes());
-        }
+        req.setAttribute("transactions", models);
+        req.getRequestDispatcher("/jsp/jstl/transaction_list.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
     }
 }

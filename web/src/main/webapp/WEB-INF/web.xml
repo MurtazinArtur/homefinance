@@ -17,10 +17,8 @@
         <jsp-file>/jsp/jstl/category_list.jsp</jsp-file>
     </servlet>
     <servlet>
-        <servlet-name>transactionServlet</servlet-name>
-        <servlet-class>
-            geekfactory.homefinance.web.servlet.TransactionServlet
-        </servlet-class>
+        <servlet-name>transactionList</servlet-name>
+        <jsp-file>/jsp/jstl/transaction_list.jsp</jsp-file>
     </servlet>
     <servlet>
         <servlet-name>currencyList</servlet-name>
@@ -55,8 +53,8 @@
         <url-pattern>/account_list</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>transactionServlet</servlet-name>
-        <url-pattern>/transaction</url-pattern>
+        <servlet-name>transactionList</servlet-name>
+        <url-pattern>/transaction_list</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>bankList</servlet-name>

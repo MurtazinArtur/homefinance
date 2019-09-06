@@ -28,37 +28,47 @@
 
 <a href="#x" class="overlay" id="form1"></a>
 <form class="modal" action="<c:url value="/bank_list" />" method="post">
-    <input name="account_name" type="text" onkeyup="var yratext=/[,':']/;
-    if(yratext.test(this.value)) this.value=''" placeholder="Введите наименование счета:"
+    <input name="amount" type="text" onkeyup="var yratext=/[,':']/;
+    if(yratext.test(this.value)) this.value=''" placeholder="Введите сумму операции:"
            class="name" required/>
-    <input name="amount" type="text" onkeyup="var yratext=/['0-9',':']/;
-    if(yratext.test(this.value)) this.value=''" placeholder="Введите остаток на счете:"
+    <input name="date" type="text" onkeyup="var yratext=/['0-9',':']/;
+    if(yratext.test(this.value)) this.value=''" placeholder="Введите дату операции:"
+           class="name" required/>
+    <input name="source" type="text" onkeyup="var yratext=/['0-9',':']/;
+    if(yratext.test(this.value)) this.value=''" placeholder="Введите наименование банка:"
+           class="name" required/>
+    <input name="bank_id" type="text" onkeyup="var yratext=/['0-9',':']/;
+    if(yratext.test(this.value)) this.value=''" placeholder="Введите наименование счета :"
+           class="name" required/>
+    <input name="account_id" type="text" onkeyup="var yratext=/['0-9',':']/;
+    if(yratext.test(this.value)) this.value=''" placeholder="Введите валюту операции :"
            class="name" required/>
     <input name="currency_id" type="text" onkeyup="var yratext=/['0-9',':']/;
-    if(yratext.test(this.value)) this.value=''" placeholder="Введите наименование валюты счета:"
-           class="name" required/>
-    <input name="account_type" type="text" onkeyup="var yratext=/['0-9',':']/;
-    if(yratext.test(this.value)) this.value=''" placeholder="Введите тип счета:"
+    if(yratext.test(this.value)) this.value=''" placeholder="Введите валюту операции :"
            class="name" required/>
     <input name="submit" class="btn" type="submit" value="Отправить"/>
 </form>
-<h1><p align="center">Список Счетов</p></h1>
+<h1><p align="center">Список Операций</p></h1>
 <table class="table table-hover">
     <thead>
     <tr>
-        <th scope="col">Наименование</th>
-        <th scope="col">Остаток на счёте</th>
-        <th scope="col">Валюта счета</th>
-        <th scope="col">Тип счета</th>
+        <th scope="col">Сумма</th>
+        <th scope="col">Дата</th>
+        <th scope="col">Источник транзакции</th>
+        <th scope="col">Наименование банка</th>
+        <th scope="col">Наименование счета</th>
+        <th scope="col">Наименование валюты</th>
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="accounts" items="${accounts}">
+    <c:forEach var="transactions" items="${transactions}">
         <tr>
-            <td>${accounts.name}</td>
-            <td>${accounts.amount}</td>
-            <td>${accounts.currency_id}</td>
-            <td>${accounts.account_type}</td>
+            <td>${transactions.amount}</td>
+            <td>${transactions.date}</td>
+            <td>${transactions.source}</td>
+            <td>${transactions.bank_id}</td>
+            <td>${transactions.account_id}</td>
+            <td>${transactions.currency_id}</td>
         </tr>
     </c:forEach>
     </tbody>
