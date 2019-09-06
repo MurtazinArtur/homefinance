@@ -9,8 +9,8 @@
         <param-value>c_value</param-value>
     </context-param>
     <servlet>
-        <servlet-name>accountServlet</servlet-name>
-        <servlet-class>geekfactory.homefinance.web.servlet.AccountServlet</servlet-class>
+        <servlet-name>accountList</servlet-name>
+        <jsp-file>/jsp/jstl/account_list.jsp</jsp-file>
     </servlet>
     <servlet>
         <servlet-name>categoryList</servlet-name>
@@ -51,8 +51,8 @@
         </servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>accountServlet</servlet-name>
-        <url-pattern>/accounts</url-pattern>
+        <servlet-name>accountList</servlet-name>
+        <url-pattern>/account_list</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>transactionServlet</servlet-name>
