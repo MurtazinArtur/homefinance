@@ -23,7 +23,7 @@ public class CurrencyServlet extends HttpServlet {
         //WebContext contex = new WebContext(req, resp, req.getServletContext());
         //templateEngine.process("menu", contex, resp.getWriter());
         req.setAttribute("currencies", models);
-        req.getRequestDispatcher("jsp/jstl/currency_list.jsp").forward(req, resp);
+        req.getRequestDispatcher("/jsp/jstl/currency_list.jsp").forward(req, resp);
     }
 
     @Override

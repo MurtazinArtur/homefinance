@@ -27,23 +27,28 @@
 <div class="mask-content"></div>
 
 <a href="#x" class="overlay" id="form1"></a>
-<form class="modal" action="<c:url value="/bank_list" />" method="post">
+<form class="modal" action="<c:url value="/category_list" />" method="post">
     <input name="bank_name" type="text" onkeyup="var yratext=/[,':']/;
-    if(yratext.test(this.value)) this.value=''" placeholder="Введите наименование банка:"
+    if(yratext.test(this.value)) this.value=''" placeholder="Введите наименование категории:"
+           class="name" required/>
+    <input name="bank_name" type="text" onkeyup="var yratext=/[,':']/;
+    if(yratext.test(this.value)) this.value=''" placeholder="Введите наименование родительской категории:"
            class="name" required/>
     <input name="submit" class="btn" type="submit" value="Отправить"/>
 </form>
-<h1><p align="center">Список Банков</p></h1>
+<h1><p align="center">Список Категорий Платежей</p></h1>
 <table class="table table-hover">
     <thead>
     <tr>
-        <th scope="col"><p align="center">Наименование</p></th>
+        <th scope="col">Наименование</th>
+        <th scope="col">Родительская категория</th>
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="banks" items="${banks}">
+    <c:forEach var="categories" items="${categories}">
         <tr>
-            <td>${banks.name}</td>
+            <td>${categories.name}</td>
+            <td>${categories.parent_category}</td>
         </tr>
     </c:forEach>
     </tbody>

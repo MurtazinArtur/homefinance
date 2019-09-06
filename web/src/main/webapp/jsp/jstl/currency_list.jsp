@@ -22,7 +22,7 @@
     <li><a href="<c:url value="/currency_list" />">Виды Валют</a>
     <li><a href="<c:url value="/accounts" />">Счета</a>
     <li><a href="<c:url value="/bank_list" />">Банки</a>
-    <li><a href="<c:url value="/categories" />">Категории Платежей</a>
+    <li><a href="<c:url value="/category_list" />">Категории Платежей</a>
     <li><a href="<c:url value="/transaction" />">Транзакции</a>
 </ul>
 </nav>

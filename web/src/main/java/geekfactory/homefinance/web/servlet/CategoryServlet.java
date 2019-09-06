@@ -16,8 +16,22 @@ public class CategoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         CategoryService categoryService = new CategoryService();
         Collection<CategoryTransactionModel> models = categoryService.findAll();
-        for (CategoryTransactionModel model : models) {
-            resp.getOutputStream().write(("<h1>" + model + "<br>" + "</h1>").getBytes());
-        }
+        req.setAttribute("categories", models);
+        req.getRequestDispatcher("/jsp/jstl/category_list.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
     }
 }

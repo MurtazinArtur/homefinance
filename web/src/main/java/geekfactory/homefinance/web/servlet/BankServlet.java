@@ -17,7 +17,7 @@ public class BankServlet extends HttpServlet {
         BankService bankService = new BankService();
         Collection<BankModel> models = bankService.findAll();
         req.setAttribute("banks", models);
-        req.getRequestDispatcher("jsp/jstl/bank_list.jsp").forward(req, resp);
+        req.getRequestDispatcher("/jsp/jstl/bank_list.jsp").forward(req, resp);
     }
 
     @Override
