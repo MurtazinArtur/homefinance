@@ -41,9 +41,9 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="banks" items="${banks}">
+    <c:forEach var="bank" items="${banks}">
         <tr>
-            <td>${banks.name}</td>
+            <td><p align="center">${bank.name}</p></td>
         </tr>
     </c:forEach>
     </tbody>

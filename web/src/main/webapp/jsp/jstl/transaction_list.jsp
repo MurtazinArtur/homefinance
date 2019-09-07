@@ -52,29 +52,31 @@
 <table class="table table-hover">
     <thead>
     <tr>
-        <th scope="col">Сумма</th>
-        <th scope="col">Дата</th>
-        <th scope="col">Источник транзакции</th>
-        <th scope="col">Наименование банка</th>
-        <th scope="col">Наименование счета</th>
-        <th scope="col">Наименование валюты</th>
+        <th scope="col"><p align="center">Сумма</p></th>
+        <th scope="col"><p align="center">Дата</p></th>
+        <th scope="col"><p align="center">Источник транзакции</p></th>
+        <th scope="col"><p align="center">Категория транзакции</p></th>
+        <th scope="col"><p align="center">Наименование банка</p></th>
+        <th scope="col"><p align="center">Наименование счета</p></th>
+        <th scope="col"><p align="center">Наименование валюты</p></th>
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="transactions" items="${transactions}">
+    <c:forEach var="transaction" items="${transactions}">
         <tr>
-            <td>${transactions.amount}</td>
-            <td>${transactions.date}</td>
-            <td>${transactions.source}</td>
-            <td>${transactions.bank_id}</td>
-            <td>${transactions.account_id}</td>
-            <td>${transactions.currency_id}</td>
+            <td><p align="center">${transaction.amount}</p></td>
+            <td><p align="center">${transaction.date}</p></td>
+            <td><p align="center">${transaction.source}</p></td>
+            <td><p align="center">${transaction.category.iterator().next().getName()}</p></td>
+            <td><p align="center">${transaction.bank.name}</p></td>
+            <td><p align="center">${transaction.account.name}</p></td>
+            <td><p align="center">${transaction.currency.name}</p></td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
 
-<div style="float:left; width:150px; margin-right: 50px; margin-left:150px">
+<div style="float:left; width:150px; margin-right: 50px; margin-left:50px">
     <a href="#form1" class="bott">Создать</a></div>
 <div style="float:left; width:150px; margin-right: 50px;">
     <a href="#" class="bott">Удалить</a></div>

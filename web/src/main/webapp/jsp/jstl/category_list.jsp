@@ -40,15 +40,15 @@
 <table class="table table-hover">
     <thead>
     <tr>
-        <th scope="col">Наименование</th>
-        <th scope="col">Родительская категория</th>
+        <th scope="col"><p align="center">Наименование</p></th>
+        <th scope="col"><p align="center">Родительская категория</p></th>
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="categories" items="${categories}">
+    <c:forEach var="category" items="${categories}">
         <tr>
-            <td>${categories.name}</td>
-            <td>${categories.parent_category}</td>
+            <td><p align="center">${category.name}</p></td>
+            <td><p align="center">${category.parentCategory.name}</p></td>
         </tr>
     </c:forEach>
     </tbody>

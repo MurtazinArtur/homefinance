@@ -9,26 +9,6 @@
         <param-value>c_value</param-value>
     </context-param>
     <servlet>
-        <servlet-name>accountList</servlet-name>
-        <jsp-file>/jsp/jstl/account_list.jsp</jsp-file>
-    </servlet>
-    <servlet>
-        <servlet-name>categoryList</servlet-name>
-        <jsp-file>/jsp/jstl/category_list.jsp</jsp-file>
-    </servlet>
-    <servlet>
-        <servlet-name>transactionList</servlet-name>
-        <jsp-file>/jsp/jstl/transaction_list.jsp</jsp-file>
-    </servlet>
-    <servlet>
-        <servlet-name>currencyList</servlet-name>
-        <jsp-file>/jsp/jstl/currency_list.jsp</jsp-file>
-    </servlet>
-    <servlet>
-        <servlet-name>bankList</servlet-name>
-        <jsp-file>/jsp/jstl/bank_list.jsp</jsp-file>
-    </servlet>
-    <servlet>
         <servlet-name>servletConfigServlet</servlet-name>
         <servlet-class>
             geekfactory.homefinance.web.servlet.ServletConfigServlet
@@ -48,26 +28,6 @@
             geekfactory.homefinance.web.servlet.ServletContextServlet
         </servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>accountList</servlet-name>
-        <url-pattern>/account_list</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>transactionList</servlet-name>
-        <url-pattern>/transaction_list</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>bankList</servlet-name>
-        <url-pattern>/bank_list</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>categoryList</servlet-name>
-        <url-pattern>/category_list</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>currencyList</servlet-name>
-        <url-pattern>/currency_list</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>servletConfigServlet</servlet-name>
         <url-pattern>/servlet-config</url-pattern>

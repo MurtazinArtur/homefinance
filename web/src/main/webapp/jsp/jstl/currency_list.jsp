@@ -45,17 +45,17 @@
 <table class="table table-hover">
     <thead>
     <tr>
-        <th scope="col">Наименование</th>
-        <th scope="col">Код</th>
-        <th scope="col">Символ</th>
+        <th scope="col"><p align="center">Наименование</p></th>
+        <th scope="col"><p align="center">Код</p></th>
+        <th scope="col"><p align="center">Символ</p></th>
     </tr>
     </thead>
     <tbody>
     <c:forEach var="currency" items="${currencies}">
         <tr>
-            <td>${currency.name}</td>
-            <td>${currency.code}</td>
-            <td>${currency.symbol}</td>
+            <td><p align="center">${currency.name}</p></td>
+            <td><p align="center">${currency.code}</p></td>
+            <td><p align="center">${currency.symbol}</p></td>
         </tr>
     </c:forEach>
     </tbody>

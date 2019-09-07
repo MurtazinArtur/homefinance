@@ -46,19 +46,19 @@
 <table class="table table-hover">
     <thead>
     <tr>
-        <th scope="col">Наименование</th>
-        <th scope="col">Остаток на счёте</th>
-        <th scope="col">Валюта счета</th>
-        <th scope="col">Тип счета</th>
+        <th scope="col"><p align="center">Наименование</p></th>
+        <th scope="col"><p align="center">Остаток на счёте</p></th>
+        <th scope="col"><p align="center">Валюта счета</p></th>
+        <th scope="col"><p align="center">Тип счета</p></th>
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="accounts" items="${accounts}">
+    <c:forEach var="account" items="${accounts}">
         <tr>
-            <td>${accounts.name}</td>
-            <td>${accounts.amount}</td>
-            <td>${accounts.currency_id}</td>
-            <td>${accounts.account_type}</td>
+            <td><p align="center">${account.name}</p></td>
+            <td><p align="center">${account.amount}</p></td>
+            <td><p align="center">${account.currencyModel.name}</p></td>
+            <td><p align="center">${account.accountType}</p></td>
         </tr>
     </c:forEach>
     </tbody>
