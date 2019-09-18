@@ -1,5 +1,3 @@
-<%@ page import="geekfactory.homefinance.service.CurrencyService" %>
-<%@ page import="geekfactory.homefinance.dao.model.CurrencyModel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
@@ -28,20 +26,8 @@
 </nav>
 <div class="mask-content"></div>
 
-<a href="#x" class="overlay" id="form1"></a>
-<form class="modal" action="<c:url value="/currency_list" />" method="post">
-    <input name="currency_name" type="text" onkeyup="var yratext=/['0-9',':']/;
-    if(yratext.test(this.value)) this.value=''" placeholder="Введите наименование валюты:"
-           class="name" required/>
-    <input name="currency_code" type="text" onkeyup="var yratext=/['0-9',':']/;
-    if(yratext.test(this.value)) this.value=''" placeholder="Введите код валюты:"
-           class="name" required/>
-    <input name="currency_symbol" type="text" onkeyup="var yratext=/['0-9',':']/;
-    if(yratext.test(this.value)) this.value=''" placeholder="Введите символ валюты:"
-           class="name" required/>
-    <input name="submit" class="btn" type="submit" value="Отправить"/>
-</form>
 <h1><p align="center">Список Валют</p></h1>
+
 <table class="table table-hover">
     <thead>
     <tr>
@@ -52,10 +38,13 @@
     </thead>
     <tbody>
     <c:forEach var="currency" items="${currencies}">
-        <tr>
-            <td><p align="center">${currency.name}</p></td>
-            <td><p align="center">${currency.code}</p></td>
-            <td><p align="center">${currency.symbol}</p></td>
+        <tr><a href="#form1" class="popup"></a>
+            <td class="tbl-item cl-0" cellnum='0'>
+                <p align="center">${currency.name}</p></td>
+            <td class="tbl-item cl-1" cellnum='1'>
+                <p align="center">${currency.code}</p></td>
+            <td class="tbl-item cl-2" cellnum='2'>
+                <p align="center">${currency.symbol}</p></td>
         </tr>
     </c:forEach>
     </tbody>
@@ -67,5 +56,11 @@
     <a href="#" class="bott">Удалить</a></div>
 <div style="float:left; width:150px; margin-right: 50px;">
     <a href="<c:url value="/" />" class="bott">Вернуться</a></div>
+
+<script src="<c:url value="/resources/js/send_post.js" />"></script>
+<script src="<c:url value="/resources/js/send_delete.js" />"></script>
+<script src="<c:url value="/resources/js/serialize.js" />"></script>
+<script src="<c:url value="/resources/js/table.js" />"></script>
+
 </body>
 </html>

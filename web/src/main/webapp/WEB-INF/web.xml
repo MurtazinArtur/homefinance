@@ -9,6 +9,10 @@
         <param-value>c_value</param-value>
     </context-param>
     <servlet>
+        <servlet-name>bankServlet</servlet-name>
+        <servlet-class>geekfactory.homefinance.web.servlet.BankServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>servletConfigServlet</servlet-name>
         <servlet-class>
             geekfactory.homefinance.web.servlet.ServletConfigServlet
@@ -28,6 +32,10 @@
             geekfactory.homefinance.web.servlet.ServletContextServlet
         </servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>bankServlet</servlet-name>
+        <url-pattern>/bankServlet</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>servletConfigServlet</servlet-name>
         <url-pattern>/servlet-config</url-pattern>
