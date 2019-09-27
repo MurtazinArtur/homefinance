@@ -4,25 +4,33 @@ import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
 import geekfactory.homefinance.dao.model.AccountModel;
 import geekfactory.homefinance.dao.model.AccountType;
 import geekfactory.homefinance.dao.model.CurrencyModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
-public class AccountRepository implements Repository<AccountModel> {
+@Transactional
+public class AccountRepository implements Repository<AccountModel, Long> {
     private final static String INSERT = "INSERT INTO account_tbl(name, amount, currency_id, account_type) VALUES (?, ?, ?, ?)";
     private final static String FIND_BY_ID = "SELECT id, name, amount, currency_id, account_type FROM account_tbl WHERE id = ?";
     private final static String FIND_ALL = "SELECT id, name, amount, currency_id, account_type FROM account_tbl";
     private final static String REMOVE = "DELETE FROM account_tbl WHERE id = ?";
     private final static String UPDATE = "UPDATE account_tbl SET name = ?, amount = ?, currency_id = ?, account_type = ? WHERE id = ?";
-    private ConnectionSupplier connectionSupplier = new ConnectionSupplier();
-    private CurrencyRepository currencyRepository = new CurrencyRepository();
+
+    @Autowired
+    private DataSource dataSource;
+
+    @Autowired
+    private Repository<CurrencyModel, Long> currencyModelRepository;
 
     @Override
     public Optional<AccountModel> findById(Long id) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement =
                     connection.prepareStatement(FIND_BY_ID);
                 preparedStatement.setLong(1, id);
@@ -33,7 +41,7 @@ public class AccountRepository implements Repository<AccountModel> {
                     model.setId(resultSet.getLong(1));
                     model.setName(resultSet.getString(2));
                     model.setAmount(resultSet.getBigDecimal(3));
-                    Optional<CurrencyModel> currencyModel = currencyRepository.findById(resultSet.getLong(4));
+                    Optional<CurrencyModel> currencyModel = currencyModelRepository.findById(resultSet.getLong(4));
                     model.setCurrencyModel(currencyModel.get());
                     model.setAccountType(AccountType.valueOf(resultSet.getString(5)));
                     return Optional.of(model);
@@ -48,11 +56,11 @@ public class AccountRepository implements Repository<AccountModel> {
     public Collection<AccountModel> findAll() {
         Collection<AccountModel> listCategory = new ArrayList<>();
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
             ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
-                    Optional<CurrencyModel> currencyModel = currencyRepository.findById(resultSet.getLong(4));
+                    Optional<CurrencyModel> currencyModel = currencyModelRepository.findById(resultSet.getLong(4));
                     listCategory.add(new AccountModel(resultSet.getLong(1),
                             currencyModel.get(), resultSet.getString(2),
                             AccountType.valueOf(resultSet.getString(5)),
@@ -67,7 +75,7 @@ public class AccountRepository implements Repository<AccountModel> {
     @Override
     public boolean remove(Long id) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
@@ -82,7 +90,7 @@ public class AccountRepository implements Repository<AccountModel> {
     @Override
     public void save(AccountModel model) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, model.getName());
                 preparedStatement.setBigDecimal(2, model.getAmount());
@@ -103,7 +111,7 @@ public class AccountRepository implements Repository<AccountModel> {
     @Override
     public void update(AccountModel model, Long idRow) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
                 model.setId(idRow);
                 preparedStatement.setString(1, model.getName());

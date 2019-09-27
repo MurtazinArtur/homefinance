@@ -2,24 +2,30 @@ package geekfactory.homefinance.dao.repository;
 
 import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
 import geekfactory.homefinance.dao.model.BankModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
-public class BankRepository implements Repository<BankModel>{
+@Transactional
+public class BankRepository implements Repository<BankModel, Long>{
     private final static String INSERT = "INSERT INTO bank_tbl(name) VALUES (?)";
     private final static String FIND_BY_ID = "SELECT id, name FROM bank_tbl WHERE id = ?";
     private final static String FIND_ALL = "SELECT id, name FROM bank_tbl";
     private final static String REMOVE = "DELETE FROM bank_tbl WHERE id = ?";
     private final static String UPDATE = "UPDATE bank_tbl set name = ? WHERE id = ?";
-    private ConnectionSupplier connectionSupplier = new ConnectionSupplier();
+
+    @Autowired
+    private DataSource dataSource;
 
     @Override
     public Optional<BankModel> findById(Long id) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID);
                 preparedStatement.setLong(1, id);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -41,7 +47,7 @@ public class BankRepository implements Repository<BankModel>{
     public Collection<BankModel> findAll() {
         Collection<BankModel> listCategory = new ArrayList<>();
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
             ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
@@ -56,7 +62,7 @@ public class BankRepository implements Repository<BankModel>{
     @Override
     public boolean remove(Long id) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
@@ -71,7 +77,7 @@ public class BankRepository implements Repository<BankModel>{
     @Override
     public void save(BankModel model) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, model.getName());
                 preparedStatement.executeUpdate();
@@ -88,7 +94,7 @@ public class BankRepository implements Repository<BankModel>{
     @Override
     public void update(BankModel model, Long idRow) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
                 preparedStatement.setString(1, model.getName());
                 preparedStatement.setLong(2, idRow);

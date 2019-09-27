@@ -14,7 +14,7 @@
     <properties>
         <lombok>1.16.20</lombok>
         <mysql>8.0.11</mysql>
-        <spring>5.1.9</spring>
+        <spring>5.1.9.RELEASE</spring>
         <junitjupiter>5.5.1</junitjupiter>
         <compiler>3.5.1</compiler>
         <junitplatform>1.1.0</junitplatform>
@@ -22,6 +22,7 @@
         <mockito>2.24.0</mockito>
         <source>1.8</source>
         <h2>1.4.199</h2>
+        <spring-test>3.2.2.RELEASE</spring-test>
     </properties>
 
     <dependencyManagement>
@@ -40,8 +41,19 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
-                <version>5.1.9.RELEASE</version>
+                <version>${spring}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring}</version>
+            </dependency>
+            <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring}</version>
+            <scope>test</scope>
+        </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>

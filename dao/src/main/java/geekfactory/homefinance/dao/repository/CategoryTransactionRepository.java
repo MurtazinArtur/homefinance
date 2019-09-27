@@ -1,26 +1,33 @@
 package geekfactory.homefinance.dao.repository;
 
-import geekfactory.homefinance.dao.model.CategoryTransactionModel;
 import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
+import geekfactory.homefinance.dao.model.CategoryTransactionModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Optional;
+import java.util.TreeSet;
 
-public class CategoryTransactionRepository implements Repository<CategoryTransactionModel> {
+@Transactional
+public class CategoryTransactionRepository implements Repository<CategoryTransactionModel, Long> {
     private final static String INSERT = "INSERT INTO category_tbl(name, parent_category) VALUES (?, ?)";
     private final static String FIND_BY_ID = "SELECT id, name, parent_category FROM category_tbl WHERE id = ?";
     private final static String FIND_ALL = "SELECT id, name, parent_category FROM category_tbl";
     private final static String REMOVE = "DELETE FROM category_tbl WHERE id = ?";
     private final static String REMOVE_PARENT_CATEGORY = "UPDATE category_tbl SET parent_category = ? WHERE parent_category = ?";
     private final static String UPDATE = "UPDATE category_tbl SET name = ?, parent_category = ? WHERE id = ?";
-    private ConnectionSupplier connectionSupplier = new ConnectionSupplier();
+
+    @Autowired
+    private DataSource dataSource;
+    //private ConnectionSupplier connectionSupplier = new ConnectionSupplier();
 
     @Override
     public Optional<CategoryTransactionModel> findById(Long id) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID);
                 preparedStatement.setLong(1, id);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -47,9 +54,9 @@ public class CategoryTransactionRepository implements Repository<CategoryTransac
     @SuppressWarnings("Duplicates")
     @Override
     public Collection<CategoryTransactionModel> findAll() {
-        Collection<CategoryTransactionModel> hashSetCategory = new HashSet<>();
+        Collection<CategoryTransactionModel> treeSetCategory = new TreeSet<>();
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
             ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
@@ -59,18 +66,18 @@ public class CategoryTransactionRepository implements Repository<CategoryTransac
                     if (resultSet.getString(3) != null) {
                         model.setParentCategory(findById(resultSet.getLong(3)).orElse(null));
                     }
-                    hashSetCategory.add(model);
+                    treeSetCategory.add(model);
                 }
             } catch (SQLException e) {
                 throw new HomeFinanceDaoException("Error find", e);
         }
-        return hashSetCategory;
+        return treeSetCategory;
     }
 
     @Override
     public boolean remove(Long id) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
@@ -89,7 +96,7 @@ public class CategoryTransactionRepository implements Repository<CategoryTransac
     @Override
     public void save(CategoryTransactionModel model) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, model.getName());
                 if (model.getParentCategory() != null) {
@@ -113,7 +120,7 @@ public class CategoryTransactionRepository implements Repository<CategoryTransac
     public void update(CategoryTransactionModel model, Long idRow) {
         if (model != null) {
             try {
-                Connection connection = connectionSupplier.getConnection();
+                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
                     preparedStatement.setString(1, model.getName());
                     preparedStatement.setLong(3, idRow);

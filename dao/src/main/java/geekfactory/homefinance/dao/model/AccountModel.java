@@ -13,4 +13,7 @@ public class AccountModel {
     private String name;
     private AccountType accountType;
     private BigDecimal amount;
+
+    public AccountModel(CurrencyModel currencyModel, String name, AccountType accountType, BigDecimal amount) {
+    }
 }

@@ -36,12 +36,10 @@ CREATE TABLE transaction_tbl
     amount      DECIMAL(15, 2)                 NOT NULL,
     date        DATE                           NOT NULL,
     source      VARCHAR(50),
-    category_id INT                            NOT NULL,
     bank_id     INT                            NOT NULL,
     account_id  INT                            NOT NULL,
     currency_id INT                            NOT NULL,
 
-    CONSTRAINT category_fk FOREIGN KEY (category_id) REFERENCES category_tbl (id),
     CONSTRAINT bank_fk FOREIGN KEY (bank_id) REFERENCES bank_tbl (id),
     CONSTRAINT account_fk FOREIGN KEY (account_id) REFERENCES account_tbl (id),
     CONSTRAINT currency_transaction_fk FOREIGN KEY (currency_id) REFERENCES currency_tbl (id)
