@@ -1,10 +1,15 @@
 package geekfactory.homefinance.service;
 
+import geekfactory.homefinance.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
 import geekfactory.homefinance.dao.repository.CategoryTransactionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
@@ -13,31 +18,32 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, SpringExtension.class})
+@ContextConfiguration(classes = {ServiceConfiguration.class})
 public class CategoryServiceTest {
+    private CategoryTransactionRepository categoryTransactionRepositoryMock = mock(CategoryTransactionRepository.class);
+    @InjectMocks
+    @Autowired
+    private CategoryService categoryService;
 
     @Test
     public void testCategoryService() {
-        CategoryService categoryService = new CategoryService();
-        categoryService.setCategoryTransactionRepository(mock(CategoryTransactionRepository.class));
+        when(categoryTransactionRepositoryMock.findById(anyLong())).thenReturn(Optional.ofNullable(createModel()));
 
-        when(categoryService.findById(anyLong())).thenReturn(Optional.ofNullable(createModel()));
+        assertNotNull(categoryTransactionRepositoryMock);
+        assertEquals(createModel(), categoryTransactionRepositoryMock.findById(2L).get());
 
-        assertNotNull(categoryService);
-        assertNotNull(categoryService.getCategoryTransactionRepository());
-        assertEquals(createModel(), categoryService.findById(2L).get());
-
-        verify(categoryService.getCategoryTransactionRepository(), never()).findAll();
-        verify(categoryService.getCategoryTransactionRepository(), never()).save(createModel());
-        verify(categoryService.getCategoryTransactionRepository(), never()).remove(createModel().getId());
-        verify(categoryService.getCategoryTransactionRepository(), never()).update(eq(createModel()), anyLong());
+        verify(categoryTransactionRepositoryMock, never()).findAll();
+        verify(categoryTransactionRepositoryMock, never()).save(createModel());
+        verify(categoryTransactionRepositoryMock, never()).remove(createModel().getId());
+        verify(categoryTransactionRepositoryMock, never()).update(eq(createModel()), anyLong());
     }
 
     private CategoryTransactionModel createModel() {
         CategoryTransactionModel categoryTransactionModel = new CategoryTransactionModel();
         categoryTransactionModel.setId(2L);
         categoryTransactionModel.setName("testModel");
-        categoryTransactionModel.setParentCategory(new CategoryTransactionRepository().findById(1L).orElse(null));
+        categoryTransactionModel.setParentCategory(null);
 
         return categoryTransactionModel;
     }

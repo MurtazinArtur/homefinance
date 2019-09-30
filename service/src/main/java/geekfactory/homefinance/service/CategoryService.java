@@ -1,24 +1,21 @@
 package geekfactory.homefinance.service;
 
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
-import geekfactory.homefinance.dao.repository.CategoryTransactionRepository;
+import geekfactory.homefinance.dao.repository.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Optional;
 
-public class CategoryService implements Service<CategoryTransactionModel> {
-    private CategoryTransactionRepository categoryTransactionRepository = new CategoryTransactionRepository();
+@Transactional
+public class CategoryService implements ServiceCRUD<CategoryTransactionModel, Long> {
 
-    public CategoryTransactionRepository getCategoryTransactionRepository() {
-        return categoryTransactionRepository;
-    }
-
-    public void setCategoryTransactionRepository(CategoryTransactionRepository categoryTransactionRepository) {
-        this.categoryTransactionRepository = categoryTransactionRepository;
-    }
+    @Autowired
+    private Repository<CategoryTransactionModel, Long> categoryTransactionRepository;
 
     @Override
-    public Optional<CategoryTransactionModel> findById(long id) {
+    public Optional<CategoryTransactionModel> findById(Long id) {
         return categoryTransactionRepository.findById(id);
     }
 
@@ -28,7 +25,7 @@ public class CategoryService implements Service<CategoryTransactionModel> {
     }
 
     @Override
-    public boolean remove(long id) {
+    public boolean remove(Long id) {
         categoryTransactionRepository.remove(id);
         return true;
     }
@@ -39,7 +36,7 @@ public class CategoryService implements Service<CategoryTransactionModel> {
     }
 
     @Override
-    public void update(CategoryTransactionModel model, long idRow) {
+    public void update(CategoryTransactionModel model, Long idRow) {
         categoryTransactionRepository.update(model, idRow);
     }
 }

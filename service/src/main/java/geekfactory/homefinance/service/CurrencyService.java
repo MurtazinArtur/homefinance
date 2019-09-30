@@ -1,24 +1,21 @@
 package geekfactory.homefinance.service;
 
 import geekfactory.homefinance.dao.model.CurrencyModel;
-import geekfactory.homefinance.dao.repository.CurrencyRepository;
+import geekfactory.homefinance.dao.repository.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Optional;
 
-public class CurrencyService implements Service<CurrencyModel> {
-    private CurrencyRepository currencyRepository = new CurrencyRepository();
+@Transactional
+public class CurrencyService implements ServiceCRUD<CurrencyModel, Long> {
 
-    public CurrencyRepository getCurrencyRepository() {
-        return currencyRepository;
-    }
-
-    public void setCurrencyRepository(CurrencyRepository currencyRepository) {
-        this.currencyRepository = currencyRepository;
-    }
+    @Autowired
+    private Repository<CurrencyModel, Long> currencyRepository;
 
     @Override
-    public Optional<CurrencyModel> findById(long id) {
+    public Optional<CurrencyModel> findById(Long id) {
         return currencyRepository.findById(id);
     }
 
@@ -28,7 +25,7 @@ public class CurrencyService implements Service<CurrencyModel> {
     }
 
     @Override
-    public boolean remove(long id) {
+    public boolean remove(Long id) {
         currencyRepository.remove(id);
         return true;
     }
@@ -39,7 +36,7 @@ public class CurrencyService implements Service<CurrencyModel> {
     }
 
     @Override
-    public void update(CurrencyModel model, long idRow) {
+    public void update(CurrencyModel model, Long idRow) {
         currencyRepository.update(model, idRow);
     }
 }

@@ -1,13 +1,15 @@
 package geekfactory.homefinance.service;
 
-import geekfactory.homefinance.dao.model.TransactionModel;
-import geekfactory.homefinance.dao.repository.AccountRepository;
-import geekfactory.homefinance.dao.repository.BankRepository;
-import geekfactory.homefinance.dao.repository.CurrencyRepository;
+import geekfactory.homefinance.config.ServiceConfiguration;
+import geekfactory.homefinance.dao.model.*;
 import geekfactory.homefinance.dao.repository.TransactionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,37 +20,67 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, SpringExtension.class})
+@ContextConfiguration(classes = {ServiceConfiguration.class})
 public class TransactionServiceTest {
+    private TransactionRepository transactionRepositoryMock = mock(TransactionRepository.class);
+    @InjectMocks
+    @Autowired
+    private TransactionService transactionService;
 
     @Test
-    public void testAccountService() {
-        TransactionService transactionService = new TransactionService();
-        transactionService.setTransactionRepository(mock(TransactionRepository.class));
+    public void testTransactionService() {
 
-        when(transactionService.findById(anyLong())).thenReturn(Optional.ofNullable(createModel()));
+        when(transactionRepositoryMock.findById(anyLong())).thenReturn(Optional.ofNullable(createTransactionModel()));
 
-        assertNotNull(transactionService);
-        assertNotNull(transactionService.getTransactionRepository());
-        assertEquals(createModel(), transactionService.findById(5L).get());
+        assertNotNull(transactionRepositoryMock);
+        assertEquals(createTransactionModel(), transactionRepositoryMock.findById(5L).get());
 
-        verify(transactionService.getTransactionRepository(), times(1)).findById(anyLong());
-        verify(transactionService.getTransactionRepository(), never()).findAll();
-        verify(transactionService.getTransactionRepository(), never()).save(createModel());
-        verify(transactionService.getTransactionRepository(), never()).remove(createModel().getId());
-        verify(transactionService.getTransactionRepository(), never()).update(eq(createModel()), anyLong());
+        verify(transactionRepositoryMock, times(1)).findById(anyLong());
+        verify(transactionRepositoryMock, never()).findAll();
+        verify(transactionRepositoryMock, never()).save(createTransactionModel());
+        verify(transactionRepositoryMock, never()).remove(createTransactionModel().getId());
+        verify(transactionRepositoryMock, never()).update(eq(createTransactionModel()), anyLong());
     }
 
-    private TransactionModel createModel() {
+    private TransactionModel createTransactionModel() {
         TransactionModel transactionModel = new TransactionModel();
         transactionModel.setId(5L);
-        transactionModel.setAmount(BigDecimal.valueOf(3.15));
+        transactionModel.setAmount(new BigDecimal("3.15"));
         transactionModel.setDate(LocalDate.now());
         transactionModel.setSource("TestSource");
-        transactionModel.setBank(new BankRepository().findById(1L).get());
-        transactionModel.setAccount(new AccountRepository().findById(1L).get());
-        transactionModel.setCurrency(new CurrencyRepository().findById(1L).get());
+        transactionModel.setBank(createBankModel());
+        transactionModel.setAccount(createAccountModel());
+        transactionModel.setCurrency(createCurrencyModel());
 
         return transactionModel;
+    }
+
+    private BankModel createBankModel() {
+        BankModel bankModel = new BankModel();
+        bankModel.setId(1L);
+        bankModel.setName("testUpdate");
+
+        return bankModel;
+    }
+
+    private AccountModel createAccountModel() {
+        AccountModel accountModel = new AccountModel();
+        accountModel.setId(1L);
+        accountModel.setName("testModel");
+        accountModel.setAmount(new BigDecimal("5.00"));
+        accountModel.setAccountType(AccountType.CASH);
+        accountModel.setCurrencyModel(createCurrencyModel());
+
+        return accountModel;
+    }
+
+    private CurrencyModel createCurrencyModel() {
+        CurrencyModel currencyModel = new CurrencyModel();
+        currencyModel.setId(1L);
+        currencyModel.setName("testCurrency");
+        currencyModel.setCode("TC");
+        currencyModel.setSymbol("T");
+        return currencyModel;
     }
 }

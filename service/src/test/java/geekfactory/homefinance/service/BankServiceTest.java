@@ -1,10 +1,15 @@
 package geekfactory.homefinance.service;
 
+import geekfactory.homefinance.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.BankModel;
 import geekfactory.homefinance.dao.repository.BankRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
@@ -12,29 +17,31 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, SpringExtension.class})
+@ContextConfiguration(classes = {ServiceConfiguration.class})
 public class BankServiceTest {
+    private BankRepository bankRepositoryMock = mock(BankRepository.class);
+    @InjectMocks
+    @Autowired
+    private BankService bankService;
+
     @Test
     public void testBankService() {
-        BankService bankService = new BankService();
-        bankService.setBankRepository(mock(BankRepository.class));
+        when(bankRepositoryMock.findById(anyLong())).thenReturn(Optional.ofNullable(createModel()));
 
-        when(bankService.findById(anyLong())).thenReturn(Optional.ofNullable(createModel()));
+        assertNotNull(bankRepositoryMock);
+        assertEquals(createModel(), bankRepositoryMock.findById(1L).get());
 
-        assertNotNull(bankService);
-        assertNotNull(bankService.getBankRepository());
-        assertEquals(createModel(), bankService.findById(10L).get());
-
-        verify(bankService.getBankRepository(), times(1)).findById(anyLong());
-        verify(bankService.getBankRepository(), never()).findAll();
-        verify(bankService.getBankRepository(), never()).save(createModel());
-        verify(bankService.getBankRepository(), never()).remove(createModel().getId());
-        verify(bankService.getBankRepository(), never()).update(eq(createModel()), anyLong());
+        verify(bankRepositoryMock, times(1)).findById(anyLong());
+        verify(bankRepositoryMock, never()).findAll();
+        verify(bankRepositoryMock, never()).save(createModel());
+        verify(bankRepositoryMock, never()).remove(createModel().getId());
+        verify(bankRepositoryMock, never()).update(eq(createModel()), anyLong());
     }
 
     private BankModel createModel() {
         BankModel bankModel = new BankModel();
-        bankModel.setId(10L);
+        bankModel.setId(1L);
         bankModel.setName("testUpdate");
 
         return bankModel;

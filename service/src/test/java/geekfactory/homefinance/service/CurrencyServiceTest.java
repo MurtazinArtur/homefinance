@@ -1,10 +1,15 @@
 package geekfactory.homefinance.service;
 
+import geekfactory.homefinance.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.CurrencyModel;
 import geekfactory.homefinance.dao.repository.CurrencyRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
@@ -13,24 +18,26 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, SpringExtension.class})
+@ContextConfiguration(classes = {ServiceConfiguration.class})
 public class CurrencyServiceTest {
+    private CurrencyRepository currencyRepositoryMock = mock(CurrencyRepository.class);
+    @InjectMocks
+    @Autowired
+    private CurrencyService currencyService;
 
     @Test
-    public void testAccountService() {
-        CurrencyService currencyService = new CurrencyService();
-        currencyService.setCurrencyRepository(mock(CurrencyRepository.class));
+    public void testCurrencyService() {
 
-        when(currencyService.findById(anyLong())).thenReturn(Optional.ofNullable(createModel()));
+        when(currencyRepositoryMock.findById(anyLong())).thenReturn(Optional.ofNullable(createModel()));
 
-        assertNotNull(currencyService);
-        assertNotNull(currencyService.getCurrencyRepository());
-        assertEquals(createModel(), currencyService.findById(3L).get());
+        assertNotNull(currencyRepositoryMock);
+        assertEquals(createModel(), currencyRepositoryMock.findById(3L).get());
 
-        verify(currencyService.getCurrencyRepository(), never()).findAll();
-        verify(currencyService.getCurrencyRepository(), never()).save(createModel());
-        verify(currencyService.getCurrencyRepository(), never()).remove(createModel().getId());
-        verify(currencyService.getCurrencyRepository(), never()).update(eq(createModel()), anyLong());
+        verify(currencyRepositoryMock, never()).findAll();
+        verify(currencyRepositoryMock, never()).save(createModel());
+        verify(currencyRepositoryMock, never()).remove(createModel().getId());
+        verify(currencyRepositoryMock, never()).update(eq(createModel()), anyLong());
     }
 
     private CurrencyModel createModel() {

@@ -1,12 +1,17 @@
 package geekfactory.homefinance.service;
 
+import geekfactory.homefinance.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.AccountModel;
 import geekfactory.homefinance.dao.model.AccountType;
+import geekfactory.homefinance.dao.model.CurrencyModel;
 import geekfactory.homefinance.dao.repository.AccountRepository;
-import geekfactory.homefinance.dao.repository.CurrencyRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -16,37 +21,46 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith({MockitoExtension.class, SpringExtension.class})
+@ContextConfiguration(classes = {ServiceConfiguration.class})
 public class AccountServiceTest {
+    private AccountRepository accountRepositoryMock = mock(AccountRepository.class);
+    @InjectMocks
+    @Autowired
+    private ServiceCRUD<AccountModel, Long> accountService;
 
     @Test
     public void testAccountService() {
 
-        AccountService accountService = new AccountService();
-        accountService.setAccountRepository(mock(AccountRepository.class));
+        when(accountRepositoryMock.findById(anyLong())).thenReturn(Optional.ofNullable(createAccountModel()));
 
-        when(accountService.findById(anyLong())).thenReturn(Optional.ofNullable(createModel()));
+        assertNotNull(accountRepositoryMock);
+        assertEquals(createAccountModel(), accountRepositoryMock.findById(1L).get());
 
-        assertNotNull(accountService);
-        assertNotNull(accountService.getAccountRepository());
-        assertEquals(createModel(), accountService.findById(5L).get());
-
-        verify(accountService.getAccountRepository(), times(1)).findById(anyLong());
-        verify(accountService.getAccountRepository(), never()).findAll();
-        verify(accountService.getAccountRepository(), never()).save(createModel());
-        verify(accountService.getAccountRepository(), never()).remove(createModel().getId());
-        verify(accountService.getAccountRepository(), never()).update(eq(createModel()), anyLong());
+        verify(accountRepositoryMock, times(1)).findById(anyLong());
+        verify(accountRepositoryMock, never()).findAll();
+        verify(accountRepositoryMock, never()).save(createAccountModel());
+        verify(accountRepositoryMock, never()).remove(createAccountModel().getId());
+        verify(accountRepositoryMock, never()).update(eq(createAccountModel()), anyLong());
     }
 
-    private AccountModel createModel() {
+    private AccountModel createAccountModel() {
         AccountModel accountModel = new AccountModel();
-        CurrencyRepository currencyRepository = new CurrencyRepository();
-        accountModel.setId(5L);
+        accountModel.setId(1L);
         accountModel.setName("testModel");
-        accountModel.setAmount(BigDecimal.valueOf(5.0));
+        accountModel.setAmount(new BigDecimal("5.00"));
         accountModel.setAccountType(AccountType.CASH);
-        accountModel.setCurrencyModel(currencyRepository.findById(1L).orElse(null));
+        accountModel.setCurrencyModel(createCurrencyModel());
 
         return accountModel;
+    }
+
+    private CurrencyModel createCurrencyModel() {
+        CurrencyModel currencyModel = new CurrencyModel();
+        currencyModel.setId(1L);
+        currencyModel.setName("testCurrency");
+        currencyModel.setCode("TC");
+        currencyModel.setSymbol("T");
+        return currencyModel;
     }
 }
