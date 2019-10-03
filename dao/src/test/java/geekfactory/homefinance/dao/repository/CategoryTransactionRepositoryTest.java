@@ -1,99 +1,103 @@
 package geekfactory.homefinance.dao.repository;
 
+import geekfactory.homefinance.dao.config.DaoConfiguration;
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CategoryTransactionRepositoryTest {
-    private static final String CREATE_TBL = "CREATE TABLE category_tbl\n" +
-            "(\n" +
-            "    id   INT AUTO_INCREMENT PRIMARY KEY NOT NULL,\n" +
-            "    name VARCHAR(50)                    NOT NULL,\n" +
-            "    parent_category INT\n" +
-            ")";
-    private static final String REMOVE_TABLE = "DROP TABLE category_tbl";
-    private static ConnectionSupplier connectionSupplierTest = new ConnectionSupplier();
-    private static CategoryTransactionRepository categoryTransactionRepository = new CategoryTransactionRepository();
-    private static CategoryTransactionModel model = new CategoryTransactionModel();
-    private static CategoryTransactionModel model1 = new CategoryTransactionModel();
 
-    @BeforeAll
-    static void beforeAll() {
-        model.setName("test");
-        model.setParentCategory(null);
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {DaoConfiguration.class})
+@Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:delete_tables_ddl.sql")
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:init_ddl.sql")
+class CategoryTransactionRepositoryTest {
 
-        model1.setName("test1");
-        model1.setParentCategory(categoryTransactionRepository.findById((long) 1).orElse(null));
-    }
-
-    @BeforeEach
-    void beforeEach() {
-        Connection connection = connectionSupplierTest.getConnection();
-        try {
-            connection.prepareStatement(REMOVE_TABLE).executeUpdate();
-            connection.prepareStatement(CREATE_TBL).executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    @Autowired
+    private Repository<CategoryTransactionModel, Long> categoryTransactionModelRepository;
 
     @Test
     void TestContext(){
-        assertNotNull(categoryTransactionRepository);
+        assertNotNull(categoryTransactionModelRepository);
     }
 
     @Test
     @DisplayName("running save and findById test")
     void testSaveAndFind(){
-        categoryTransactionRepository.save(model);
-        assertEquals(model, categoryTransactionRepository.findById((long) 1).get());
+        categoryTransactionModelRepository.save(createModel());
+
+        assertEquals(createModel(), categoryTransactionModelRepository.findById(1L).get());
     }
 
     @Test
     @DisplayName("running update test")
     void testUpdate(){
-        categoryTransactionRepository.save(model);
-        assertNotNull(model);
-        CategoryTransactionModel categoryTransactionUpdate = categoryTransactionRepository.findById((long) 1).orElse(null);
+        categoryTransactionModelRepository.save(createModel());
+
+        CategoryTransactionModel categoryTransactionUpdate = categoryTransactionModelRepository.findById(1L).orElse(null);
         categoryTransactionUpdate.setName("testUpdate");
-        categoryTransactionRepository.update(categoryTransactionUpdate, (long) 1);
-        assertEquals(categoryTransactionUpdate, categoryTransactionRepository.findById((long) 1).get());
+        categoryTransactionModelRepository.update(categoryTransactionUpdate, 1L);
+
+        assertEquals(categoryTransactionUpdate, categoryTransactionModelRepository.findById(1L).get());
     }
 
     @Test
     @DisplayName("running findAll test")
     void testFindAll(){
-        categoryTransactionRepository.save(model);
-        categoryTransactionRepository.save(model1);
-        Collection<CategoryTransactionModel> expectedList = (categoryTransactionRepository.findAll());
-        Collection<CategoryTransactionModel> actualList = new HashSet<>();
-        actualList.add(model);
-        actualList.add(model1);
+        for (int i = 0; i < createCollectionModels().size(); i++) {
+            categoryTransactionModelRepository.save(createCollectionModels().iterator().next());
+        }
+
+        Collection<CategoryTransactionModel> actualList = (categoryTransactionModelRepository.findAll());
+        Collection<CategoryTransactionModel> expectedList = createCollectionModels();
+
         assertEquals(expectedList, actualList);
 
-        int expected = expectedList.size();
-        int actual = 2;
+        int expected = 3;
+        int actual = actualList.size();
+
         assertEquals(expected, actual);
-        assertNotNull(expectedList);
     }
 
     @Test
     @DisplayName("running remove test")
     void testRemove(){
-        categoryTransactionRepository.save(model);
-        categoryTransactionRepository.save(model1);
-        CategoryTransactionModel categoryTransactionModel = categoryTransactionRepository.findById((long) 1).orElse(null);
-        categoryTransactionRepository.remove(categoryTransactionModel.getId());
-        CategoryTransactionModel removedModel = categoryTransactionRepository.findById((long) 1).orElse(null);
+        categoryTransactionModelRepository.save(createModel());
+        CategoryTransactionModel categoryTransactionModel = categoryTransactionModelRepository.findById(1L).orElse(null);
+        categoryTransactionModelRepository.remove(categoryTransactionModel.getId());
+        CategoryTransactionModel removedModel = categoryTransactionModelRepository.findById(1L).orElse(null);
+
         assertNull(removedModel);
+    }
+
+    private CategoryTransactionModel createModel() {
+        CategoryTransactionModel model = new CategoryTransactionModel();
+        model.setId(1l);
+        model.setName("test1");
+        model.setParentCategory(null);
+
+        return model;
+    }
+
+    private Collection<CategoryTransactionModel> createCollectionModels() {
+        Collection<CategoryTransactionModel> colllection = new TreeSet<>();
+        for (int i = 1; i <= 3; i++) {
+            CategoryTransactionModel model = new CategoryTransactionModel();
+            model.setId(Long.valueOf(i));
+            model.setName("test");
+            model.setParentCategory(null);
+
+            colllection.add(model);
+        }
+        return colllection;
     }
 }

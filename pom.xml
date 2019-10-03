@@ -13,17 +13,16 @@
 
     <properties>
         <lombok>1.16.20</lombok>
-        <mysql>8.0.17</mysql>
+        <mysql>8.0.11</mysql>
+        <spring>5.1.9.RELEASE</spring>
         <junitjupiter>5.5.1</junitjupiter>
         <compiler>3.5.1</compiler>
         <junitplatform>1.1.0</junitplatform>
         <surefire-plugin>2.22.1</surefire-plugin>
-        <servlet>3.1.0</servlet>
-        <jstl>1.2</jstl>
-        <thymeleaf>3.0.0.RELEASE</thymeleaf>
-        <mockito>3.0.0</mockito>
+        <mockito>2.24.0</mockito>
         <source>1.8</source>
         <h2>1.4.199</h2>
+        <spring-test>3.2.2.RELEASE</spring-test>
     </properties>
 
     <dependencyManagement>
@@ -40,20 +39,21 @@
                 <version>${mysql}</version>
             </dependency>
             <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>${servlet}</version>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring}</version>
             </dependency>
             <dependency>
-                <groupId>org.thymeleaf</groupId>
-                <artifactId>thymeleaf</artifactId>
-                <version>${thymeleaf}</version>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring}</version>
             </dependency>
             <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>jstl</artifactId>
-                <version>${jstl}</version>
-            </dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring}</version>
+            <scope>test</scope>
+        </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
@@ -81,12 +81,6 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
-                <version>${mockito}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
                 <version>${mockito}</version>
                 <scope>test</scope>
             </dependency>

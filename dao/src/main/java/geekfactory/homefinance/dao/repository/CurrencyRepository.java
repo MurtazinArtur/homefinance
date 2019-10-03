@@ -2,24 +2,30 @@ package geekfactory.homefinance.dao.repository;
 
 import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
 import geekfactory.homefinance.dao.model.CurrencyModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
-public class CurrencyRepository implements Repository<CurrencyModel> {
+@Transactional
+public class CurrencyRepository implements Repository<CurrencyModel, Long> {
     private final static String INSERT = "INSERT INTO currency_tbl(name, code, symbol) VALUES (?, ?, ?)";
     private final static String FIND_BY_ID = "SELECT id, name, code, symbol FROM currency_tbl WHERE id = ?";
     private final static String FIND_ALL = "SELECT id, name, code, symbol FROM currency_tbl";
     private final static String REMOVE = "DELETE FROM currency_tbl WHERE id = ?";
     private final static String UPDATE = "UPDATE currency_tbl set name = ?, code = ?, symbol = ?  WHERE id = ?";
-    private ConnectionSupplier connectionSupplier = new ConnectionSupplier();
+
+    @Autowired
+    DataSource dataSource;
 
     @Override
     public Optional<CurrencyModel> findById(Long id) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID);
                 preparedStatement.setLong(1, id);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -43,7 +49,7 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
     public Collection<CurrencyModel> findAll() {
         Collection<CurrencyModel> listCurrency = new ArrayList<>();
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
             ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
@@ -59,7 +65,7 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
     @Override
     public boolean remove(Long id) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
@@ -74,7 +80,7 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
     @Override
     public void save(CurrencyModel model) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement =
                     connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1, model.getName());
@@ -95,7 +101,7 @@ public class CurrencyRepository implements Repository<CurrencyModel> {
     @Override
     public void update(CurrencyModel model, Long idRow) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement =
                     connection.prepareStatement(UPDATE);
                 model.setId(idRow);

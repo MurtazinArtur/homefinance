@@ -1,50 +1,29 @@
 package geekfactory.homefinance.dao.repository;
 
+import geekfactory.homefinance.dao.config.DaoConfiguration;
 import geekfactory.homefinance.dao.model.BankModel;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BankRepositoryTest {
-    private static final String CREATE_TBL = "CREATE TABLE bank_tbl\n" +
-            "(\n" +
-            "    id     INT AUTO_INCREMENT PRIMARY KEY NOT NULL,\n" +
-            "    name   VARCHAR(50)                    NOT NULL\n" +
-            ")";
-    private static final String REMOVE_TABLE = "DROP TABLE bank_tbl";
-    private static ConnectionSupplier connectionSupplierTest = new ConnectionSupplier();
-    private BankRepository bankRepository = new BankRepository();
-    private static BankModel model = new BankModel();
-    private static BankModel model1 = new BankModel();
-    private static BankModel model2 = new BankModel();
-    @BeforeAll
-    static void beforeAll() {
 
-        model.setName("VTB");
-        model1.setName("VTB");
-        model2.setName("VTB");
-    }
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {DaoConfiguration.class})
+@Sql(executionPhase= Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts="classpath:delete_tables_ddl.sql")
+@Sql(executionPhase= Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts="classpath:init_ddl.sql")
+class BankRepositoryTest {
 
-    @BeforeEach
-    void beforeEach(){
-        Connection connection = connectionSupplierTest.getConnection();
-        try {
-            connection.prepareStatement(REMOVE_TABLE).executeUpdate();
-            connection.prepareStatement(CREATE_TBL).executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @AfterAll
-    static void afterAll() {
-        connectionSupplierTest.getDisconnection();
-    }
+    @Autowired
+    private Repository<BankModel, Long> bankRepository;
 
     @Test
     void TestContext(){
@@ -54,49 +33,66 @@ public class BankRepositoryTest {
     @Test
     @DisplayName("running save and findById test")
     void testSaveAndFind() {
-        bankRepository.save(model);
-        assertEquals(model, bankRepository.findById((long) 1).get());
+        bankRepository.save(createModel());
+
+        assertEquals(createModel(), bankRepository.findById(1L).get());
     }
 
     @Test
     @DisplayName("running update test")
     void testUpdate() {
-        bankRepository.save(model);
-        assertNotNull(model);
-        BankModel accountUpdate = bankRepository.findById((long) 1).orElse(null);
+        bankRepository.save(createModel());
+
+        BankModel accountUpdate = bankRepository.findById(1L).orElse(null);
         accountUpdate.setName("testUpdate");
-        bankRepository.update(accountUpdate, (long) 1);
-        assertEquals(accountUpdate, bankRepository.findById((long) 1).get());
+        bankRepository.update(accountUpdate, 1L);
+
+        assertEquals(accountUpdate, bankRepository.findById(1L).get());
     }
+
     @Test
     @DisplayName("running findAll test")
     void testFindAll() {
-        bankRepository.save(model);
-        bankRepository.save(model1);
-        bankRepository.save(model2);
+        for (int i = 0; i < createCollectionModels().size(); i++){
+            bankRepository.save(createCollectionModels().get(i));
+        }
         List expectedList = (List<BankModel>) bankRepository.findAll();
-        List<BankModel> actualList = new ArrayList<>();
-        actualList.add(model);
-        actualList.add(model1);
-        actualList.add(model2);
+        List<BankModel> actualList = createCollectionModels();
         assertEquals(expectedList, actualList);
 
         int expected = expectedList.size();
         int actual = 3;
+
         assertEquals(expected, actual);
-        assertNotNull(expectedList);
     }
 
 
     @Test
     @DisplayName("running remove test")
     void testRemove() {
-        bankRepository.save(model);
-        bankRepository.save(model1);
-        bankRepository.save(model2);
-        BankModel bankModel = bankRepository.findById((long) 1).orElse(null);
+        bankRepository.save(createModel());
+        BankModel bankModel = bankRepository.findById(1L).orElse(null);
         bankRepository.remove(bankModel.getId());
-        BankModel removedModel = bankRepository.findById((long) 1).orElse(null);
+        BankModel removedModel = bankRepository.findById(1L).orElse(null);
+
         assertNull(removedModel);
+    }
+
+    private BankModel createModel() {
+        BankModel model = new BankModel();
+        model.setId(1L);
+        model.setName("VTB");
+        return model;
+    }
+
+    private List<BankModel> createCollectionModels(){
+        List<BankModel> colllection = new ArrayList<>();
+        for (int i = 1; i <= 3 ; i++) {
+            BankModel model = new BankModel();
+            model.setId(Long.valueOf(i));
+            model.setName("VTB");
+            colllection.add(model);
+        }
+        return colllection;
     }
 }

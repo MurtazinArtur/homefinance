@@ -1,9 +1,11 @@
 package geekfactory.homefinance.dao.repository;
 
-import geekfactory.homefinance.dao.model.CategoryTransactionModel;
 import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
-import geekfactory.homefinance.dao.model.TransactionModel;
+import geekfactory.homefinance.dao.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,20 +13,32 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 
-public class TransactionRepository implements Repository <TransactionModel>{
+@Transactional
+public class TransactionRepository implements Repository<TransactionModel, Long> {
     private final static String INSERT = "INSERT INTO transaction_tbl(amount, date, source, bank_id, account_id, currency_id) VALUES (?, ?, ?, ?, ?, ?)";
     private final static String INSERT_TRANSACTION_CATEGORY = "INSERT INTO transaction_category_tbl(transaction_id, category_id) VALUES (?, ?)";
     private final static String FIND_BY_ID = "SELECT id, amount, date, source, bank_id, account_id, currency_id FROM transaction_tbl WHERE id = ?";
     private final static String FIND_CATEGORY_BY_ID = "SELECT transaction_id, category_id FROM transaction_category_tbl WHERE transaction_id = ?";
     private final static String FIND_ALL = "SELECT id, amount, date, source, bank_id, account_id, currency_id FROM transaction_tbl";
-    private final static String REMOVE = "DELETE FROM transaction_tbl WHERE id = ?";
-    private final static String UPDATE = "UPDATE transaction_tbl set amount = ?, date = ?, source = ?,bank_id = ?, account_id = ?, currency_id = ?   WHERE id = ?";
-    private ConnectionSupplier connectionSupplier = new ConnectionSupplier();
+    private final static String REMOVE = "DELETE FROM transaction_tbl, transaction_category_tbl USING transaction_tbl JOIN transaction_category_tbl " +
+            "ON transaction_category_tbl.transaction_id=transaction_tbl.id WHERE transaction_category_tbl.transaction_id=?;";
+    private final static String UPDATE = "UPDATE transaction_tbl set amount = ?, date = ?, source = ?, bank_id = ?, account_id = ?, currency_id = ?   WHERE id = ?";
+
+    @Autowired
+    DataSource dataSource;
+    @Autowired
+    private Repository<BankModel, Long> bankModelRepository;
+    @Autowired
+    private Repository<AccountModel, Long> accountModelRepository;
+    @Autowired
+    private Repository<CurrencyModel, Long> currencyModelRepository;
+    @Autowired
+    private Repository<CategoryTransactionModel, Long> categoryTransactionModelRepository;
 
     @Override
     public Optional<TransactionModel> findById(Long id) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID);
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -43,7 +57,7 @@ public class TransactionRepository implements Repository <TransactionModel>{
     public Collection<TransactionModel> findAll() {
         Collection<TransactionModel> listTransaction = new ArrayList<>();
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
             ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
@@ -58,7 +72,7 @@ public class TransactionRepository implements Repository <TransactionModel>{
     @Override
     public boolean remove(Long id) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
@@ -73,7 +87,7 @@ public class TransactionRepository implements Repository <TransactionModel>{
     @Override
     public void save(TransactionModel model) {
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             Collection<CategoryTransactionModel> heshSetCategory = new HashSet<>();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setBigDecimal(1, model.getAmount());
@@ -112,7 +126,7 @@ public class TransactionRepository implements Repository <TransactionModel>{
     public void update(TransactionModel model, Long idRow) {
         if (model != null) {
             try {
-                Connection connection = connectionSupplier.getConnection();
+                Connection connection = dataSource.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
                 model.setId(idRow);
                 preparedStatement.setBigDecimal(1, model.getAmount());
@@ -132,9 +146,6 @@ public class TransactionRepository implements Repository <TransactionModel>{
     }
 
     private TransactionModel createModel(ResultSet resultSet) throws SQLException {
-        BankRepository bankRepository = new BankRepository();
-        AccountRepository accountRepository = new AccountRepository();
-        CurrencyRepository currencyRepository = new CurrencyRepository();
         TransactionModel model = new TransactionModel();
 
         model.setId(resultSet.getLong(1));
@@ -142,11 +153,11 @@ public class TransactionRepository implements Repository <TransactionModel>{
         model.setDate(resultSet.getTimestamp(3).toLocalDateTime().toLocalDate());
         model.setSource(resultSet.getString(4));
         model.setCategory(getCategories(resultSet.getLong(1)));
-        model.setBank((bankRepository.findById
+        model.setBank((bankModelRepository.findById
                 (resultSet.getLong(5)).get()));
-        model.setAccount((accountRepository.findById
+        model.setAccount((accountModelRepository.findById
                 (resultSet.getLong(6)).get()));
-        model.setCurrency(currencyRepository.findById
+        model.setCurrency(currencyModelRepository.findById
                 (resultSet.getLong(7)).get());
         return model;
     }
@@ -154,15 +165,14 @@ public class TransactionRepository implements Repository <TransactionModel>{
     private Collection<CategoryTransactionModel> getCategories(Long transactionId) {
         HashSet<CategoryTransactionModel> categoryTransactionHashSet = new HashSet<>();
         try {
-            Connection connection = connectionSupplier.getConnection();
+            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(FIND_CATEGORY_BY_ID);
                 preparedStatement.setLong(1, transactionId);
                 ResultSet resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()) {
                     Long idCategory = resultSet.getLong(2);
-                    CategoryTransactionRepository categoryTransactionRepository = new CategoryTransactionRepository();
-                    Optional<CategoryTransactionModel> model = Optional.ofNullable(categoryTransactionRepository.findById(idCategory).orElse(null));
+                    Optional<CategoryTransactionModel> model = Optional.ofNullable(categoryTransactionModelRepository.findById(idCategory).orElse(null));
                     categoryTransactionHashSet.add(model.get());
                 }
             } catch (SQLException e) {
@@ -180,7 +190,6 @@ public class TransactionRepository implements Repository <TransactionModel>{
         } catch (SQLException e) {
             throw new HomeFinanceDaoException("Error paste data in table", e);
         }
-        CategoryTransactionRepository categoryTransactionRepository = new CategoryTransactionRepository();
-        return null;//new CategoryTransactionModel(categoryTransactionRepository.findById(idCategory));
+        return new CategoryTransactionModel(categoryTransactionModelRepository.findById(idCategory));
     }
 }

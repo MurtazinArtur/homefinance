@@ -1,78 +1,52 @@
 package geekfactory.homefinance.service;
 
+import geekfactory.homefinance.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.CurrencyModel;
-import geekfactory.homefinance.dao.repository.ConnectionSupplier;
 import geekfactory.homefinance.dao.repository.CurrencyRepository;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class CurrencyServiceTest extends Mockito {
-    private static ConnectionSupplier connectionSupplier = new ConnectionSupplier();
-    @Spy
-    CurrencyService spy;
-    private CurrencyModel currencyModel = new CurrencyModel();
-    @Mock
-    private CurrencyRepository currencyRepositoryMock;
-
+@ExtendWith({MockitoExtension.class, SpringExtension.class})
+@ContextConfiguration(classes = {ServiceConfiguration.class})
+public class CurrencyServiceTest {
+    private CurrencyRepository currencyRepositoryMock = mock(CurrencyRepository.class);
     @InjectMocks
+    @Autowired
     private CurrencyService currencyService;
 
-    @BeforeAll
-    static void beforeAll() {
-        connectionSupplier.getConnection();
+    @Test
+    public void testCurrencyService() {
+
+        when(currencyRepositoryMock.findById(anyLong())).thenReturn(Optional.ofNullable(createModel()));
+
+        assertNotNull(currencyRepositoryMock);
+        assertEquals(createModel(), currencyRepositoryMock.findById(3L).get());
+
+        verify(currencyRepositoryMock, never()).findAll();
+        verify(currencyRepositoryMock, never()).save(createModel());
+        verify(currencyRepositoryMock, never()).remove(createModel().getId());
+        verify(currencyRepositoryMock, never()).update(eq(createModel()), anyLong());
     }
 
-    @BeforeEach
-    void beforeEach() {
-        currencyModel.setId((long) 5);
+    private CurrencyModel createModel() {
+        CurrencyModel currencyModel = new CurrencyModel();
+        currencyModel.setId(3L);
         currencyModel.setName("testModel");
         currencyModel.setSymbol("T");
         currencyModel.setCode("TES");
+
+        return currencyModel;
     }
-
-    @Test
-    void testAccountService() {
-        when(currencyService.findById(anyLong())).thenReturn(Optional.ofNullable(currencyModel));
-        assertNotNull(currencyService);
-        assertEquals(currencyModel, currencyService.findById((long) 5).get());
-        // assertNotEquals(accountModel, accountService.findById((long) 6).get());
-
-        assertNotNull(currencyRepositoryMock);
-        verify(currencyRepositoryMock, times(1)).findById(anyLong());
-        verify(currencyRepositoryMock, never()).findAll();
-        verify(currencyRepositoryMock, never()).save(currencyModel);
-        verify(currencyRepositoryMock, never()).remove(currencyModel.getId());
-        // verify(accountRepositoryMock, never()).update(accountModel, anyLong());
-    }
-
-    @Test
-    void testServiceMock() {
-        when(currencyRepositoryMock.findById(anyLong())).thenReturn(Optional.ofNullable(currencyModel));
-        assertNotNull(currencyRepositoryMock);
-        assertEquals(currencyModel, currencyRepositoryMock.findById((long) 5).get());
-        // assertNotEquals(accountModel, accountRepositoryMock.findById((long) 5).get());
-
-        verify(currencyRepositoryMock, times(1)).findById(anyLong());
-    }
-
-    @Test
-    void testWithSpy() {
-        when(spy.findById(anyLong())).thenReturn(Optional.ofNullable(currencyModel));
-
-        assertEquals(currencyModel, spy.findById((long) 5).get());
-    }
-
 }

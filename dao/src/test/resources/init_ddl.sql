@@ -1,4 +1,4 @@
-CREATE TABLE currency_tbl
+CREATE TABLE IF NOT EXISTS currency_tbl
 (
     id     INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     name   VARCHAR(50)                    NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE currency_tbl
     symbol VARCHAR(50)                    NOT NULL
 );
 
-CREATE TABLE account_tbl
+CREATE TABLE IF NOT EXISTS account_tbl
 (
     id           INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     name         VARCHAR(50)                    NOT NULL,
@@ -17,37 +17,35 @@ CREATE TABLE account_tbl
     CONSTRAINT currency_fk FOREIGN KEY (currency_id) REFERENCES currency_tbl (id)
 );
 
-CREATE TABLE category_tbl
+CREATE TABLE IF NOT EXISTS category_tbl
 (
     id   INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     name VARCHAR(50)                    NOT NULL,
     parent_category INT
 );
 
-CREATE TABLE bank_tbl
+CREATE TABLE IF NOT EXISTS bank_tbl
 (
     id   INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     name VARCHAR(50)
 );
 
-CREATE TABLE transaction_tbl
+CREATE TABLE IF NOT EXISTS transaction_tbl
 (
     id          INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     amount      DECIMAL(15, 2)                 NOT NULL,
     date        DATE                           NOT NULL,
     source      VARCHAR(50),
-    category_id INT                            NOT NULL,
     bank_id     INT                            NOT NULL,
     account_id  INT                            NOT NULL,
     currency_id INT                            NOT NULL,
 
-    CONSTRAINT category_fk FOREIGN KEY (category_id) REFERENCES category_tbl (id),
     CONSTRAINT bank_fk FOREIGN KEY (bank_id) REFERENCES bank_tbl (id),
     CONSTRAINT account_fk FOREIGN KEY (account_id) REFERENCES account_tbl (id),
     CONSTRAINT currency_transaction_fk FOREIGN KEY (currency_id) REFERENCES currency_tbl (id)
 );
 
-CREATE TABLE transaction_category_tbl
+CREATE TABLE IF NOT EXISTS transaction_category_tbl
 (
     transaction_id INT NOT NULL,
     category_id    INT NOT NULL,

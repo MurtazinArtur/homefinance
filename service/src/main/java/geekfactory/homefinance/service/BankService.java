@@ -1,16 +1,20 @@
 package geekfactory.homefinance.service;
 
 import geekfactory.homefinance.dao.model.BankModel;
-import geekfactory.homefinance.dao.repository.BankRepository;
+import geekfactory.homefinance.dao.repository.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Optional;
 
-public class BankService implements Service<BankModel> {
-    BankRepository bankRepository = new BankRepository();
+@Transactional
+public class BankService implements ServiceCRUD<BankModel, Long> {
+    @Autowired
+    private Repository<BankModel, Long> bankRepository;
 
     @Override
-    public Optional<BankModel> findById(long id) {
+    public Optional<BankModel> findById(Long id) {
         return bankRepository.findById(id);
     }
 
@@ -20,7 +24,7 @@ public class BankService implements Service<BankModel> {
     }
 
     @Override
-    public boolean remove(long id) {
+    public boolean remove(Long id) {
         bankRepository.remove(id);
         return true;
     }
@@ -31,7 +35,7 @@ public class BankService implements Service<BankModel> {
     }
 
     @Override
-    public void update(BankModel model, long idRow) {
+    public void update(BankModel model, Long idRow) {
         bankRepository.update(model, idRow);
     }
 }

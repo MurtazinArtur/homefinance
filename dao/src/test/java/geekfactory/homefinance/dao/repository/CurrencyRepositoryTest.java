@@ -1,112 +1,106 @@
 package geekfactory.homefinance.dao.repository;
 
+import geekfactory.homefinance.dao.config.DaoConfiguration;
 import geekfactory.homefinance.dao.model.CurrencyModel;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CurrencyRepositoryTest {
-    private static final String CREATE_TBL = "CREATE TABLE currency_tbl\n" +
-            "(\n" +
-            "    id     INT AUTO_INCREMENT PRIMARY KEY NOT NULL,\n" +
-            "    name   VARCHAR(50)                    NOT NULL,\n" +
-            "    code   VARCHAR(50)                    NOT NULL,\n" +
-            "    symbol VARCHAR(50)                    NOT NULL\n" +
-            ")";
-    private static final String REMOVE_TABLE = "DROP TABLE currency_tbl";
-    private static ConnectionSupplier connectionSupplierTest = new ConnectionSupplier();
-    private CurrencyRepository currencyRepository = new CurrencyRepository();
-    private static CurrencyModel model = new CurrencyModel();
-    private static CurrencyModel model1 = new CurrencyModel();
-    private static CurrencyModel model2 = new CurrencyModel();
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {DaoConfiguration.class})
 
-    @BeforeAll
-    static void beforeAll() {
+@Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:delete_tables_ddl.sql")
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:init_ddl.sql")
+class CurrencyRepositoryTest {
 
-        model.setName("Dollar");
-        model.setSymbol("D");
-        model.setCode("USD");
+    @Autowired
+    private Repository<CurrencyModel, Long> currencyModelRepository;
 
-        model1.setName("Dollar");
-        model1.setSymbol("D");
-        model1.setCode("USD");
-
-        model2.setName("Dollar");
-        model2.setSymbol("D");
-        model2.setCode("USD");
-    }
-
-    @AfterAll
-    static void afterAll() {
-        connectionSupplierTest.getDisconnection();
-    }
-
-    @BeforeEach
-    void beforeEach() {
-        Connection connection = connectionSupplierTest.getConnection();
-        try {
-            connection.prepareStatement(REMOVE_TABLE).executeUpdate();
-            connection.prepareStatement(CREATE_TBL).executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     @Test
     void TestContext(){
-        Assertions.assertNotNull(currencyRepository);
+        assertNotNull(currencyModelRepository);
     }
 
     @Test
     @DisplayName("running save and findById test")
     void testSaveAndFind() {
-        currencyRepository.save(model);
-        assertEquals(model, currencyRepository.findById((long) 1).get());
+        currencyModelRepository.save(createModel());
+
+        assertEquals(createModel(), currencyModelRepository.findById(1L).get());
     }
 
     @Test
     @DisplayName("running update test")
     void testUpdate() {
-        currencyRepository.save(model);
-        Assertions.assertNotNull(model);
-        CurrencyModel accountUpdate = currencyRepository.findById((long) 1).orElse(null);
+        currencyModelRepository.save(createModel());
+
+        CurrencyModel accountUpdate = currencyModelRepository.findById(1L).orElse(null);
         accountUpdate.setName("testUpdate");
-        currencyRepository.update(accountUpdate, (long) 1);
-        assertEquals(accountUpdate, currencyRepository.findById((long) 1).get());
+        currencyModelRepository.update(accountUpdate, 1L);
+
+        assertEquals(accountUpdate, currencyModelRepository.findById(1L).get());
     }
+
     @Test
     @DisplayName("running findAll test")
     void testFindAll() {
-        currencyRepository.save(model);
-        currencyRepository.save(model1);
-        currencyRepository.save(model2);
-        List expectedList = (List<CurrencyModel>) currencyRepository.findAll();
-        List<CurrencyModel> actualList = new ArrayList<>();
-        actualList.add(model);
-        actualList.add(model1);
-        actualList.add(model2);
+        for (int i = 0; i < createCollectionModels().size(); i++) {
+            currencyModelRepository.save(createCollectionModels().get(i));
+        }
+        List expectedList = (List<CurrencyModel>) currencyModelRepository.findAll();
+
+        List<CurrencyModel> actualList = createCollectionModels();
+
         assertEquals(expectedList, actualList);
 
         int expected = expectedList.size();
         int actual = 3;
+
         assertEquals(expected, actual);
-        assertNotNull(expectedList);
     }
 
 
     @Test
     @DisplayName("running remove test")
     void testRemove() {
-        currencyRepository.save(model);
-        currencyRepository.save(model1);
-        currencyRepository.save(model2);
-        CurrencyModel currencyModel = currencyRepository.findById((long) 1).orElse(null);
-        currencyRepository.remove(currencyModel.getId());
-        CurrencyModel removedModel = currencyRepository.findById((long) 1).orElse(null);
+        currencyModelRepository.save(createModel());
+        CurrencyModel currencyModel = currencyModelRepository.findById(1L).orElse(null);
+        currencyModelRepository.remove(currencyModel.getId());
+        CurrencyModel removedModel = currencyModelRepository.findById(1L).orElse(null);
+
         assertNull(removedModel);
+    }
+
+    private CurrencyModel createModel() {
+        CurrencyModel model = new CurrencyModel();
+        model.setId(1L);
+        model.setName("Dollar");
+        model.setSymbol("D");
+        model.setCode("USD");
+
+        return model;
+    }
+
+
+    private List<CurrencyModel> createCollectionModels() {
+        List<CurrencyModel> colllection = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            CurrencyModel model = new CurrencyModel();
+            model.setId(Long.valueOf(i));
+            model.setName("Dollar");
+            model.setSymbol("D");
+            model.setCode("USD");
+            colllection.add(model);
+        }
+        return colllection;
     }
 }
