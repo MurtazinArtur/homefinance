@@ -1,25 +1,23 @@
 package geekfactory.homefinance.dao.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import javax.persistence.*;
 import java.util.Optional;
 
+@Entity
+@Table(name = "category_tbl")
 @Data
+@EqualsAndHashCode
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryTransactionModel implements Comparable<CategoryTransactionModel> {
+public class CategoryTransactionModel  {
+    @Id
     private Long id;
+    @Column(name = "name")
     private String name;
+    @ManyToOne
+    @JoinColumn(name = "parent_category")
     private CategoryTransactionModel parentCategory;
-
-    public CategoryTransactionModel(Optional<CategoryTransactionModel> byId) {
-
-    }
-
-    @Override
-    public int compareTo(CategoryTransactionModel model) {
-        return (int) (this.id - model.id);
-    }
 }
