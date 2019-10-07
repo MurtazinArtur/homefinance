@@ -3,6 +3,7 @@ package geekfactory.homefinance.dao.repository;
 import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
 import geekfactory.homefinance.dao.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
@@ -14,7 +15,8 @@ import java.util.HashSet;
 import java.util.Optional;
 
 @Transactional
-public class TransactionRepository implements Repository<TransactionModel, Long> {
+@Repository("transactionRepository")
+public class TransactionRepositoryCRUD implements RepositoryCRUD<TransactionModel, Long> {
     private final static String INSERT = "INSERT INTO transaction_tbl(amount, date, source, bank_id, account_id, currency_id) VALUES (?, ?, ?, ?, ?, ?)";
     private final static String INSERT_TRANSACTION_CATEGORY = "INSERT INTO transaction_category_tbl(transaction_id, category_id) VALUES (?, ?)";
     private final static String FIND_BY_ID = "SELECT id, amount, date, source, bank_id, account_id, currency_id FROM transaction_tbl WHERE id = ?";
@@ -27,13 +29,13 @@ public class TransactionRepository implements Repository<TransactionModel, Long>
     @Autowired
     DataSource dataSource;
     @Autowired
-    private Repository<BankModel, Long> bankModelRepository;
+    private RepositoryCRUD<BankModel, Long> bankModelRepositoryCRUD;
     @Autowired
-    private Repository<AccountModel, Long> accountModelRepository;
+    private RepositoryCRUD<AccountModel, Long> accountModelRepositoryCRUD;
     @Autowired
-    private Repository<CurrencyModel, Long> currencyModelRepository;
+    private RepositoryCRUD<CurrencyModel, Long> currencyModelRepositoryCRUD;
     @Autowired
-    private Repository<CategoryTransactionModel, Long> categoryTransactionModelRepository;
+    private RepositoryCRUD<CategoryTransactionModel, Long> categoryTransactionModelRepositoryCRUD;
 
     @Override
     public Optional<TransactionModel> findById(Long id) {
@@ -153,11 +155,11 @@ public class TransactionRepository implements Repository<TransactionModel, Long>
         model.setDate(resultSet.getTimestamp(3).toLocalDateTime().toLocalDate());
         model.setSource(resultSet.getString(4));
         model.setCategory(getCategories(resultSet.getLong(1)));
-        model.setBank((bankModelRepository.findById
+        model.setBank((bankModelRepositoryCRUD.findById
                 (resultSet.getLong(5)).get()));
-        model.setAccount((accountModelRepository.findById
+        model.setAccount((accountModelRepositoryCRUD.findById
                 (resultSet.getLong(6)).get()));
-        model.setCurrency(currencyModelRepository.findById
+        model.setCurrency(currencyModelRepositoryCRUD.findById
                 (resultSet.getLong(7)).get());
         return model;
     }
@@ -172,7 +174,7 @@ public class TransactionRepository implements Repository<TransactionModel, Long>
 
                 while (resultSet.next()) {
                     Long idCategory = resultSet.getLong(2);
-                    Optional<CategoryTransactionModel> model = Optional.ofNullable(categoryTransactionModelRepository.findById(idCategory).orElse(null));
+                    Optional<CategoryTransactionModel> model = Optional.ofNullable(categoryTransactionModelRepositoryCRUD.findById(idCategory).orElse(null));
                     categoryTransactionHashSet.add(model.get());
                 }
             } catch (SQLException e) {
@@ -190,6 +192,6 @@ public class TransactionRepository implements Repository<TransactionModel, Long>
         } catch (SQLException e) {
             throw new HomeFinanceDaoException("Error paste data in table", e);
         }
-        return new CategoryTransactionModel(categoryTransactionModelRepository.findById(idCategory));
+        return new CategoryTransactionModel(categoryTransactionModelRepositoryCRUD.findById(idCategory));
     }
 }

@@ -1,24 +1,20 @@
 package geekfactory.homefinance.spring.controller;
 
 import geekfactory.homefinance.dao.model.BankModel;
-import geekfactory.homefinance.service.BankService;
+import geekfactory.homefinance.service.ServiceCRUD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @Controller
-@RequestMapping("banks")
+@RequestMapping("/banks")
 public class BankController {
-
     @Autowired
-    private BankService bankService;
+    private ServiceCRUD<BankModel, Long> bankService;
 
     @PostMapping(value = "save", produces = MediaType.APPLICATION_JSON_VALUE)
     public String save (@RequestBody BankModel bankModel, Model model){
@@ -26,7 +22,7 @@ public class BankController {
 
         model.addAttribute("name", saveBankModel.getName());
 
-        return "save bank success";
+        return "bank_list";
     }
 
     @GetMapping("/findAll")
@@ -35,6 +31,20 @@ public class BankController {
 
         model.addAttribute("banks", allBanks);
 
-        return "all banks";
+        return "bank_list";
+    }
+
+    @PutMapping("/update")
+    public String update(@PathVariable String id, @RequestBody BankModel bankModel, Model model) {
+        BankModel updateBankModel = new BankModel();
+        model.addAttribute("id", updateBankModel.getId());
+        model.addAttribute("name", updateBankModel.getName());
+
+        return "banks/bank_list";
+    }
+
+    @DeleteMapping("/delete")
+    public void delete(Long id) {
+        bankService.remove(id);
     }
 }

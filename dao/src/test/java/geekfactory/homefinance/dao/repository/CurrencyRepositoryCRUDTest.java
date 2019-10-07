@@ -20,43 +20,43 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:delete_tables_ddl.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:init_ddl.sql")
-class CurrencyRepositoryTest {
+class CurrencyRepositoryCRUDTest {
 
     @Autowired
-    private Repository<CurrencyModel, Long> currencyModelRepository;
+    private RepositoryCRUD<CurrencyModel, Long> currencyModelRepositoryCRUD;
 
     @Test
     void TestContext(){
-        assertNotNull(currencyModelRepository);
+        assertNotNull(currencyModelRepositoryCRUD);
     }
 
     @Test
     @DisplayName("running save and findById test")
     void testSaveAndFind() {
-        currencyModelRepository.save(createModel());
+        currencyModelRepositoryCRUD.save(createModel());
 
-        assertEquals(createModel(), currencyModelRepository.findById(1L).get());
+        assertEquals(createModel(), currencyModelRepositoryCRUD.findById(1L).get());
     }
 
     @Test
     @DisplayName("running update test")
     void testUpdate() {
-        currencyModelRepository.save(createModel());
+        currencyModelRepositoryCRUD.save(createModel());
 
-        CurrencyModel accountUpdate = currencyModelRepository.findById(1L).orElse(null);
+        CurrencyModel accountUpdate = currencyModelRepositoryCRUD.findById(1L).orElse(null);
         accountUpdate.setName("testUpdate");
-        currencyModelRepository.update(accountUpdate, 1L);
+        currencyModelRepositoryCRUD.update(accountUpdate, 1L);
 
-        assertEquals(accountUpdate, currencyModelRepository.findById(1L).get());
+        assertEquals(accountUpdate, currencyModelRepositoryCRUD.findById(1L).get());
     }
 
     @Test
     @DisplayName("running findAll test")
     void testFindAll() {
         for (int i = 0; i < createCollectionModels().size(); i++) {
-            currencyModelRepository.save(createCollectionModels().get(i));
+            currencyModelRepositoryCRUD.save(createCollectionModels().get(i));
         }
-        List expectedList = (List<CurrencyModel>) currencyModelRepository.findAll();
+        List expectedList = (List<CurrencyModel>) currencyModelRepositoryCRUD.findAll();
 
         List<CurrencyModel> actualList = createCollectionModels();
 
@@ -72,10 +72,10 @@ class CurrencyRepositoryTest {
     @Test
     @DisplayName("running remove test")
     void testRemove() {
-        currencyModelRepository.save(createModel());
-        CurrencyModel currencyModel = currencyModelRepository.findById(1L).orElse(null);
-        currencyModelRepository.remove(currencyModel.getId());
-        CurrencyModel removedModel = currencyModelRepository.findById(1L).orElse(null);
+        currencyModelRepositoryCRUD.save(createModel());
+        CurrencyModel currencyModel = currencyModelRepositoryCRUD.findById(1L).orElse(null);
+        currencyModelRepositoryCRUD.remove(currencyModel.getId());
+        CurrencyModel removedModel = currencyModelRepositoryCRUD.findById(1L).orElse(null);
 
         assertNull(removedModel);
     }

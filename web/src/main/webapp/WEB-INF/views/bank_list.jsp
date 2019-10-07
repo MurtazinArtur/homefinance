@@ -5,11 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Список Банков</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="<c:url value="/resources/js/bootstrap/bootstrap.min.js" />"></script>
-    <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/buttons.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/modal_form.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/menu.css" />" rel="stylesheet">
+    <script src="<c:url value="webapp/resources/js/bootstrap/bootstrap.min.js" />"></script>
+    <link href="<c:url value="webapp/resources/css/bootstrap.css" />" rel="stylesheet">
+    <link href="<c:url value="webapp/resources/css/buttons.css" />" rel="stylesheet">
+    <link href="<c:url value="webapp/resources/css/modal_form.css" />" rel="stylesheet">
+    <link href="<c:url value="webapp/resources/css/menu.css" />" rel="stylesheet">
 </head>
 <body>
 <input type="checkbox" id="nav-toggle" hidden>

@@ -20,43 +20,43 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration(classes = {DaoConfiguration.class})
 @Sql(executionPhase= Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts="classpath:delete_tables_ddl.sql")
 @Sql(executionPhase= Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts="classpath:init_ddl.sql")
-class BankRepositoryTest {
+class BankRepositoryCRUDTest {
 
     @Autowired
-    private Repository<BankModel, Long> bankRepository;
+    private RepositoryCRUD<BankModel, Long> bankRepositoryCRUD;
 
     @Test
     void TestContext(){
-        assertNotNull(bankRepository);
+        assertNotNull(bankRepositoryCRUD);
     }
 
     @Test
     @DisplayName("running save and findById test")
     void testSaveAndFind() {
-        bankRepository.save(createModel());
+        bankRepositoryCRUD.save(createModel());
 
-        assertEquals(createModel(), bankRepository.findById(1L).get());
+        assertEquals(createModel(), bankRepositoryCRUD.findById(1L).get());
     }
 
     @Test
     @DisplayName("running update test")
     void testUpdate() {
-        bankRepository.save(createModel());
+        bankRepositoryCRUD.save(createModel());
 
-        BankModel accountUpdate = bankRepository.findById(1L).orElse(null);
+        BankModel accountUpdate = bankRepositoryCRUD.findById(1L).orElse(null);
         accountUpdate.setName("testUpdate");
-        bankRepository.update(accountUpdate, 1L);
+        bankRepositoryCRUD.update(accountUpdate, 1L);
 
-        assertEquals(accountUpdate, bankRepository.findById(1L).get());
+        assertEquals(accountUpdate, bankRepositoryCRUD.findById(1L).get());
     }
 
     @Test
     @DisplayName("running findAll test")
     void testFindAll() {
         for (int i = 0; i < createCollectionModels().size(); i++){
-            bankRepository.save(createCollectionModels().get(i));
+            bankRepositoryCRUD.save(createCollectionModels().get(i));
         }
-        List expectedList = (List<BankModel>) bankRepository.findAll();
+        List expectedList = (List<BankModel>) bankRepositoryCRUD.findAll();
         List<BankModel> actualList = createCollectionModels();
         assertEquals(expectedList, actualList);
 
@@ -70,10 +70,10 @@ class BankRepositoryTest {
     @Test
     @DisplayName("running remove test")
     void testRemove() {
-        bankRepository.save(createModel());
-        BankModel bankModel = bankRepository.findById(1L).orElse(null);
-        bankRepository.remove(bankModel.getId());
-        BankModel removedModel = bankRepository.findById(1L).orElse(null);
+        bankRepositoryCRUD.save(createModel());
+        BankModel bankModel = bankRepositoryCRUD.findById(1L).orElse(null);
+        bankRepositoryCRUD.remove(bankModel.getId());
+        BankModel removedModel = bankRepositoryCRUD.findById(1L).orElse(null);
 
         assertNull(removedModel);
     }

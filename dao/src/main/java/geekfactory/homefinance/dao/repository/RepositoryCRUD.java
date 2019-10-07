@@ -3,7 +3,7 @@ package geekfactory.homefinance.dao.repository;
 import java.util.Collection;
 import java.util.Optional;
 
-public interface Repository<T, V> {
+public interface RepositoryCRUD<T, V> {
     Optional<T> findById (V id);
     Collection<T> findAll();
     boolean remove (V id);

@@ -2,7 +2,7 @@ package geekfactory.homefinance.service;
 
 import geekfactory.homefinance.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.BankModel;
-import geekfactory.homefinance.dao.repository.BankRepository;
+import geekfactory.homefinance.dao.repository.BankRepositoryCRUD;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith({MockitoExtension.class, SpringExtension.class})
 @ContextConfiguration(classes = {ServiceConfiguration.class})
 public class BankServiceTest {
-    private BankRepository bankRepositoryMock = mock(BankRepository.class);
+    private BankRepositoryCRUD bankRepositoryMock = mock(BankRepositoryCRUD.class);
     @InjectMocks
     @Autowired
     private BankService bankService;

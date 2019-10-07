@@ -2,7 +2,7 @@ package geekfactory.homefinance.service;
 
 import geekfactory.homefinance.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.CurrencyModel;
-import geekfactory.homefinance.dao.repository.CurrencyRepository;
+import geekfactory.homefinance.dao.repository.CurrencyRepositoryCRUD;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith({MockitoExtension.class, SpringExtension.class})
 @ContextConfiguration(classes = {ServiceConfiguration.class})
 public class CurrencyServiceTest {
-    private CurrencyRepository currencyRepositoryMock = mock(CurrencyRepository.class);
+    private CurrencyRepositoryCRUD currencyRepositoryMock = mock(CurrencyRepositoryCRUD.class);
     @InjectMocks
     @Autowired
     private CurrencyService currencyService;

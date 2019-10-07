@@ -3,6 +3,7 @@ package geekfactory.homefinance.dao.repository;
 import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
@@ -12,7 +13,8 @@ import java.util.Optional;
 import java.util.TreeSet;
 
 @Transactional
-public class CategoryTransactionRepository implements Repository<CategoryTransactionModel, Long> {
+@Repository("categoryRepository")
+public class CategoryTransactionRepositoryCRUD implements RepositoryCRUD<CategoryTransactionModel, Long> {
     private final static String INSERT = "INSERT INTO category_tbl(name, parent_category) VALUES (?, ?)";
     private final static String FIND_BY_ID = "SELECT id, name, parent_category FROM category_tbl WHERE id = ?";
     private final static String FIND_ALL = "SELECT id, name, parent_category FROM category_tbl";

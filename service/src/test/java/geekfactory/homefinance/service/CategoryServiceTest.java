@@ -2,7 +2,7 @@ package geekfactory.homefinance.service;
 
 import geekfactory.homefinance.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
-import geekfactory.homefinance.dao.repository.CategoryTransactionRepository;
+import geekfactory.homefinance.dao.repository.CategoryTransactionRepositoryCRUD;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith({MockitoExtension.class, SpringExtension.class})
 @ContextConfiguration(classes = {ServiceConfiguration.class})
 public class CategoryServiceTest {
-    private CategoryTransactionRepository categoryTransactionRepositoryMock = mock(CategoryTransactionRepository.class);
+    private CategoryTransactionRepositoryCRUD categoryTransactionRepositoryMock = mock(CategoryTransactionRepositoryCRUD.class);
     @InjectMocks
     @Autowired
     private CategoryService categoryService;

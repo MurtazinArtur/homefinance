@@ -1,41 +1,43 @@
 package geekfactory.homefinance.service;
 
 import geekfactory.homefinance.dao.model.BankModel;
-import geekfactory.homefinance.dao.repository.Repository;
+import geekfactory.homefinance.dao.repository.RepositoryCRUD;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Optional;
 
 @Transactional
+@Service("bankService")
 public class BankService implements ServiceCRUD<BankModel, Long> {
     @Autowired
-    private Repository<BankModel, Long> bankRepository;
+    private RepositoryCRUD<BankModel, Long> bankRepositoryCRUD;
 
     @Override
     public Optional<BankModel> findById(Long id) {
-        return bankRepository.findById(id);
+        return bankRepositoryCRUD.findById(id);
     }
 
     @Override
     public Collection<BankModel> findAll() {
-        return bankRepository.findAll();
+        return bankRepositoryCRUD.findAll();
     }
 
     @Override
     public boolean remove(Long id) {
-        bankRepository.remove(id);
+        bankRepositoryCRUD.remove(id);
         return true;
     }
 
     @Override
     public void save(BankModel model) {
-        bankRepository.save(model);
+        bankRepositoryCRUD.save(model);
     }
 
     @Override
     public void update(BankModel model, Long idRow) {
-        bankRepository.update(model, idRow);
+        bankRepositoryCRUD.update(model, idRow);
     }
 }

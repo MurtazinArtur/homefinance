@@ -20,44 +20,44 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration(classes = {DaoConfiguration.class})
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:delete_tables_ddl.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:init_ddl.sql")
-class CategoryTransactionRepositoryTest {
+class CategoryTransactionRepositoryCRUDTest {
 
     @Autowired
-    private Repository<CategoryTransactionModel, Long> categoryTransactionModelRepository;
+    private RepositoryCRUD<CategoryTransactionModel, Long> categoryTransactionModelRepositoryCRUD;
 
     @Test
     void TestContext(){
-        assertNotNull(categoryTransactionModelRepository);
+        assertNotNull(categoryTransactionModelRepositoryCRUD);
     }
 
     @Test
     @DisplayName("running save and findById test")
     void testSaveAndFind(){
-        categoryTransactionModelRepository.save(createModel());
+        categoryTransactionModelRepositoryCRUD.save(createModel());
 
-        assertEquals(createModel(), categoryTransactionModelRepository.findById(1L).get());
+        assertEquals(createModel(), categoryTransactionModelRepositoryCRUD.findById(1L).get());
     }
 
     @Test
     @DisplayName("running update test")
     void testUpdate(){
-        categoryTransactionModelRepository.save(createModel());
+        categoryTransactionModelRepositoryCRUD.save(createModel());
 
-        CategoryTransactionModel categoryTransactionUpdate = categoryTransactionModelRepository.findById(1L).orElse(null);
+        CategoryTransactionModel categoryTransactionUpdate = categoryTransactionModelRepositoryCRUD.findById(1L).orElse(null);
         categoryTransactionUpdate.setName("testUpdate");
-        categoryTransactionModelRepository.update(categoryTransactionUpdate, 1L);
+        categoryTransactionModelRepositoryCRUD.update(categoryTransactionUpdate, 1L);
 
-        assertEquals(categoryTransactionUpdate, categoryTransactionModelRepository.findById(1L).get());
+        assertEquals(categoryTransactionUpdate, categoryTransactionModelRepositoryCRUD.findById(1L).get());
     }
 
     @Test
     @DisplayName("running findAll test")
     void testFindAll(){
         for (int i = 0; i < createCollectionModels().size(); i++) {
-            categoryTransactionModelRepository.save(createCollectionModels().iterator().next());
+            categoryTransactionModelRepositoryCRUD.save(createCollectionModels().iterator().next());
         }
 
-        Collection<CategoryTransactionModel> actualList = (categoryTransactionModelRepository.findAll());
+        Collection<CategoryTransactionModel> actualList = (categoryTransactionModelRepositoryCRUD.findAll());
         Collection<CategoryTransactionModel> expectedList = createCollectionModels();
 
         assertEquals(expectedList, actualList);
@@ -71,10 +71,10 @@ class CategoryTransactionRepositoryTest {
     @Test
     @DisplayName("running remove test")
     void testRemove(){
-        categoryTransactionModelRepository.save(createModel());
-        CategoryTransactionModel categoryTransactionModel = categoryTransactionModelRepository.findById(1L).orElse(null);
-        categoryTransactionModelRepository.remove(categoryTransactionModel.getId());
-        CategoryTransactionModel removedModel = categoryTransactionModelRepository.findById(1L).orElse(null);
+        categoryTransactionModelRepositoryCRUD.save(createModel());
+        CategoryTransactionModel categoryTransactionModel = categoryTransactionModelRepositoryCRUD.findById(1L).orElse(null);
+        categoryTransactionModelRepositoryCRUD.remove(categoryTransactionModel.getId());
+        CategoryTransactionModel removedModel = categoryTransactionModelRepositoryCRUD.findById(1L).orElse(null);
 
         assertNull(removedModel);
     }
