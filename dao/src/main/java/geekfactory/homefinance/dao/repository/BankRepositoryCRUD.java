@@ -1,110 +1,61 @@
 package geekfactory.homefinance.dao.repository;
 
-import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
 import geekfactory.homefinance.dao.model.BankModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.Optional;
 
 @Transactional
 @Repository("bankRepository")
 public class BankRepositoryCRUD implements RepositoryCRUD<BankModel, Long> {
-    private final static String INSERT = "INSERT INTO bank_tbl(name) VALUES (?)";
-    private final static String FIND_BY_ID = "SELECT id, name FROM bank_tbl WHERE id = ?";
-    private final static String FIND_ALL = "SELECT id, name FROM bank_tbl";
-    private final static String REMOVE = "DELETE FROM bank_tbl WHERE id = ?";
-    private final static String UPDATE = "UPDATE bank_tbl set name = ? WHERE id = ?";
 
-    @Autowired
-    private DataSource dataSource;
+    @PersistenceContext
+    EntityManager entityManager;
 
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<BankModel> findByName(String name) {
+        TypedQuery<BankModel> query =
+                entityManager.createQuery("SELECT bank FROM BankModel bank " +
+                        "WHERE bank.name = :name", BankModel.class);
+        query.setParameter("name", name);
+        return Optional.ofNullable(query.getSingleResult());
+    }
+
+    @Transactional(readOnly = true)
     @Override
     public Optional<BankModel> findById(Long id) {
-        try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID);
-                preparedStatement.setLong(1, id);
-                ResultSet resultSet = preparedStatement.executeQuery();
-
-                if (resultSet.next()) {
-                    BankModel model = new BankModel();
-                    model.setId(resultSet.getLong(1));
-                    model.setName(resultSet.getString(2));
-                    return Optional.of(model);
-                }
-
-            } catch (SQLException e) {
-                throw new HomeFinanceDaoException("Error find " + id, e);
-        }
-        return Optional.empty();
+        return Optional.ofNullable(entityManager.find(BankModel.class, id));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Collection<BankModel> findAll() {
-        Collection<BankModel> listCategory = new ArrayList<>();
-        try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
-            ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()) {
-                    listCategory.add(new BankModel(resultSet.getLong(1), resultSet.getString(2)));
-                }
-            } catch (SQLException e) {
-                throw new HomeFinanceDaoException("Error find", e);
-        }
-        return listCategory;
+        return (Collection<BankModel>) entityManager.createQuery("SELECT bank FROM BankModel bank").getResultList();
     }
 
+    @Transactional
     @Override
     public boolean remove(Long id) {
-        try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
-                preparedStatement.setLong(1, id);
-                preparedStatement.executeUpdate();
-                connection.commit();
-                return true;
-
-            } catch (SQLException e) {
-            throw new HomeFinanceDaoException("Error delete", e);
-        }
+        BankModel modelToDelete = entityManager.find(BankModel.class, id);
+        entityManager.remove(modelToDelete);
+        return true;
     }
 
+    @Transactional
     @Override
     public void save(BankModel model) {
-        try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-                preparedStatement.setString(1, model.getName());
-                preparedStatement.executeUpdate();
-                ResultSet resultSet = preparedStatement.getGeneratedKeys();
-                if (resultSet.next()){
-                    model.setId(resultSet.getLong(1));
-                }
-                connection.commit();
-            } catch (SQLException e) {
-            throw new HomeFinanceDaoException("Error save " + model, e);
-        }
+        entityManager.persist(model);
     }
 
+    @Transactional
     @Override
-    public void update(BankModel model, Long idRow) {
-        try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
-                preparedStatement.setString(1, model.getName());
-                preparedStatement.setLong(2, idRow);
-                preparedStatement.executeUpdate();
-                connection.commit();
-
-        } catch (SQLException e) {
-            throw new HomeFinanceDaoException("Error update " + model, e);
-        }
+    public void update(BankModel model) {
+        entityManager.merge(model);
     }
 }

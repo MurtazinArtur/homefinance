@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -17,181 +20,48 @@ import java.util.Optional;
 @Transactional
 @Repository("transactionRepository")
 public class TransactionRepositoryCRUD implements RepositoryCRUD<TransactionModel, Long> {
-    private final static String INSERT = "INSERT INTO transaction_tbl(amount, date, source, bank_id, account_id, currency_id) VALUES (?, ?, ?, ?, ?, ?)";
-    private final static String INSERT_TRANSACTION_CATEGORY = "INSERT INTO transaction_category_tbl(transaction_id, category_id) VALUES (?, ?)";
-    private final static String FIND_BY_ID = "SELECT id, amount, date, source, bank_id, account_id, currency_id FROM transaction_tbl WHERE id = ?";
-    private final static String FIND_CATEGORY_BY_ID = "SELECT transaction_id, category_id FROM transaction_category_tbl WHERE transaction_id = ?";
-    private final static String FIND_ALL = "SELECT id, amount, date, source, bank_id, account_id, currency_id FROM transaction_tbl";
-    private final static String REMOVE = "DELETE FROM transaction_tbl, transaction_category_tbl USING transaction_tbl JOIN transaction_category_tbl " +
-            "ON transaction_category_tbl.transaction_id=transaction_tbl.id WHERE transaction_category_tbl.transaction_id=?;";
-    private final static String UPDATE = "UPDATE transaction_tbl set amount = ?, date = ?, source = ?, bank_id = ?, account_id = ?, currency_id = ?   WHERE id = ?";
+    @PersistenceContext
+    EntityManager entityManager;
 
-    @Autowired
-    DataSource dataSource;
-    @Autowired
-    private RepositoryCRUD<BankModel, Long> bankModelRepositoryCRUD;
-    @Autowired
-    private RepositoryCRUD<AccountModel, Long> accountModelRepositoryCRUD;
-    @Autowired
-    private RepositoryCRUD<CurrencyModel, Long> currencyModelRepositoryCRUD;
-    @Autowired
-    private RepositoryCRUD<CategoryTransactionModel, Long> categoryTransactionModelRepositoryCRUD;
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<TransactionModel> findByName(String name) {
+        TypedQuery<TransactionModel> query =
+                entityManager.createQuery("SELECT transaction FROM TransactionModel transaction " +
+                        "WHERE transaction.name = :name", TransactionModel.class);
+        query.setParameter("name", name);
+        return Optional.ofNullable(query.getSingleResult());
+    }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<TransactionModel> findById(Long id) {
-        try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID);
-            preparedStatement.setLong(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-                if (resultSet.next()) {
-                    return Optional.of(createModel(resultSet));
-                }
-            } catch (SQLException e) {
-                throw new HomeFinanceDaoException("Error find by id" + id, e);
-        }
-        return Optional.empty();
+        return Optional.ofNullable(entityManager.find(TransactionModel.class, id));
     }
 
-    @SuppressWarnings("Duplicates")
+    @Transactional(readOnly = true)
     @Override
     public Collection<TransactionModel> findAll() {
-        Collection<TransactionModel> listTransaction = new ArrayList<>();
-        try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
-            ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()) {
-                    listTransaction.add(createModel(resultSet));
-                }
-            } catch (SQLException e) {
-                throw new HomeFinanceDaoException("Error find all", e);
-        }
-        return listTransaction;
+        return (Collection<TransactionModel>) entityManager.createQuery("SELECT transaction FROM TransactionModel transaction").getResultList();
     }
 
+    @Transactional
     @Override
     public boolean remove(Long id) {
-        try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(REMOVE);
-                preparedStatement.setLong(1, id);
-                preparedStatement.executeUpdate();
-                connection.commit();
-                return true;
-
-            } catch (SQLException e) {
-            throw new HomeFinanceDaoException("Error delete", e);
-        }
+        TransactionModel modelToDelete = entityManager.find(TransactionModel.class, id);
+        entityManager.remove(modelToDelete);
+        return true;
     }
 
+    @Transactional
     @Override
     public void save(TransactionModel model) {
-        try {
-            Connection connection = dataSource.getConnection();
-            Collection<CategoryTransactionModel> heshSetCategory = new HashSet<>();
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-                preparedStatement.setBigDecimal(1, model.getAmount());
-                preparedStatement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-                preparedStatement.setString(3, model.getSource());
-                if (model.getBank() != null) {
-                    preparedStatement.setLong(4, model.getBank().getId());
-                } else {
-                    System.out.println("Поле Банк не может быть пустым!");
-                }if (model.getAccount() != null) {
-                    preparedStatement.setLong(5, model.getAccount().getId());
-                } else {
-                    System.out.println("Поле Платеж не может быть пустым!");
-                }if (model.getCurrency() != null) {
-                    preparedStatement.setLong(6, model.getCurrency().getId());
-                } else {
-                    System.out.println("Поле Платеж не может быть пустым!");
-                }
-
-                preparedStatement.executeUpdate();
-                ResultSet resultSet = preparedStatement.getGeneratedKeys();
-                if (resultSet.next()) {
-                    model.setId(resultSet.getLong(1));
-                }
-                connection.commit();
-                PreparedStatement putPreparedStatement = connection.prepareStatement(INSERT_TRANSACTION_CATEGORY);
-                for (CategoryTransactionModel setCategory : model.getCategory()) {
-                    heshSetCategory.add(putCategory(connection, putPreparedStatement, model.getId(), setCategory.getId()));
-                }
-            } catch (SQLException e) {
-            throw new HomeFinanceDaoException("Error save " + model, e);
-        }
+        entityManager.persist(model);
     }
 
+    @Transactional
     @Override
-    public void update(TransactionModel model, Long idRow) {
-        if (model != null) {
-            try {
-                Connection connection = dataSource.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
-                model.setId(idRow);
-                preparedStatement.setBigDecimal(1, model.getAmount());
-                preparedStatement.setDate(2, Date.valueOf(model.getDate()));
-                preparedStatement.setString(3, model.getSource());
-                preparedStatement.setLong(4, model.getBank().getId());
-                preparedStatement.setLong(5, model.getAccount().getId());
-                preparedStatement.setLong(6, model.getCurrency().getId());
-                preparedStatement.setLong(7, idRow);
-                preparedStatement.executeUpdate();
-                    connection.commit();
-
-                } catch (SQLException e) {
-                    throw new HomeFinanceDaoException("Error update " + model, e);
-            }
-        }
-    }
-
-    private TransactionModel createModel(ResultSet resultSet) throws SQLException {
-        TransactionModel model = new TransactionModel();
-
-        model.setId(resultSet.getLong(1));
-        model.setAmount(resultSet.getBigDecimal(2));
-        model.setDate(resultSet.getTimestamp(3).toLocalDateTime().toLocalDate());
-        model.setSource(resultSet.getString(4));
-        model.setCategory(getCategories(resultSet.getLong(1)));
-        model.setBank((bankModelRepositoryCRUD.findById
-                (resultSet.getLong(5)).get()));
-        model.setAccount((accountModelRepositoryCRUD.findById
-                (resultSet.getLong(6)).get()));
-        model.setCurrency(currencyModelRepositoryCRUD.findById
-                (resultSet.getLong(7)).get());
-        return model;
-    }
-
-    private Collection<CategoryTransactionModel> getCategories(Long transactionId) {
-        HashSet<CategoryTransactionModel> categoryTransactionHashSet = new HashSet<>();
-        try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_CATEGORY_BY_ID);
-                preparedStatement.setLong(1, transactionId);
-                ResultSet resultSet = preparedStatement.executeQuery();
-
-                while (resultSet.next()) {
-                    Long idCategory = resultSet.getLong(2);
-                    Optional<CategoryTransactionModel> model = Optional.ofNullable(categoryTransactionModelRepositoryCRUD.findById(idCategory).orElse(null));
-                    categoryTransactionHashSet.add(model.get());
-                }
-            } catch (SQLException e) {
-                throw new HomeFinanceDaoException("Error find", e);
-        }
-        return categoryTransactionHashSet;
-    }
-
-    private CategoryTransactionModel putCategory(Connection connection, PreparedStatement putPreparedStatement, Long idTransaction, Long idCategory) {
-        try {
-            putPreparedStatement.setLong(1, idTransaction);
-            putPreparedStatement.setLong(2, idCategory);
-            putPreparedStatement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            throw new HomeFinanceDaoException("Error paste data in table", e);
-        }
-        return new CategoryTransactionModel(categoryTransactionModelRepositoryCRUD.findById(idCategory));
+    public void update(TransactionModel model) {
+        entityManager.merge(model);
     }
 }
