@@ -41,7 +41,7 @@ public class AccountServiceTest {
         verify(accountRepositoryMock, never()).findAll();
         verify(accountRepositoryMock, never()).save(createAccountModel());
         verify(accountRepositoryMock, never()).remove(createAccountModel().getId());
-        verify(accountRepositoryMock, never()).update(eq(createAccountModel()), anyLong());
+        verify(accountRepositoryMock, never()).update(eq(createAccountModel()));
     }
 
     private AccountModel createAccountModel() {

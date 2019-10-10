@@ -39,6 +39,6 @@ public class TransactionService implements ServiceCRUD<TransactionModel, Long> {
 
     @Override
     public void update(TransactionModel model, Long idRow) {
-        transactionRepositoryCRUD.update(model, idRow);
+        transactionRepositoryCRUD.update(model);
     }
 }

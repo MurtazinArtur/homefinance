@@ -40,7 +40,7 @@ public class TransactionServiceTest {
         verify(transactionRepositoryMock, never()).findAll();
         verify(transactionRepositoryMock, never()).save(createTransactionModel());
         verify(transactionRepositoryMock, never()).remove(createTransactionModel().getId());
-        verify(transactionRepositoryMock, never()).update(eq(createTransactionModel()), anyLong());
+        verify(transactionRepositoryMock, never()).update(eq(createTransactionModel()));
     }
 
     private TransactionModel createTransactionModel() {

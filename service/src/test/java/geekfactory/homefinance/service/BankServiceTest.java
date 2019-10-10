@@ -36,7 +36,7 @@ public class BankServiceTest {
         verify(bankRepositoryMock, never()).findAll();
         verify(bankRepositoryMock, never()).save(createModel());
         verify(bankRepositoryMock, never()).remove(createModel().getId());
-        verify(bankRepositoryMock, never()).update(eq(createModel()), anyLong());
+        verify(bankRepositoryMock, never()).update(eq(createModel()));
     }
 
     private BankModel createModel() {

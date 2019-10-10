@@ -39,6 +39,6 @@ public class CurrencyService implements ServiceCRUD<CurrencyModel, Long> {
 
     @Override
     public void update(CurrencyModel model, Long idRow) {
-        currencyRepositoryCRUD.update(model, idRow);
+        currencyRepositoryCRUD.update(model);
     }
 }

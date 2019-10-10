@@ -37,7 +37,7 @@ public class CurrencyServiceTest {
         verify(currencyRepositoryMock, never()).findAll();
         verify(currencyRepositoryMock, never()).save(createModel());
         verify(currencyRepositoryMock, never()).remove(createModel().getId());
-        verify(currencyRepositoryMock, never()).update(eq(createModel()), anyLong());
+        verify(currencyRepositoryMock, never()).update(eq(createModel()));
     }
 
     private CurrencyModel createModel() {

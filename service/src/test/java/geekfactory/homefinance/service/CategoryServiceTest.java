@@ -36,7 +36,7 @@ public class CategoryServiceTest {
         verify(categoryTransactionRepositoryMock, never()).findAll();
         verify(categoryTransactionRepositoryMock, never()).save(createModel());
         verify(categoryTransactionRepositoryMock, never()).remove(createModel().getId());
-        verify(categoryTransactionRepositoryMock, never()).update(eq(createModel()), anyLong());
+        verify(categoryTransactionRepositoryMock, never()).update(eq(createModel()));
     }
 
     private CategoryTransactionModel createModel() {

@@ -39,6 +39,6 @@ public class CategoryService implements ServiceCRUD<CategoryTransactionModel, Lo
 
     @Override
     public void update(CategoryTransactionModel model, Long idRow) {
-        categoryTransactionRepositoryCRUD.update(model, idRow);
+        categoryTransactionRepositoryCRUD.update(model);
     }
 }

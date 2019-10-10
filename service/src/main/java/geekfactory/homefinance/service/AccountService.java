@@ -39,6 +39,6 @@ public class AccountService implements ServiceCRUD<AccountModel, Long> {
 
     @Override
     public void update(AccountModel model, Long idRow) {
-        accountRepositoryCRUD.update(model, idRow);
+        accountRepositoryCRUD.update(model);
     }
 }

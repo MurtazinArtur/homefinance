@@ -38,6 +38,6 @@ public class BankService implements ServiceCRUD<BankModel, Long> {
 
     @Override
     public void update(BankModel model, Long idRow) {
-        bankRepositoryCRUD.update(model, idRow);
+        bankRepositoryCRUD.update(model);
     }
 }
