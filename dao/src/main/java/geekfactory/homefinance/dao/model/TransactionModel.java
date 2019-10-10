@@ -23,8 +23,8 @@ public class TransactionModel {
     private LocalDate date;
     @Column(name = "source")
     private String source;
-    @ManyToMany
-    @JoinTable(name = "transaction_category.tbl",
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(name = "transaction_category_tbl",
             joinColumns = @JoinColumn(name = "transaction_id"),
     inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Collection<CategoryTransactionModel> category;

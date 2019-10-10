@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,34 +32,18 @@ class CurrencyRepositoryCRUDTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("running save and findById test")
     void testSaveAndFind() {
-        currencyModelRepositoryCRUD.save(createModel());
-
         assertEquals(createModel(), currencyModelRepositoryCRUD.findById(1L).get());
     }
 
     @Test
-    @DisplayName("running update test")
-    void testUpdate() {
-        currencyModelRepositoryCRUD.save(createModel());
-
-        CurrencyModel accountUpdate = currencyModelRepositoryCRUD.findById(1L).orElse(null);
-        accountUpdate.setName("testUpdate");
-        currencyModelRepositoryCRUD.update(accountUpdate, 1L);
-
-        assertEquals(accountUpdate, currencyModelRepositoryCRUD.findById(1L).get());
-    }
-
-    @Test
+    @Transactional
     @DisplayName("running findAll test")
     void testFindAll() {
-        for (int i = 0; i < createCollectionModels().size(); i++) {
-            currencyModelRepositoryCRUD.save(createCollectionModels().get(i));
-        }
-        List expectedList = (List<CurrencyModel>) currencyModelRepositoryCRUD.findAll();
-
         List<CurrencyModel> actualList = createCollectionModels();
+        List expectedList = (List<CurrencyModel>) currencyModelRepositoryCRUD.findAll();
 
         assertEquals(expectedList, actualList);
 
@@ -68,11 +53,24 @@ class CurrencyRepositoryCRUDTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    @Transactional
+    @DisplayName("running update test")
+    void testUpdate() {
+        createModel();
+
+        CurrencyModel accountUpdate = currencyModelRepositoryCRUD.findById(1L).orElse(null);
+        accountUpdate.setName("testUpdate");
+        currencyModelRepositoryCRUD.update(accountUpdate);
+
+        assertEquals(accountUpdate, currencyModelRepositoryCRUD.findById(1L).get());
+    }
 
     @Test
+    @Transactional
     @DisplayName("running remove test")
     void testRemove() {
-        currencyModelRepositoryCRUD.save(createModel());
+        createModel();
         CurrencyModel currencyModel = currencyModelRepositoryCRUD.findById(1L).orElse(null);
         currencyModelRepositoryCRUD.remove(currencyModel.getId());
         CurrencyModel removedModel = currencyModelRepositoryCRUD.findById(1L).orElse(null);
@@ -81,25 +79,29 @@ class CurrencyRepositoryCRUDTest {
     }
 
     private CurrencyModel createModel() {
-        CurrencyModel model = new CurrencyModel();
-        model.setId(1L);
-        model.setName("Dollar");
-        model.setSymbol("D");
-        model.setCode("USD");
+        CurrencyModel currencyModel = new CurrencyModel();
+        currencyModel.setId(1L);
+        currencyModel.setName("Dollar");
+        currencyModel.setSymbol("D");
+        currencyModel.setCode("USD");
 
-        return model;
+        currencyModelRepositoryCRUD.save(currencyModel);
+        return currencyModel;
     }
 
 
     private List<CurrencyModel> createCollectionModels() {
         List<CurrencyModel> colllection = new ArrayList<>();
+
         for (int i = 1; i <= 3; i++) {
-            CurrencyModel model = new CurrencyModel();
-            model.setId(Long.valueOf(i));
-            model.setName("Dollar");
-            model.setSymbol("D");
-            model.setCode("USD");
-            colllection.add(model);
+            CurrencyModel currencyModel = new CurrencyModel();
+            currencyModel.setId(Long.valueOf(i));
+            currencyModel.setName("Dollar");
+            currencyModel.setSymbol("D");
+            currencyModel.setCode("USD");
+            colllection.add(currencyModel);
+
+            currencyModelRepositoryCRUD.save(currencyModel);
         }
         return colllection;
     }

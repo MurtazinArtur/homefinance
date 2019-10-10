@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -35,31 +36,16 @@ class AccountRepositoryCRUDTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("running save and findById test")
     void testSaveAndFind(){
-        accountModelRepositoryCRUD.save(createModel());
-
         assertEquals(createModel(), accountModelRepositoryCRUD.findById(1L).get());
     }
 
     @Test
-    @DisplayName("running update test")
-    void testUpdate(){
-        accountModelRepositoryCRUD.save(createModel());
-
-        AccountModel accountUpdate = accountModelRepositoryCRUD.findById(1L).orElse(null);
-        accountUpdate.setName("testUpdate");
-        accountModelRepositoryCRUD.update(accountUpdate, 1L);
-
-        assertEquals(accountUpdate, accountModelRepositoryCRUD.findById(1L).get());
-    }
-
-    @Test
+    @Transactional
     @DisplayName("running findAll test")
-    void testFindAll(){
-        for (int i = 0; i < createCollectionModels().size(); i++) {
-            accountModelRepositoryCRUD.save(createCollectionModels().get(i));
-        }
+    void testFindAll() {
         List<AccountModel> expectedList = createCollectionModels();
         List<AccountModel> actualList = (List<AccountModel>) accountModelRepositoryCRUD.findAll();
 
@@ -72,9 +58,25 @@ class AccountRepositoryCRUDTest {
     }
 
     @Test
+    @Transactional
+    @DisplayName("running update test")
+    void testUpdate(){
+        createModel();
+
+        AccountModel accountUpdate = accountModelRepositoryCRUD.findById(1L).orElse(null);
+        accountUpdate.setName("testUpdate");
+        accountModelRepositoryCRUD.update(accountUpdate);
+
+        assertEquals(accountUpdate, accountModelRepositoryCRUD.findById(1L).get());
+    }
+
+
+    @Test
+    @Transactional
     @DisplayName("running remove test")
     void testRemove(){
-        accountModelRepositoryCRUD.save(createModel());
+        createModel();
+
         AccountModel accountModel = accountModelRepositoryCRUD.findById(1L).orElse(null);
         accountModelRepositoryCRUD.remove(accountModel.getId());
         AccountModel removedModel = accountModelRepositoryCRUD.findById(1L).orElse(null);
@@ -82,17 +84,18 @@ class AccountRepositoryCRUDTest {
         assertNull(removedModel);
     }
 
-    private void saveCurrencymodel() {
+    private void saveCurrencyModel() {
         CurrencyModel currencyModel = new CurrencyModel();
         currencyModel.setId(1L);
         currencyModel.setName("Dollar");
         currencyModel.setSymbol("D");
         currencyModel.setCode("USD");
+
         currencyModelRepositoryCRUD.save(currencyModel);
     }
 
     private AccountModel createModel() {
-        saveCurrencymodel();
+        saveCurrencyModel();
         AccountModel accountModel = new AccountModel();
         accountModel.setId(1L);
         accountModel.setName("test");
@@ -100,21 +103,26 @@ class AccountRepositoryCRUDTest {
         accountModel.setCurrencyModel(currencyModelRepositoryCRUD.findById(1L).orElse(null));
         accountModel.setAccountType(CASH);
 
+        accountModelRepositoryCRUD.save(accountModel);
+
         return accountModel;
     }
 
     private List<AccountModel> createCollectionModels() {
-        List<AccountModel> colllection = new ArrayList<>();
+        List<AccountModel> collection = new ArrayList<>();
+        saveCurrencyModel();
+
         for (int i = 1; i <= 3; i++) {
-            saveCurrencymodel();
-            AccountModel model = new AccountModel();
-            model.setId(Long.valueOf(i));
-            model.setName("test");
-            model.setAccountType(CASH);
-            model.setAmount(new BigDecimal("1.00"));
-            model.setCurrencyModel(currencyModelRepositoryCRUD.findById(1L).orElse(null));
-            colllection.add(model);
+            AccountModel accountModel = new AccountModel();
+            accountModel.setId(Long.valueOf(i));
+            accountModel.setName("test");
+            accountModel.setAccountType(CASH);
+            accountModel.setAmount(new BigDecimal("1.00"));
+            accountModel.setCurrencyModel(currencyModelRepositoryCRUD.findById(1L).orElse(null));
+
+            collection.add(accountModel);
+            accountModelRepositoryCRUD.save(accountModel);
         }
-        return colllection;
+        return collection;
     }
 }

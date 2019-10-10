@@ -10,7 +10,6 @@ import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.Optional;
 
-@Transactional
 @Repository("bankRepository")
 public class BankRepositoryCRUD implements RepositoryCRUD<BankModel, Long> {
 

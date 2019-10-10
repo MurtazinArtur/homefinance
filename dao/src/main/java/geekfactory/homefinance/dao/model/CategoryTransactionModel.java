@@ -3,7 +3,6 @@ package geekfactory.homefinance.dao.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Optional;
 
 @Entity
 @Table(name = "category_tbl")
@@ -12,12 +11,12 @@ import java.util.Optional;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryTransactionModel  {
+public class CategoryTransactionModel {
     @Id
     private Long id;
     @Column(name = "name")
     private String name;
     @ManyToOne
-    @JoinColumn(name = "parent_category")
+    @JoinColumn(name = "parent_category_id")
     private CategoryTransactionModel parentCategory;
 }

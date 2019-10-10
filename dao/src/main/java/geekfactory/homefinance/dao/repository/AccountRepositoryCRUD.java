@@ -1,5 +1,6 @@
 package geekfactory.homefinance.dao.repository;
 
+import geekfactory.homefinance.dao.config.DaoConfiguration;
 import geekfactory.homefinance.dao.model.AccountModel;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;

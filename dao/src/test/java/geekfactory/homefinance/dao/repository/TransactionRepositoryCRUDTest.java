@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,13 +19,15 @@ import java.util.HashSet;
 import java.util.List;
 
 import static geekfactory.homefinance.dao.model.AccountType.CASH;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DaoConfiguration.class})
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:delete_tables_ddl.sql")
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:init_ddl.sql")
+@Transactional
 class TransactionRepositoryCRUDTest {
 
     @Autowired
@@ -46,31 +49,14 @@ class TransactionRepositoryCRUDTest {
     @Test
     @DisplayName("running save and findById test")
     void testSaveAndFind(){
-        transactionModelRepositoryCRUD.save(createModel());
-
         assertEquals(createModel(), transactionModelRepositoryCRUD.findById(1L).get());
-    }
-
-    @Test
-    @DisplayName("running update test")
-    void testUpdate(){
-        transactionModelRepositoryCRUD.save(createModel());
-
-        TransactionModel transactionUpdate = transactionModelRepositoryCRUD.findById(1L).orElse(null);
-        transactionUpdate.setSource("testUpdate");
-        transactionModelRepositoryCRUD.update(transactionUpdate, 1L);
-
-        assertEquals(transactionUpdate, transactionModelRepositoryCRUD.findById(1L).get());
     }
 
     @Test
     @DisplayName("running findAll test")
     void testFindAll(){
-        for (int i = 0; i < createCollectionModels().size(); i++) {
-            transactionModelRepositoryCRUD.save(createCollectionModels().get(i));
-        }
-        List<TransactionModel> expectedList = (List<TransactionModel>) transactionModelRepositoryCRUD.findAll();
-        List<TransactionModel> actualList = createCollectionModels();
+        List<TransactionModel> expectedList = createCollectionModels();
+        List<TransactionModel> actualList = (List<TransactionModel>) transactionModelRepositoryCRUD.findAll();
 
         assertEquals(expectedList, actualList);
 
@@ -80,41 +66,58 @@ class TransactionRepositoryCRUDTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    @DisplayName("running update test")
+    void testUpdate() {
+        createModel();
+
+        TransactionModel transactionUpdate = transactionModelRepositoryCRUD.findById(1L).orElse(null);
+        transactionUpdate.setSource("testUpdate");
+        transactionModelRepositoryCRUD.update(transactionUpdate);
+
+        assertEquals(transactionUpdate, transactionModelRepositoryCRUD.findById(1L).get());
+    }
+
     private List<TransactionModel> createCollectionModels() {
         saveAllModels();
-        List<TransactionModel> colllection = new ArrayList<>();
+        List<TransactionModel> collection = new ArrayList<>();
+
         for (int i = 1; i <= 3; i++) {
-            TransactionModel model = new TransactionModel();
+            TransactionModel transactionModel = new TransactionModel();
             Collection<CategoryTransactionModel> categoryTransactionModels = new HashSet<>();
-            model.setId(Long.valueOf(i));
-            model.setAmount(BigDecimal.valueOf(35.18));
-            model.setDate(LocalDate.now());
-            model.setSource("Testing Record");
-            model.setBank(bankModelRepositoryCRUD.findById(1L).get());
-            model.setAccount(accountModelRepositoryCRUD.findById(1L).get());
-            model.setCurrency(currencyModelRepositoryCRUD.findById(1L).get());
+            transactionModel.setId(Long.valueOf(i));
+            transactionModel.setAmount(BigDecimal.valueOf(35.18));
+            transactionModel.setDate(LocalDate.now());
+            transactionModel.setSource("Testing Record");
+            transactionModel.setBank(bankModelRepositoryCRUD.findById(1L).get());
+            transactionModel.setAccount(accountModelRepositoryCRUD.findById(1L).get());
+            transactionModel.setCurrency(currencyModelRepositoryCRUD.findById(1L).get());
             categoryTransactionModels.add(categoryTransactionModelRepositoryCRUD.findById(1L).get());
-            model.setCategory(categoryTransactionModels);
-            colllection.add(model);
+            transactionModel.setCategory(categoryTransactionModels);
+            collection.add(transactionModel);
+
+            transactionModelRepositoryCRUD.save(transactionModel);
         }
-        return colllection;
+        return collection;
     }
 
     private TransactionModel createModel() {
         saveAllModels();
-        TransactionModel model = new TransactionModel();
+        TransactionModel transactionModel = new TransactionModel();
         Collection<CategoryTransactionModel> categoryTransactionModels = new HashSet<>();
-        model.setId(1l);
-        model.setAmount(BigDecimal.valueOf(35.18));
-        model.setDate(LocalDate.now());
-        model.setSource("Testing Record");
-        model.setBank(bankModelRepositoryCRUD.findById(1L).get());
-        model.setAccount(accountModelRepositoryCRUD.findById(1L).get());
-        model.setCurrency(currencyModelRepositoryCRUD.findById(1L).get());
+        transactionModel.setId(1L);
+        transactionModel.setAmount(BigDecimal.valueOf(35.18));
+        transactionModel.setDate(LocalDate.now());
+        transactionModel.setSource("Testing Record");
+        transactionModel.setBank(bankModelRepositoryCRUD.findById(1L).get());
+        transactionModel.setAccount(accountModelRepositoryCRUD.findById(1L).get());
+        transactionModel.setCurrency(currencyModelRepositoryCRUD.findById(1L).get());
         categoryTransactionModels.add(categoryTransactionModelRepositoryCRUD.findById(1L).get());
-        model.setCategory(categoryTransactionModels);
+        transactionModel.setCategory(categoryTransactionModels);
 
-        return model;
+        transactionModelRepositoryCRUD.save(transactionModel);
+
+        return transactionModel;
     }
 
     private void saveAccountModel() {
@@ -139,11 +142,11 @@ class TransactionRepositoryCRUDTest {
     }
 
     private void saveBankModel() {
-        BankModel model = new BankModel();
-        model.setId(1L);
-        model.setName("VTB");
+        BankModel bankModel = new BankModel();
+        bankModel.setId(1L);
+        bankModel.setName("VTB");
 
-        bankModelRepositoryCRUD.save(model);
+        bankModelRepositoryCRUD.save(bankModel);
     }
 
     private void saveCategoryModel() {

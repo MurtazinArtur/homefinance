@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS category_tbl
 (
     id   INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     name VARCHAR(50)                    NOT NULL,
-    parent_category INT
+    parent_category_id INT
 );
 
 CREATE TABLE IF NOT EXISTS bank_tbl

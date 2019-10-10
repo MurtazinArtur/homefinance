@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,33 +32,19 @@ class BankRepositoryCRUDTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("running save and findById test")
     void testSaveAndFind() {
-        bankRepositoryCRUD.save(createModel());
-
         assertEquals(createModel(), bankRepositoryCRUD.findById(1L).get());
     }
 
     @Test
-    @DisplayName("running update test")
-    void testUpdate() {
-        bankRepositoryCRUD.save(createModel());
-
-        BankModel accountUpdate = bankRepositoryCRUD.findById(1L).orElse(null);
-        accountUpdate.setName("testUpdate");
-        bankRepositoryCRUD.update(accountUpdate, 1L);
-
-        assertEquals(accountUpdate, bankRepositoryCRUD.findById(1L).get());
-    }
-
-    @Test
+    @Transactional
     @DisplayName("running findAll test")
     void testFindAll() {
-        for (int i = 0; i < createCollectionModels().size(); i++){
-            bankRepositoryCRUD.save(createCollectionModels().get(i));
-        }
-        List expectedList = (List<BankModel>) bankRepositoryCRUD.findAll();
         List<BankModel> actualList = createCollectionModels();
+        List expectedList = (List<BankModel>) bankRepositoryCRUD.findAll();
+
         assertEquals(expectedList, actualList);
 
         int expected = expectedList.size();
@@ -66,11 +53,25 @@ class BankRepositoryCRUDTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    @Transactional
+    @DisplayName("running update test")
+    void testUpdate() {
+        createModel();
+
+        BankModel bankUpdate = bankRepositoryCRUD.findById(1L).orElse(null);
+        bankUpdate.setName("testUpdate");
+        bankRepositoryCRUD.update(bankUpdate);
+
+        assertEquals(bankUpdate, bankRepositoryCRUD.findById(1L).get());
+    }
 
     @Test
+    @Transactional
     @DisplayName("running remove test")
     void testRemove() {
-        bankRepositoryCRUD.save(createModel());
+        createModel();
+
         BankModel bankModel = bankRepositoryCRUD.findById(1L).orElse(null);
         bankRepositoryCRUD.remove(bankModel.getId());
         BankModel removedModel = bankRepositoryCRUD.findById(1L).orElse(null);
@@ -79,20 +80,24 @@ class BankRepositoryCRUDTest {
     }
 
     private BankModel createModel() {
-        BankModel model = new BankModel();
-        model.setId(1L);
-        model.setName("VTB");
-        return model;
+        BankModel bankModel = new BankModel();
+        bankModel.setId(1L);
+        bankModel.setName("VTB");
+
+        bankRepositoryCRUD.save(bankModel);
+        return bankModel;
     }
 
     private List<BankModel> createCollectionModels(){
-        List<BankModel> colllection = new ArrayList<>();
+        List<BankModel> collection = new ArrayList<>();
         for (int i = 1; i <= 3 ; i++) {
-            BankModel model = new BankModel();
-            model.setId(Long.valueOf(i));
-            model.setName("VTB");
-            colllection.add(model);
+            BankModel bankModel = new BankModel();
+            bankModel.setId(Long.valueOf(i));
+            bankModel.setName("VTB");
+
+            collection.add(bankModel);
+            bankRepositoryCRUD.save(bankModel);
         }
-        return colllection;
+        return collection;
     }
 }

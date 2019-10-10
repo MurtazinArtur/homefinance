@@ -9,9 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,34 +32,18 @@ class CategoryTransactionRepositoryCRUDTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("running save and findById test")
     void testSaveAndFind(){
-        categoryTransactionModelRepositoryCRUD.save(createModel());
-
         assertEquals(createModel(), categoryTransactionModelRepositoryCRUD.findById(1L).get());
     }
 
     @Test
-    @DisplayName("running update test")
-    void testUpdate(){
-        categoryTransactionModelRepositoryCRUD.save(createModel());
-
-        CategoryTransactionModel categoryTransactionUpdate = categoryTransactionModelRepositoryCRUD.findById(1L).orElse(null);
-        categoryTransactionUpdate.setName("testUpdate");
-        categoryTransactionModelRepositoryCRUD.update(categoryTransactionUpdate, 1L);
-
-        assertEquals(categoryTransactionUpdate, categoryTransactionModelRepositoryCRUD.findById(1L).get());
-    }
-
-    @Test
+    @Transactional
     @DisplayName("running findAll test")
     void testFindAll(){
-        for (int i = 0; i < createCollectionModels().size(); i++) {
-            categoryTransactionModelRepositoryCRUD.save(createCollectionModels().iterator().next());
-        }
-
-        Collection<CategoryTransactionModel> actualList = (categoryTransactionModelRepositoryCRUD.findAll());
         Collection<CategoryTransactionModel> expectedList = createCollectionModels();
+        Collection<CategoryTransactionModel> actualList = (categoryTransactionModelRepositoryCRUD.findAll());
 
         assertEquals(expectedList, actualList);
 
@@ -69,9 +54,24 @@ class CategoryTransactionRepositoryCRUDTest {
     }
 
     @Test
+    @Transactional
+    @DisplayName("running update test")
+    void testUpdate() {
+        createModel();
+
+        CategoryTransactionModel categoryTransactionUpdate = categoryTransactionModelRepositoryCRUD.findById(1L).orElse(null);
+        categoryTransactionUpdate.setName("testUpdate");
+        categoryTransactionModelRepositoryCRUD.update(categoryTransactionUpdate);
+
+        assertEquals(categoryTransactionUpdate, categoryTransactionModelRepositoryCRUD.findById(1L).get());
+    }
+
+    @Test
+    @Transactional
     @DisplayName("running remove test")
     void testRemove(){
-        categoryTransactionModelRepositoryCRUD.save(createModel());
+        createModel();
+
         CategoryTransactionModel categoryTransactionModel = categoryTransactionModelRepositoryCRUD.findById(1L).orElse(null);
         categoryTransactionModelRepositoryCRUD.remove(categoryTransactionModel.getId());
         CategoryTransactionModel removedModel = categoryTransactionModelRepositoryCRUD.findById(1L).orElse(null);
@@ -80,24 +80,27 @@ class CategoryTransactionRepositoryCRUDTest {
     }
 
     private CategoryTransactionModel createModel() {
-        CategoryTransactionModel model = new CategoryTransactionModel();
-        model.setId(1l);
-        model.setName("test1");
-        model.setParentCategory(null);
+        CategoryTransactionModel categoryModel = new CategoryTransactionModel();
+        categoryModel.setId(1l);
+        categoryModel.setName("test1");
+        categoryModel.setParentCategory(null);
 
-        return model;
+        categoryTransactionModelRepositoryCRUD.save(categoryModel);
+        return categoryModel;
     }
 
     private Collection<CategoryTransactionModel> createCollectionModels() {
-        Collection<CategoryTransactionModel> colllection = new TreeSet<>();
-        for (int i = 1; i <= 3; i++) {
-            CategoryTransactionModel model = new CategoryTransactionModel();
-            model.setId(Long.valueOf(i));
-            model.setName("test");
-            model.setParentCategory(null);
+        Collection<CategoryTransactionModel> collection = new ArrayList<>();
 
-            colllection.add(model);
+        for (int i = 1; i <= 3; i++) {
+            CategoryTransactionModel categoryModel = new CategoryTransactionModel();
+            categoryModel.setId(Long.valueOf(i));
+            categoryModel.setName("test");
+            categoryModel.setParentCategory(null);
+
+            collection.add(categoryModel);
+            categoryTransactionModelRepositoryCRUD.save(categoryModel);
         }
-        return colllection;
+        return collection;
     }
 }
