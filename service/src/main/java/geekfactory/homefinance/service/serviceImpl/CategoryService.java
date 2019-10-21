@@ -1,7 +1,7 @@
-package geekfactory.homefinance.service;
+package geekfactory.homefinance.service.serviceImpl;
 
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
-import geekfactory.homefinance.dao.repository.RepositoryCRUD;
+import geekfactory.homefinance.dao.repository.CategoryTransactionRepositoryCRUD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,34 +11,33 @@ import java.util.Optional;
 
 @Transactional
 @Service("categoryService")
-public class CategoryService implements ServiceCRUD<CategoryTransactionModel, Long> {
+public class CategoryService {
 
     @Autowired
-    private RepositoryCRUD<CategoryTransactionModel, Long> categoryTransactionRepositoryCRUD;
+    private CategoryTransactionRepositoryCRUD categoryTransactionRepositoryCRUD;
 
-    @Override
     public Optional<CategoryTransactionModel> findById(Long id) {
-        return categoryTransactionRepositoryCRUD.findById(id);
+        return Optional.ofNullable(categoryTransactionRepositoryCRUD.findById(id).get());
     }
 
-    @Override
+    public Optional<CategoryTransactionModel> findByName(String name) {
+        return null;
+    }
+
     public Collection<CategoryTransactionModel> findAll() {
         return categoryTransactionRepositoryCRUD.findAll();
     }
 
-    @Override
-    public boolean remove(Long id) {
-        categoryTransactionRepositoryCRUD.remove(id);
-        return true;
+    public void remove(CategoryTransactionModel model) {
+        categoryTransactionRepositoryCRUD.remove(model);
     }
 
-    @Override
     public void save(CategoryTransactionModel model) {
         categoryTransactionRepositoryCRUD.save(model);
     }
 
-    @Override
-    public void update(CategoryTransactionModel model, Long idRow) {
+    public CategoryTransactionModel update(CategoryTransactionModel model) {
         categoryTransactionRepositoryCRUD.update(model);
+        return model;
     }
 }

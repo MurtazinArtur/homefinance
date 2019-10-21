@@ -1,6 +1,6 @@
-package geekfactory.homefinance.service;
+package geekfactory.homefinance.service.serviceImpl;
 
-import geekfactory.homefinance.config.ServiceConfiguration;
+import geekfactory.homefinance.service.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.BankModel;
 import geekfactory.homefinance.dao.repository.BankRepositoryCRUD;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ public class BankServiceTest {
         verify(bankRepositoryMock, times(1)).findById(anyLong());
         verify(bankRepositoryMock, never()).findAll();
         verify(bankRepositoryMock, never()).save(createModel());
-        verify(bankRepositoryMock, never()).remove(createModel().getId());
+        verify(bankRepositoryMock, never()).remove(createModel());
         verify(bankRepositoryMock, never()).update(eq(createModel()));
     }
 

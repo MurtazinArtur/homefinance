@@ -1,10 +1,11 @@
-package geekfactory.homefinance.service;
+package geekfactory.homefinance.service.serviceImpl;
 
-import geekfactory.homefinance.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.AccountModel;
 import geekfactory.homefinance.dao.model.AccountType;
 import geekfactory.homefinance.dao.model.CurrencyModel;
 import geekfactory.homefinance.dao.repository.AccountRepositoryCRUD;
+import geekfactory.homefinance.service.config.ServiceConfiguration;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,7 +17,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -27,7 +27,7 @@ public class AccountServiceTest {
     private AccountRepositoryCRUD accountRepositoryMock = mock(AccountRepositoryCRUD.class);
     @InjectMocks
     @Autowired
-    private ServiceCRUD<AccountModel, Long> accountService;
+    private AccountService accountService;
 
     @Test
     public void testAccountService() {
@@ -35,12 +35,12 @@ public class AccountServiceTest {
         when(accountRepositoryMock.findById(anyLong())).thenReturn(Optional.ofNullable(createAccountModel()));
 
         assertNotNull(accountRepositoryMock);
-        assertEquals(createAccountModel(), accountRepositoryMock.findById(1L).get());
+        Assertions.assertEquals(createAccountModel(), accountRepositoryMock.findById(1L).get());
 
         verify(accountRepositoryMock, times(1)).findById(anyLong());
         verify(accountRepositoryMock, never()).findAll();
         verify(accountRepositoryMock, never()).save(createAccountModel());
-        verify(accountRepositoryMock, never()).remove(createAccountModel().getId());
+        verify(accountRepositoryMock, never()).remove(createAccountModel());
         verify(accountRepositoryMock, never()).update(eq(createAccountModel()));
     }
 

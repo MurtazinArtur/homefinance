@@ -1,6 +1,6 @@
-package geekfactory.homefinance.service;
+package geekfactory.homefinance.service.serviceImpl;
 
-import geekfactory.homefinance.config.ServiceConfiguration;
+import geekfactory.homefinance.service.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
 import geekfactory.homefinance.dao.repository.CategoryTransactionRepositoryCRUD;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ public class CategoryServiceTest {
 
         verify(categoryTransactionRepositoryMock, never()).findAll();
         verify(categoryTransactionRepositoryMock, never()).save(createModel());
-        verify(categoryTransactionRepositoryMock, never()).remove(createModel().getId());
+        verify(categoryTransactionRepositoryMock, never()).remove(createModel());
         verify(categoryTransactionRepositoryMock, never()).update(eq(createModel()));
     }
 

@@ -1,6 +1,6 @@
-package geekfactory.homefinance.service;
+package geekfactory.homefinance.service.serviceImpl;
 
-import geekfactory.homefinance.config.ServiceConfiguration;
+import geekfactory.homefinance.service.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.CurrencyModel;
 import geekfactory.homefinance.dao.repository.CurrencyRepositoryCRUD;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ public class CurrencyServiceTest {
 
         verify(currencyRepositoryMock, never()).findAll();
         verify(currencyRepositoryMock, never()).save(createModel());
-        verify(currencyRepositoryMock, never()).remove(createModel().getId());
+        verify(currencyRepositoryMock, never()).remove(createModel());
         verify(currencyRepositoryMock, never()).update(eq(createModel()));
     }
 

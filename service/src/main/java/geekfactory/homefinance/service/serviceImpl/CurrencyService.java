@@ -1,7 +1,7 @@
-package geekfactory.homefinance.service;
+package geekfactory.homefinance.service.serviceImpl;
 
 import geekfactory.homefinance.dao.model.CurrencyModel;
-import geekfactory.homefinance.dao.repository.RepositoryCRUD;
+import geekfactory.homefinance.dao.repository.CurrencyRepositoryCRUD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,34 +11,33 @@ import java.util.Optional;
 
 @Transactional
 @Service("currencyService")
-public class CurrencyService implements ServiceCRUD<CurrencyModel, Long> {
+public class CurrencyService {
 
     @Autowired
-    private RepositoryCRUD<CurrencyModel, Long> currencyRepositoryCRUD;
+    private CurrencyRepositoryCRUD currencyRepositoryCRUD;
 
-    @Override
     public Optional<CurrencyModel> findById(Long id) {
-        return currencyRepositoryCRUD.findById(id);
+        return Optional.ofNullable(currencyRepositoryCRUD.findById(id).get());
     }
 
-    @Override
+    public Optional<CurrencyModel> findByName(String name) {
+        return null;
+    }
+
     public Collection<CurrencyModel> findAll() {
         return currencyRepositoryCRUD.findAll();
     }
 
-    @Override
-    public boolean remove(Long id) {
-        currencyRepositoryCRUD.remove(id);
-        return true;
+    public void remove(CurrencyModel model) {
+        currencyRepositoryCRUD.remove(model);
     }
 
-    @Override
     public void save(CurrencyModel model) {
         currencyRepositoryCRUD.save(model);
     }
 
-    @Override
-    public void update(CurrencyModel model, Long idRow) {
+    public CurrencyModel update(CurrencyModel model) {
         currencyRepositoryCRUD.update(model);
+        return model;
     }
 }

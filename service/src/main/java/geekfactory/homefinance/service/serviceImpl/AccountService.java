@@ -1,7 +1,7 @@
-package geekfactory.homefinance.service;
+package geekfactory.homefinance.service.serviceImpl;
 
 import geekfactory.homefinance.dao.model.AccountModel;
-import geekfactory.homefinance.dao.repository.RepositoryCRUD;
+import geekfactory.homefinance.dao.repository.AccountRepositoryCRUD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,34 +11,33 @@ import java.util.Optional;
 
 @Transactional
 @Service("accountService")
-public class AccountService implements ServiceCRUD<AccountModel, Long> {
+public class AccountService {
 
     @Autowired
-    private RepositoryCRUD<AccountModel, Long> accountRepositoryCRUD;
+    private AccountRepositoryCRUD accountRepositoryCRUD;
 
-    @Override
     public Optional<AccountModel> findById(Long id) {
-        return accountRepositoryCRUD.findById(id);
+        return Optional.ofNullable(accountRepositoryCRUD.findById(id).get());
     }
 
-    @Override
+    public Optional<AccountModel> findByName(String name) {
+        return Optional.empty();
+    }
+
     public Collection<AccountModel> findAll() {
         return accountRepositoryCRUD.findAll();
     }
 
-    @Override
-    public boolean remove(Long id) {
-        accountRepositoryCRUD.remove(id);
-        return true;
+    public void remove(AccountModel model) {
+        accountRepositoryCRUD.remove(model);
     }
 
-    @Override
     public void save(AccountModel model) {
         accountRepositoryCRUD.save(model);
     }
 
-    @Override
-    public void update(AccountModel model, Long idRow) {
+    public AccountModel update(AccountModel model) {
         accountRepositoryCRUD.update(model);
+        return model;
     }
 }
