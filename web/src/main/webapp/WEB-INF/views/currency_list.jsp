@@ -1,12 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+
 <html>
 <head>
     <title >Список валют</title>
-    <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/buttons.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/modal_form.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/menu.css" />" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="${contextPath}/resources/js/bootstrap/bootstrap.min.js"></script>
+    <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="${contextPath}/resources/css/buttons.css" rel="stylesheet">
+    <link href="${contextPath}/resources/css/modal_form.css" rel="stylesheet">
+    <link href="${contextPath}/resources/css/menu.css" rel="stylesheet">
 
 </head>
 <body>
@@ -17,11 +21,11 @@
         <a href="//dbmast.ru/">DBmast.ru</a>
     </h2>
 <ul>
-    <li><a href="<c:url value="/currency_list" />">Виды Валют</a>
-    <li><a href="<c:url value="/account_list" />">Счета</a>
-    <li><a href="<c:url value="/bank_list" />">Банки</a>
-    <li><a href="<c:url value="/category_list" />">Категории Платежей</a>
-    <li><a href="<c:url value="/transaction_list" />">Транзакции</a>
+    <li><a href="${contextPath}/currencies/">Виды Валют</a>
+    <li><a href="${contextPath}/accounts/">Счета</a>
+    <li><a href="${contextPath}/banks/">Банки</a>
+    <li><a href="${contextPath}/categories/">Категории Платежей</a>
+    <li><a href="${contextPath}/transactions/">Транзакции</a>
 </ul>
 </nav>
 <div class="mask-content"></div>
@@ -57,10 +61,8 @@
 <div style="float:left; width:150px; margin-right: 50px;">
     <a href="<c:url value="/" />" class="bott">Вернуться</a></div>
 
-<script src="<c:url value="/resources/js/send_post.js" />"></script>
-<script src="<c:url value="/resources/js/send_delete.js" />"></script>
-<script src="<c:url value="/resources/js/serialize.js" />"></script>
-<script src="<c:url value="/resources/js/table.js" />"></script>
-
+<script src="${contextPath}/resources/js/send_post.js"></script>
+<script src="${contextPath}/resources/js/send_delete.js"></script>
+<script src="${contextPath}/resources/js/serialize.js"></script>
 </body>
 </html>

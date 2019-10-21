@@ -1,0 +1,8 @@
+geekfactory\homefinance\web\controller\CategoryController.class
+geekfactory\homefinance\web\controller\HelloController.class
+geekfactory\homefinance\web\dto\BankDtoModel.class
+geekfactory\homefinance\web\controller\BankController.class
+geekfactory\homefinance\web\config\AppInit.class
+geekfactory\homefinance\web\controller\CurrencyController.class
+geekfactory\homefinance\web\config\WebConfiguration.class
+geekfactory\homefinance\web\controller\AccountController.class
