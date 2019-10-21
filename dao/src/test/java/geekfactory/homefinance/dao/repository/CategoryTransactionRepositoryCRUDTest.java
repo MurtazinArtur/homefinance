@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CategoryTransactionRepositoryCRUDTest {
 
     @Autowired
-    private RepositoryCRUD<CategoryTransactionModel, Long> categoryTransactionModelRepositoryCRUD;
+    private CategoryTransactionRepositoryCRUD categoryTransactionModelRepositoryCRUD;
 
     @Test
     void TestContext(){
@@ -73,7 +73,7 @@ class CategoryTransactionRepositoryCRUDTest {
         createModel();
 
         CategoryTransactionModel categoryTransactionModel = categoryTransactionModelRepositoryCRUD.findById(1L).orElse(null);
-        categoryTransactionModelRepositoryCRUD.remove(categoryTransactionModel.getId());
+        categoryTransactionModelRepositoryCRUD.remove(categoryTransactionModel);
         CategoryTransactionModel removedModel = categoryTransactionModelRepositoryCRUD.findById(1L).orElse(null);
 
         assertNull(removedModel);

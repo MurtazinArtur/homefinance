@@ -31,15 +31,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class TransactionRepositoryCRUDTest {
 
     @Autowired
-    private RepositoryCRUD<TransactionModel, Long> transactionModelRepositoryCRUD;
+    private TransactionRepositoryCRUD transactionModelRepositoryCRUD;
     @Autowired
-    private RepositoryCRUD<BankModel, Long> bankModelRepositoryCRUD;
+    private BankRepositoryCRUD bankModelRepositoryCRUD;
     @Autowired
-    private RepositoryCRUD<AccountModel, Long> accountModelRepositoryCRUD;
+    private AccountRepositoryCRUD accountModelRepositoryCRUD;
     @Autowired
-    private RepositoryCRUD<CurrencyModel, Long> currencyModelRepositoryCRUD;
+    private CurrencyRepositoryCRUD currencyModelRepositoryCRUD;
     @Autowired
-    private RepositoryCRUD<CategoryTransactionModel, Long> categoryTransactionModelRepositoryCRUD;
+    private CategoryTransactionRepositoryCRUD categoryTransactionModelRepositoryCRUD;
 
     @Test
     void TestContext(){
@@ -143,7 +143,6 @@ class TransactionRepositoryCRUDTest {
 
     private void saveBankModel() {
         BankModel bankModel = new BankModel();
-        bankModel.setId(1L);
         bankModel.setName("VTB");
 
         bankModelRepositoryCRUD.save(bankModel);

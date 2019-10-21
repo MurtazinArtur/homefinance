@@ -1,30 +1,24 @@
 package geekfactory.homefinance.dao.repository;
 
-import geekfactory.homefinance.dao.Exception.HomeFinanceDaoException;
-import geekfactory.homefinance.dao.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import geekfactory.homefinance.dao.model.TransactionModel;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.sql.DataSource;
-import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Optional;
 
+@EnableTransactionManagement
 @Transactional
 @Repository("transactionRepository")
-public class TransactionRepositoryCRUD implements RepositoryCRUD<TransactionModel, Long> {
+public class TransactionRepositoryCRUD {
     @PersistenceContext
     EntityManager entityManager;
 
     @Transactional(readOnly = true)
-    @Override
     public Optional<TransactionModel> findByName(String name) {
         TypedQuery<TransactionModel> query =
                 entityManager.createQuery("SELECT transaction FROM TransactionModel transaction " +
@@ -34,34 +28,29 @@ public class TransactionRepositoryCRUD implements RepositoryCRUD<TransactionMode
     }
 
     @Transactional(readOnly = true)
-    @Override
     public Optional<TransactionModel> findById(Long id) {
         return Optional.ofNullable(entityManager.find(TransactionModel.class, id));
     }
 
     @Transactional(readOnly = true)
-    @Override
     public Collection<TransactionModel> findAll() {
         return (Collection<TransactionModel>) entityManager.createQuery("SELECT transaction FROM TransactionModel transaction").getResultList();
     }
 
     @Transactional
-    @Override
-    public boolean remove(Long id) {
-        TransactionModel modelToDelete = entityManager.find(TransactionModel.class, id);
+    public void remove(TransactionModel model) {
+        TransactionModel modelToDelete = entityManager.find(TransactionModel.class, model.getId());
         entityManager.remove(modelToDelete);
-        return true;
     }
 
     @Transactional
-    @Override
     public void save(TransactionModel model) {
         entityManager.persist(model);
     }
 
     @Transactional
-    @Override
-    public void update(TransactionModel model) {
+    public TransactionModel update(TransactionModel model) {
         entityManager.merge(model);
+        return model;
     }
 }

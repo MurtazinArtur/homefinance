@@ -1,10 +1,10 @@
 package geekfactory.homefinance.dao.repository;
 
-import geekfactory.homefinance.dao.config.DaoConfiguration;
 import geekfactory.homefinance.dao.model.AccountModel;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -13,16 +13,15 @@ import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.Optional;
 
-
-@Repository("accountRepository")
+@EnableTransactionManagement
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class AccountRepositoryCRUD implements RepositoryCRUD<AccountModel, Long> {
+@Repository("accountRepository")
+public class AccountRepositoryCRUD {
 
     @PersistenceContext
     EntityManager entityManager;
 
     @Transactional(readOnly = true)
-    @Override
     public Optional<AccountModel> findByName(String name) {
         TypedQuery<AccountModel> query =
                 entityManager.createQuery("SELECT account FROM AccountModel account " +
@@ -32,34 +31,29 @@ public class AccountRepositoryCRUD implements RepositoryCRUD<AccountModel, Long>
     }
 
     @Transactional(readOnly = true)
-    @Override
     public Optional<AccountModel> findById(Long id) {
         return Optional.ofNullable(entityManager.find(AccountModel.class, id));
     }
 
     @Transactional(readOnly = true)
-    @Override
     public Collection<AccountModel> findAll() {
         return (Collection<AccountModel>) entityManager.createQuery("SELECT account FROM AccountModel account").getResultList();
     }
 
     @Transactional
-    @Override
-    public boolean remove(Long id) {
-        AccountModel modelToDelete = entityManager.find(AccountModel.class, id);
+    public void remove(AccountModel model) {
+        AccountModel modelToDelete = entityManager.find(AccountModel.class, model.getId());
         entityManager.remove(modelToDelete);
-        return true;
     }
 
     @Transactional
-    @Override
     public void save(AccountModel model) {
         entityManager.persist(model);
     }
 
     @Transactional
-    @Override
-    public void update(AccountModel model) {
+    public AccountModel update(AccountModel model) {
         entityManager.merge(model);
+        return model;
     }
 }

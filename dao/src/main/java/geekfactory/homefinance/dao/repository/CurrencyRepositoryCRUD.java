@@ -2,6 +2,7 @@ package geekfactory.homefinance.dao.repository;
 
 import geekfactory.homefinance.dao.model.CurrencyModel;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -10,15 +11,15 @@ import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.Optional;
 
+@EnableTransactionManagement
 @Transactional
 @Repository("currencyRepository")
-public class CurrencyRepositoryCRUD implements RepositoryCRUD<CurrencyModel, Long> {
+public class CurrencyRepositoryCRUD {
 
     @PersistenceContext
     EntityManager entityManager;
 
     @Transactional(readOnly = true)
-    @Override
     public Optional<CurrencyModel> findByName(String name) {
         TypedQuery<CurrencyModel> query =
                 entityManager.createQuery("SELECT currency FROM CurrencyModel currency " +
@@ -28,34 +29,29 @@ public class CurrencyRepositoryCRUD implements RepositoryCRUD<CurrencyModel, Lon
     }
 
     @Transactional(readOnly = true)
-    @Override
     public Optional<CurrencyModel> findById(Long id) {
         return Optional.ofNullable(entityManager.find(CurrencyModel.class, id));
     }
 
     @Transactional(readOnly = true)
-    @Override
     public Collection<CurrencyModel> findAll() {
         return (Collection<CurrencyModel>) entityManager.createQuery("SELECT currency FROM CurrencyModel currency").getResultList();
     }
 
     @Transactional
-    @Override
-    public boolean remove(Long id) {
-        CurrencyModel modelToDelete = entityManager.find(CurrencyModel.class, id);
+    public void remove(CurrencyModel model) {
+        CurrencyModel modelToDelete = entityManager.find(CurrencyModel.class, model.getId());
         entityManager.remove(modelToDelete);
-        return true;
     }
 
     @Transactional
-    @Override
     public void save(CurrencyModel model) {
         entityManager.persist(model);
     }
 
     @Transactional
-    @Override
-    public void update(CurrencyModel model) {
+    public CurrencyModel update(CurrencyModel model) {
         entityManager.merge(model);
+        return model;
     }
 }

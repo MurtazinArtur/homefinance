@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CurrencyRepositoryCRUDTest {
 
     @Autowired
-    private RepositoryCRUD<CurrencyModel, Long> currencyModelRepositoryCRUD;
+    private CurrencyRepositoryCRUD currencyModelRepositoryCRUD;
 
     @Test
     void TestContext(){
@@ -72,7 +72,7 @@ class CurrencyRepositoryCRUDTest {
     void testRemove() {
         createModel();
         CurrencyModel currencyModel = currencyModelRepositoryCRUD.findById(1L).orElse(null);
-        currencyModelRepositoryCRUD.remove(currencyModel.getId());
+        currencyModelRepositoryCRUD.remove(currencyModel);
         CurrencyModel removedModel = currencyModelRepositoryCRUD.findById(1L).orElse(null);
 
         assertNull(removedModel);

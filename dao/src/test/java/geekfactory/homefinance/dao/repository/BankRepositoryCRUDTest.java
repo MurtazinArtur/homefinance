@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BankRepositoryCRUDTest {
 
     @Autowired
-    private RepositoryCRUD<BankModel, Long> bankRepositoryCRUD;
+    private BankRepositoryCRUD bankRepositoryCRUD;
 
     @Test
     void TestContext(){
@@ -73,7 +73,7 @@ class BankRepositoryCRUDTest {
         createModel();
 
         BankModel bankModel = bankRepositoryCRUD.findById(1L).orElse(null);
-        bankRepositoryCRUD.remove(bankModel.getId());
+        bankRepositoryCRUD.remove(bankModel);
         BankModel removedModel = bankRepositoryCRUD.findById(1L).orElse(null);
 
         assertNull(removedModel);
@@ -81,7 +81,6 @@ class BankRepositoryCRUDTest {
 
     private BankModel createModel() {
         BankModel bankModel = new BankModel();
-        bankModel.setId(1L);
         bankModel.setName("VTB");
 
         bankRepositoryCRUD.save(bankModel);
@@ -92,7 +91,6 @@ class BankRepositoryCRUDTest {
         List<BankModel> collection = new ArrayList<>();
         for (int i = 1; i <= 3 ; i++) {
             BankModel bankModel = new BankModel();
-            bankModel.setId(Long.valueOf(i));
             bankModel.setName("VTB");
 
             collection.add(bankModel);

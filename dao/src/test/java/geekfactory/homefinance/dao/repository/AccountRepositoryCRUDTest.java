@@ -1,8 +1,9 @@
 package geekfactory.homefinance.dao.repository;
 
-import geekfactory.homefinance.dao.config.DaoConfiguration;
 import geekfactory.homefinance.dao.model.AccountModel;
+import geekfactory.homefinance.dao.model.AccountType;
 import geekfactory.homefinance.dao.model.CurrencyModel;
+import geekfactory.homefinance.dao.config.DaoConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +17,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static geekfactory.homefinance.dao.model.AccountType.CASH;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -26,9 +26,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class AccountRepositoryCRUDTest {
 
     @Autowired
-    private RepositoryCRUD<AccountModel, Long> accountModelRepositoryCRUD;
+    private AccountRepositoryCRUD accountModelRepositoryCRUD;
     @Autowired
-    private RepositoryCRUD<CurrencyModel, Long> currencyModelRepositoryCRUD;
+    private CurrencyRepositoryCRUD currencyModelRepositoryCRUD;
 
     @Test
     void TestContext(){
@@ -78,7 +78,7 @@ class AccountRepositoryCRUDTest {
         createModel();
 
         AccountModel accountModel = accountModelRepositoryCRUD.findById(1L).orElse(null);
-        accountModelRepositoryCRUD.remove(accountModel.getId());
+        accountModelRepositoryCRUD.remove(accountModel);
         AccountModel removedModel = accountModelRepositoryCRUD.findById(1L).orElse(null);
 
         assertNull(removedModel);
@@ -101,7 +101,7 @@ class AccountRepositoryCRUDTest {
         accountModel.setName("test");
         accountModel.setAmount(new BigDecimal("1.00"));
         accountModel.setCurrencyModel(currencyModelRepositoryCRUD.findById(1L).orElse(null));
-        accountModel.setAccountType(CASH);
+        accountModel.setAccountType(AccountType.CASH);
 
         accountModelRepositoryCRUD.save(accountModel);
 
@@ -116,7 +116,7 @@ class AccountRepositoryCRUDTest {
             AccountModel accountModel = new AccountModel();
             accountModel.setId(Long.valueOf(i));
             accountModel.setName("test");
-            accountModel.setAccountType(CASH);
+            accountModel.setAccountType(AccountType.CASH);
             accountModel.setAmount(new BigDecimal("1.00"));
             accountModel.setCurrencyModel(currencyModelRepositoryCRUD.findById(1L).orElse(null));
 

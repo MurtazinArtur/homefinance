@@ -1,7 +1,10 @@
 package geekfactory.homefinance.dao.repository;
 
 import geekfactory.homefinance.dao.model.BankModel;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -10,14 +13,15 @@ import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.Optional;
 
+@EnableTransactionManagement
+@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Repository("bankRepository")
-public class BankRepositoryCRUD implements RepositoryCRUD<BankModel, Long> {
+public class BankRepositoryCRUD {
 
     @PersistenceContext
     EntityManager entityManager;
 
     @Transactional(readOnly = true)
-    @Override
     public Optional<BankModel> findByName(String name) {
         TypedQuery<BankModel> query =
                 entityManager.createQuery("SELECT bank FROM BankModel bank " +
@@ -27,34 +31,29 @@ public class BankRepositoryCRUD implements RepositoryCRUD<BankModel, Long> {
     }
 
     @Transactional(readOnly = true)
-    @Override
     public Optional<BankModel> findById(Long id) {
         return Optional.ofNullable(entityManager.find(BankModel.class, id));
     }
 
     @Transactional(readOnly = true)
-    @Override
     public Collection<BankModel> findAll() {
         return (Collection<BankModel>) entityManager.createQuery("SELECT bank FROM BankModel bank").getResultList();
     }
 
-    @Transactional
-    @Override
-    public boolean remove(Long id) {
-        BankModel modelToDelete = entityManager.find(BankModel.class, id);
+    @Transactional()
+    public void remove(BankModel model) {
+        BankModel modelToDelete = findById(model.getId()).get();
         entityManager.remove(modelToDelete);
-        return true;
     }
 
     @Transactional
-    @Override
     public void save(BankModel model) {
         entityManager.persist(model);
     }
 
     @Transactional
-    @Override
-    public void update(BankModel model) {
+    public BankModel update(BankModel model) {
         entityManager.merge(model);
+        return model;
     }
 }
