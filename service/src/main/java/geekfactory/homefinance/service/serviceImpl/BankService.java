@@ -1,51 +1,76 @@
 package geekfactory.homefinance.service.serviceImpl;
 
 import geekfactory.homefinance.dao.model.BankModel;
+import geekfactory.homefinance.dao.model.TransactionModel;
 import geekfactory.homefinance.dao.repository.BankRepositoryCRUD;
+import geekfactory.homefinance.dao.repository.TransactionRepositoryCRUD;
+import geekfactory.homefinance.service.converter.BankModelConverter;
+import geekfactory.homefinance.service.dto.BankDtoModel;
+import geekfactory.homefinance.service.dto.TransactionDtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Service("bankService")
 public class BankService {
-
-    @Autowired
+    private TransactionRepositoryCRUD transactionRepositoryCRUD;
     private BankRepositoryCRUD bankRepositoryCRUD;
 
-    @Transactional
-    public Optional<BankModel> findById(Long id) {
-        return Optional.ofNullable(bankRepositoryCRUD.findById(id).get());
-    }
-
-    public Optional<BankModel> findByName(String name) {
-        return Optional.empty();
+    @Autowired
+    public BankService(TransactionRepositoryCRUD transactionRepositoryCRUD, BankRepositoryCRUD bankRepositoryCRUD) {
+        this.transactionRepositoryCRUD = transactionRepositoryCRUD;
+        this.bankRepositoryCRUD = bankRepositoryCRUD;
     }
 
     @Transactional
-    public Collection<BankModel> findAll() {
-        return bankRepositoryCRUD.findAll();
+    public Optional<BankDtoModel> findById(Long id) {
+        BankModelConverter converter = new BankModelConverter();
+        return Optional.ofNullable(converter.convertToBankDtoModel(bankRepositoryCRUD.findById(id).get()));
+    }
+
+    public Optional<BankDtoModel> findByName(String name) {
+        BankModelConverter converter = new BankModelConverter();
+        return Optional.ofNullable(converter.convertToBankDtoModel(bankRepositoryCRUD.findByName(name).get()));
+    }
+
+    @Transactional
+    public Collection<BankDtoModel> findAll() {
+        BankModelConverter converter = new BankModelConverter();
+        return converter.convertCollectionToBankDtoModel(bankRepositoryCRUD.findAll());
     }
 
     @Transactional()
-    public void remove(BankModel model) {
-        bankRepositoryCRUD.remove(model);
+    public void remove(BankDtoModel bankDtoModel) {
+        Collection<TransactionModel> transactionModelCollection = transactionRepositoryCRUD.findAll();
+        BankModelConverter converter = new BankModelConverter();
+
+        for (TransactionModel transactionModel : transactionModelCollection) {
+            if (converter.convertToBankModel(bankDtoModel).equals(transactionModel.getBank())) {
+                transactionModel.setBank(null);
+                transactionRepositoryCRUD.update(transactionModel);
+            }
+        }
+        bankRepositoryCRUD.remove(converter.convertToBankModel(bankDtoModel));
     }
 
     @Transactional
-    public void save(BankModel model) {
-        bankRepositoryCRUD.save(model);
+    public void save(BankDtoModel model) {
+        BankModelConverter converter = new BankModelConverter();
+        bankRepositoryCRUD.save(converter.convertToBankModel(model));
     }
 
     @Transactional
-    public BankModel update(BankModel model) {
-        bankRepositoryCRUD.update(model);
+    public BankDtoModel update(BankDtoModel model) {
+        BankModelConverter converter = new BankModelConverter();
+        bankRepositoryCRUD.update(converter.convertToBankModel(model));
+
         return model;
     }
 }

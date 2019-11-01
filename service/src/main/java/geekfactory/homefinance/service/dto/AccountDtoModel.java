@@ -1,4 +1,4 @@
-package geekfactory.homefinance.web.dto;
+package geekfactory.homefinance.service.dto;
 
 import geekfactory.homefinance.dao.model.AccountType;
 import geekfactory.homefinance.dao.model.CurrencyModel;

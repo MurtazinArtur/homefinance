@@ -1,4 +1,4 @@
-package geekfactory.homefinance.web.dto;
+package geekfactory.homefinance.service.dto;
 
 import lombok.*;
 
@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BankDtoModel {
-    private Long id;
+    private int id;
     private String name;
 }

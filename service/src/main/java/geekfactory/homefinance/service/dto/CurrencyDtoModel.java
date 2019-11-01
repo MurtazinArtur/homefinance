@@ -1,4 +1,4 @@
-package geekfactory.homefinance.web.dto;
+package geekfactory.homefinance.service.dto;
 
 import lombok.*;
 

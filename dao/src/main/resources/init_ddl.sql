@@ -26,7 +26,7 @@ CREATE TABLE category_tbl
 CREATE TABLE bank_tbl
 (
     id   INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    name VARCHAR(50)
+    name VARCHAR(50) NOT NULL 
 );
 
 CREATE TABLE transaction_tbl
@@ -35,7 +35,7 @@ CREATE TABLE transaction_tbl
     amount      DECIMAL(15, 2)                 NOT NULL,
     date        DATE                           NOT NULL,
     source      VARCHAR(50),
-    bank_id     INT                            NOT NULL,
+    bank_id     INT,
     account_id  INT                            NOT NULL,
     currency_id INT                            NOT NULL,
 

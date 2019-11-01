@@ -37,7 +37,7 @@ CREATE TABLE transaction_tbl
     date        DATE                           NOT NULL,
     source      VARCHAR(50),
     category_id INT                            NOT NULL,
-    bank_id     INT                            NOT NULL,
+    bank_id     INT,
     account_id  INT                            NOT NULL,
     currency_id INT                            NOT NULL,
 
