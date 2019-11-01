@@ -1,8 +1,10 @@
 package geekfactory.homefinance.web.controller;
 
-import geekfactory.homefinance.dao.model.BankModel;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import geekfactory.homefinance.service.converter.BankModelConverter;
+import geekfactory.homefinance.service.dto.BankDtoModel;
 import geekfactory.homefinance.service.serviceImpl.BankService;
-import geekfactory.homefinance.web.dto.BankDtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
 
@@ -18,17 +21,29 @@ import java.util.Collection;
 @RequestMapping("/banks")
 public class BankController {
 
-    @Autowired
     private BankService bankService;
+    private ObjectMapper mapper = new ObjectMapper();
+
+    @Autowired
+    public BankController(BankService bankService) {
+        this.bankService = bankService;
+    }
 
     @RequestMapping(value = "/add_new_bank", method = RequestMethod.GET)
     public String addNewBankPage() {
         return "/banks/add_new_bank";
     }
 
+
+    @RequestMapping(value = "/bank_edit", method = RequestMethod.GET)
+    public String editBankPage() {
+        return "/banks/bank_edit";
+    }
+
     @GetMapping("/")
     public String findAll(Model model) {
-        Collection<BankModel> allBanks = bankService.findAll();
+        Collection<BankDtoModel> allBanks = bankService.findAll();
+
         model.addAttribute("banks", allBanks);
 
         return "/banks/bank_list";
@@ -41,37 +56,46 @@ public class BankController {
         return "/find";
     }
 
-    @GetMapping(value = "/banks/add_new_bank")
-    public String save(Model model) {
-        model.addAttribute("bank", new BankModel());
-        return "/banks/add_new_bank";
+    @GetMapping("/{name}")
+    public @ResponseBody
+    String findByName(@PathVariable String name) {
+        bankService.findByName(name).get();
+        return "/findByName";
     }
 
-    @PostMapping(value = "/banks/add_new_bank")
-    public String save(@ModelAttribute("bank") BankModel bankModel) {
-        BankModel saveBankModel = new BankModel();
-        saveBankModel.setName(bankModel.getName());
+    @PostMapping(value = "/save", consumes =MediaType.APPLICATION_JSON_VALUE )
+    public ModelAndView save(@RequestBody String jsonBankDtoModel) {
+        BankDtoModel saveBankModel = new BankDtoModel();
 
+        try {
+            saveBankModel = mapper.readValue(jsonBankDtoModel, BankDtoModel.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         bankService.save(saveBankModel);
 
-        return "redirect:/banks/";
+        return new ModelAndView("redirect:/banks/");
     }
 
-    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    String update(@RequestBody BankDtoModel bankDtoModel) {
-        BankModel updateBankModel = new BankModel();
-        updateBankModel.setId(bankDtoModel.getId());
-        updateBankModel.setName(bankDtoModel.getName());
+    @RequestMapping(value = "/update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView update(@RequestBody String jsonBankDtoModel) {
+        BankDtoModel updateModel = new BankDtoModel();
 
-        bankService.update(updateBankModel);
+        try {
+            updateModel = mapper.readValue(jsonBankDtoModel, BankDtoModel.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
-        return "banks/bank_list";
+        bankService.update(updateModel);
+
+        return new ModelAndView("redirect:/banks/");
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String delete(@PathVariable(value = "id", required = true) String bankId) {
-        bankService.remove(bankService.findById(Long.valueOf(bankId)).get());
+        BankDtoModel removedBankDtoModel = bankService.findById(Long.valueOf(bankId)).get();
+        bankService.remove(removedBankDtoModel);
         return "redirect:/banks/";
     }
 }

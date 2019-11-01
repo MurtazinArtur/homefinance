@@ -6,11 +6,14 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Список Банков</title>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap/bootstrap.min.js"></script>
+    <script src="${contextPath}/resources/js/modal.js"></script>
     <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/buttons.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/menu.css" rel="stylesheet">
+
 </head>
 <body>
 <input type="checkbox" id="nav-toggle" hidden>
@@ -27,17 +30,32 @@
         <li><a href="${contextPath}/transactions/">Транзакции</a>
     </ul>
 </nav>
-<div class="mask-content"></div>
+<div class="mask-content" id="banks"></div>
 
-<a href="#x" class="overlay" id="form_post"></a>
-<form class="modal" id="posting_form" tabindex="-1" aria-hidden="true" name="posting_form"
-      action="${contextPath}/banks" method="post">
-    <input id="bank_name" name="bank_name" type="text"/>
-    <input class="btn" type="button" id="send" name="submit" value="Отправить"/>
-</form>
+<div class="modal fade" id="modal_add">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Добавить банк</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
 
-<h1><p align="center">Список Банков</p></h1>
-<div class="container">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-danger" type="button" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <h1><p align="center">Список Банков</p></h1>
+
+<div class="form-group">
+    <input type="text" class="form-control pull-right" id="search" placeholder="Поиск по таблице">
+</div>
+
+<div id="table" class="container">
     <table class="table table-hover" id="bank_table">
         <thead>
         <tr>
@@ -45,12 +63,15 @@
         </tr>
         </thead>
 
-        <tbody>
+        <tbody class="list">
         <c:forEach var="bank" items="${banks}">
-            <tr>
-                <td data-field="bank_name"><p align="center">${bank.name}</p></td>
-                <td><a type="button" class="btn btn-primary"
-                       href="/update?id=${bank.id}">Edit</a>
+            <tr id="bank_${bank.id}">
+                <td class="bank_name" data-field="bank_name" id="bank_name">
+                    <p align="center">${bank.name}</p></td>
+                <td><a href="javascript:void(0);" data-href="${contextPath}/banks/bank_edit" class="openPopup">
+                    <button type="button" class="btn btn-primary" id="edit_bank"
+                       name="${bank.id}" onclick="getBankValue(this.name)">Edit</button>
+                    </a>
                     <a type="button" class="btn btn-warning"
                        href="${contextPath}/banks/delete/${bank.id}">Delete</a>
                 </td>
@@ -59,12 +80,13 @@
         </tbody>
     </table>
     <div>
-        <a type="button" class="btn btn-success" href="${contextPath}/banks/add_new_bank">Add</a>
+        <a href="javascript:void(0);" data-href="${contextPath}/banks/add_new_bank" class="openPopup">
+            <button class="btn btn-success" type="button"> Add</button>
+        </a>
     </div>
 </div>
 
-<script src="${contextPath}/resources/js/send_post.js"></script>
-<script src="${contextPath}/resources/js/send_delete.js"></script>
-<script src="${contextPath}/resources/js/serialize.js"></script>
+<script src="${contextPath}/resources/js/filter.js"></script>
+<script src="${contextPath}/resources/js/bank_edit.js"></script>
 </body>
 </html>
