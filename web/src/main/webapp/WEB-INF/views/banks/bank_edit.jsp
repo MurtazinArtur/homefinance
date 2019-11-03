@@ -27,21 +27,19 @@ insertEditValue()
             bank['name'] = String(changedValue);
             var result = JSON.stringify(bank);
             $.ajax({
-                type: 'post',
-                url: "${contextPath}/banks/update",
-                dataType: 'json',
-                contentType: "application/json",
+				type: 'POST',
+                url: '${contextPath}/banks/update',
+                contentType: 'application/json',
 				cache: false,
                 data: result,
 				success: function(data){
-                    window.location.reload();
-                	console.log("Всё ништяк братаны");
+					window.location.reload();
 				},
-				error: function () {
-					console.log("Это пиздец какой-то");
-                    window.location.reload();
-					console.log($.ajax.status, $.ajax.statusText);
-					console.log($.ajax.response);
+				error: function (xhr, str) {
+                	alert( " || " + xhr);
+					console.log("Запрос завершен с ошибкой!!!");
+					console.log("Status ajax responce: " + $.ajax.status + " " +
+							"StatusText: " + $.ajax.statusText + " " + "ajax responce: " + $.ajax.response);
 				}
             });
             return false;

@@ -2,12 +2,12 @@ package geekfactory.homefinance.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import geekfactory.homefinance.service.converter.BankModelConverter;
 import geekfactory.homefinance.service.dto.BankDtoModel;
 import geekfactory.homefinance.service.serviceImpl.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,13 +29,13 @@ public class BankController {
         this.bankService = bankService;
     }
 
-    @RequestMapping(value = "/add_new_bank", method = RequestMethod.GET)
+    @GetMapping(value = "/add_new_bank")
     public String addNewBankPage() {
         return "/banks/add_new_bank";
     }
 
 
-    @RequestMapping(value = "/bank_edit", method = RequestMethod.GET)
+    @GetMapping(value = "/bank_edit")
     public String editBankPage() {
         return "/banks/bank_edit";
     }
@@ -63,7 +63,7 @@ public class BankController {
         return "/findByName";
     }
 
-    @PostMapping(value = "/save", consumes =MediaType.APPLICATION_JSON_VALUE )
+    @PostMapping(value = "/save", consumes =MediaType.APPLICATION_JSON_VALUE)
     public ModelAndView save(@RequestBody String jsonBankDtoModel) {
         BankDtoModel saveBankModel = new BankDtoModel();
 
@@ -77,8 +77,8 @@ public class BankController {
         return new ModelAndView("redirect:/banks/");
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ModelAndView update(@RequestBody String jsonBankDtoModel) {
+    @PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody String update(@RequestBody String jsonBankDtoModel) {
         BankDtoModel updateModel = new BankDtoModel();
 
         try {
@@ -89,10 +89,10 @@ public class BankController {
 
         bankService.update(updateModel);
 
-        return new ModelAndView("redirect:/banks/");
+        return "/banks/";
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/delete/{id}")
     public String delete(@PathVariable(value = "id", required = true) String bankId) {
         BankDtoModel removedBankDtoModel = bankService.findById(Long.valueOf(bankId)).get();
         bankService.remove(removedBankDtoModel);

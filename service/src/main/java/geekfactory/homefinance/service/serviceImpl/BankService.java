@@ -20,6 +20,7 @@ import java.util.Optional;
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Service("bankService")
 public class BankService {
+    BankModelConverter converter = new BankModelConverter();
     private TransactionRepositoryCRUD transactionRepositoryCRUD;
     private BankRepositoryCRUD bankRepositoryCRUD;
 
@@ -31,25 +32,21 @@ public class BankService {
 
     @Transactional
     public Optional<BankDtoModel> findById(Long id) {
-        BankModelConverter converter = new BankModelConverter();
         return Optional.ofNullable(converter.convertToBankDtoModel(bankRepositoryCRUD.findById(id).get()));
     }
 
     public Optional<BankDtoModel> findByName(String name) {
-        BankModelConverter converter = new BankModelConverter();
         return Optional.ofNullable(converter.convertToBankDtoModel(bankRepositoryCRUD.findByName(name).get()));
     }
 
     @Transactional
     public Collection<BankDtoModel> findAll() {
-        BankModelConverter converter = new BankModelConverter();
         return converter.convertCollectionToBankDtoModel(bankRepositoryCRUD.findAll());
     }
 
     @Transactional()
     public void remove(BankDtoModel bankDtoModel) {
         Collection<TransactionModel> transactionModelCollection = transactionRepositoryCRUD.findAll();
-        BankModelConverter converter = new BankModelConverter();
 
         for (TransactionModel transactionModel : transactionModelCollection) {
             if (converter.convertToBankModel(bankDtoModel).equals(transactionModel.getBank())) {
@@ -62,13 +59,11 @@ public class BankService {
 
     @Transactional
     public void save(BankDtoModel model) {
-        BankModelConverter converter = new BankModelConverter();
         bankRepositoryCRUD.save(converter.convertToBankModel(model));
     }
 
     @Transactional
     public BankDtoModel update(BankDtoModel model) {
-        BankModelConverter converter = new BankModelConverter();
         bankRepositoryCRUD.update(converter.convertToBankModel(model));
 
         return model;
