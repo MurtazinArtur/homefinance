@@ -32,16 +32,14 @@
         $.ajax({
             type: 'post',
             url: "${contextPath}/banks/save",
-            dataType: 'json',
             contentType: "application/json",
             cache: false,
             data: json,
             success: function (html) {
-                console.log(html);
+                //window.location.reload();
             },
             error: function () {
                 // Запрос не получилось отправить
-                window.location.reload();
                 console.error("Ошибка сохранения в базу");
             }
         });
