@@ -80,7 +80,6 @@ class CurrencyRepositoryCRUDTest {
 
     private CurrencyModel createModel() {
         CurrencyModel currencyModel = new CurrencyModel();
-        currencyModel.setId(1L);
         currencyModel.setName("Dollar");
         currencyModel.setSymbol("D");
         currencyModel.setCode("USD");
@@ -95,7 +94,6 @@ class CurrencyRepositoryCRUDTest {
 
         for (int i = 1; i <= 3; i++) {
             CurrencyModel currencyModel = new CurrencyModel();
-            currencyModel.setId(Long.valueOf(i));
             currencyModel.setName("Dollar");
             currencyModel.setSymbol("D");
             currencyModel.setCode("USD");

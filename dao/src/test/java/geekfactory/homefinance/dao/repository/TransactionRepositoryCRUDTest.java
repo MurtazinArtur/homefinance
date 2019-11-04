@@ -133,7 +133,6 @@ class TransactionRepositoryCRUDTest {
 
     private void saveCurrencyModel() {
         CurrencyModel currencyModel = new CurrencyModel();
-        currencyModel.setId(1L);
         currencyModel.setName("Dollar");
         currencyModel.setSymbol("D");
         currencyModel.setCode("USD");
