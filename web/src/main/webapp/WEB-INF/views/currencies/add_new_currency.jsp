@@ -9,19 +9,19 @@
 </head>
 <body>
 <form action="currencies/add_new_currency" id="add_currency">
-    <label>Название</label>
+    <label>Название</label><br>
     <input type="text" name="name" id="name" value="" onkeyup="var yratext=/[,':']/;
     if(yratext.test(this.value)) this.value=''" placeholder="Введите наименование валюты:"
-           class="name" required/>
-    <label>Код</label>
+           class="name" required/><br>
+    <label>Код</label><br>
     <input type="text" name="code" id="code" value="" onkeyup="var yratext=/[,':']/;
     if(yratext.test(this.value)) this.value=''" placeholder="Введите код валюты:"
-           class="code" required/>
-    <label>Символ</label>
+           class="code" required/><br>
+    <label>Символ</label><br>
     <input type="text" name="symbol" id="symbol" value="" onkeyup="var yratext=/[,':']/;
     if(yratext.test(this.value)) this.value=''" placeholder="Введите символ валюты:"
-           class="symbol" required/>
-    <input type="submit" value="Добавить валюту">
+           class="symbol" required/><br>
+    <input type="submit" value="Добавить валюту"><br>
 </form>
 <script>
     document.getElementById('add_currency').addEventListener('submit', submitForm);

@@ -10,13 +10,13 @@
 <body>
 <div>
 <form id="edit_form">
-	<label>Название</label>
-	<input type="text" id="currency_name" value="">
-	<label>Код</label>
-	<input type="text" id="currency_code" value="">
-	<label>Символ</label>
-	<input type="text" id='currency_symbol' value="">
-	<input type="button" id='edit_currency' data-dismiss="modal" value="Сохранить">
+	<label>Название</label><br>
+	<input type="text" id="currency_name" value=""><br>
+	<label>Код</label><br>
+	<input type="text" id="currency_code" value=""><br>
+	<label>Символ</label><br>
+	<input type="text" id='currency_symbol' value=""><br>
+	<input type="button" id='edit_currency' data-dismiss="modal" value="Сохранить"><br>
 </form>
 </div>
 <script>

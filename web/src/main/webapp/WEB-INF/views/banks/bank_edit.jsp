@@ -10,9 +10,9 @@
 <body>
 <div>
 <form id="edit_form">
-	<label>Название</label>
-	<input type="text" id="bank_name" value="">
-	<input type="button" id='edit_bank' data-dismiss="modal" value="Сохранить">
+	<label>Название</label><br>
+	<input type="text" id="bank_name" value=""><br>
+	<input type="button" id='edit_bank' data-dismiss="modal" value="Сохранить"><br>
 </form>
 </div>
 <script>

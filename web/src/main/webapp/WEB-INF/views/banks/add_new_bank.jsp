@@ -9,11 +9,11 @@
 </head>
 <body>
 <form action="banks/add_new_bank" id="add_bank">
-    <label>Название</label>
+    <label>Название</label><br>
     <input type="text" name="name" id="name" value="" onkeyup="var yratext=/[,':']/;
     if(yratext.test(this.value)) this.value=''" placeholder="Введите наименование банка:"
-           class="name" required/>
-    <input type="submit" value="Добавить банк">
+           class="name" required/><br>
+    <input type="submit" value="Добавить банк"><br>
 </form>
 <script>
     document.getElementById('add_bank').addEventListener('submit', submitForm);
