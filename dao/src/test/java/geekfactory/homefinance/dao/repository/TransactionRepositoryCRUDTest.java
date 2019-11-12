@@ -122,7 +122,6 @@ class TransactionRepositoryCRUDTest {
 
     private void saveAccountModel() {
         AccountModel accountModel = new AccountModel();
-        accountModel.setId(1L);
         accountModel.setName("test");
         accountModel.setAmount(new BigDecimal("1.00"));
         accountModel.setCurrencyModel(currencyModelRepositoryCRUD.findById(1L).orElse(null));

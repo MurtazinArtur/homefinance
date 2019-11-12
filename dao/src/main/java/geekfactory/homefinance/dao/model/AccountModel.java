@@ -14,12 +14,14 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class AccountModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     @Column(name = "name")
     private String name;
     @Column(name = "amount")
     private BigDecimal amount;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "currency_id")
     private CurrencyModel currencyModel;
     @Enumerated(EnumType.STRING)

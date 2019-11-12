@@ -96,7 +96,6 @@ class AccountRepositoryCRUDTest {
     private AccountModel createModel() {
         saveCurrencyModel();
         AccountModel accountModel = new AccountModel();
-        accountModel.setId(1L);
         accountModel.setName("test");
         accountModel.setAmount(new BigDecimal("1.00"));
         accountModel.setCurrencyModel(currencyModelRepositoryCRUD.findById(1L).orElse(null));
@@ -113,7 +112,6 @@ class AccountRepositoryCRUDTest {
 
         for (int i = 1; i <= 3; i++) {
             AccountModel accountModel = new AccountModel();
-            accountModel.setId(Long.valueOf(i));
             accountModel.setName("test");
             accountModel.setAccountType(AccountType.CASH);
             accountModel.setAmount(new BigDecimal("1.00"));
