@@ -35,7 +35,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>Добавить банк</h4>
+                <h4>Добавить Валюту</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -63,7 +63,7 @@
             <th scope="col"><p align="center">Символ</p></th>
         </tr>
         </thead>
-        <tbody class="list">
+        <tbody class="list" id="currency_tbl">
         <c:forEach var="currency" items="${currencies}">
             <tr id="currency_${currency.id}">
                 <td class="currency_name" data-field="currency_name" id="currency_name">

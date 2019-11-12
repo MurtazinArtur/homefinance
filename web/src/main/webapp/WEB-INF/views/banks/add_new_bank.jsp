@@ -36,7 +36,7 @@
             cache: false,
             data: json,
             success: function (html) {
-                //window.location.reload();
+                window.location.reload();
             },
             error: function () {
                 // Запрос не получилось отправить
