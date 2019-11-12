@@ -2,10 +2,15 @@ package geekfactory.homefinance.service.converter;
 
 import geekfactory.homefinance.dao.model.BankModel;
 import geekfactory.homefinance.service.dto.BankDtoModel;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
+@Component
+@Transactional
 public class BankModelConverter {
     public String conditionConvert;
 

@@ -12,9 +12,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountDtoModel {
-    private Long id;
+    private int id;
     private String name;
-    private BigDecimal amount;
-    private CurrencyModel currencyModel;
-    private AccountType accountType;
+    private String amount;
+    private String currencyModel;
+    private String accountType;
+
 }

@@ -4,12 +4,14 @@ import geekfactory.homefinance.dao.model.BankModel;
 import geekfactory.homefinance.dao.model.CurrencyModel;
 import geekfactory.homefinance.service.dto.BankDtoModel;
 import geekfactory.homefinance.service.dto.CurrencyDtoModel;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
+@Component
+@Transactional
 public class CurrencyModelConverter {
-
         public String conditionConvert;
 
         public CurrencyDtoModel convertToCurrencyDtoModel(CurrencyModel currencyModel) {
@@ -80,4 +82,3 @@ public class CurrencyModelConverter {
             return currencyModels;
         }
     }
-

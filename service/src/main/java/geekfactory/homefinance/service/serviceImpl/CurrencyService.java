@@ -1,7 +1,6 @@
 package geekfactory.homefinance.service.serviceImpl;
 
 import geekfactory.homefinance.dao.model.AccountModel;
-import geekfactory.homefinance.dao.model.CurrencyModel;
 import geekfactory.homefinance.dao.model.TransactionModel;
 import geekfactory.homefinance.dao.repository.AccountRepositoryCRUD;
 import geekfactory.homefinance.dao.repository.CurrencyRepositoryCRUD;
@@ -9,6 +8,8 @@ import geekfactory.homefinance.dao.repository.TransactionRepositoryCRUD;
 import geekfactory.homefinance.service.converter.CurrencyModelConverter;
 import geekfactory.homefinance.service.dto.CurrencyDtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,13 +20,14 @@ import java.util.Optional;
 @Service("currencyService")
 public class CurrencyService {
 
-    private CurrencyModelConverter converter = new CurrencyModelConverter();
+    private CurrencyModelConverter converter;
     private CurrencyRepositoryCRUD currencyRepositoryCRUD;
     private TransactionRepositoryCRUD transactionRepositoryCRUD;
     private AccountRepositoryCRUD accountRepositoryCRUD;
 
     @Autowired
-    public CurrencyService(CurrencyRepositoryCRUD currencyRepositoryCRUD, TransactionRepositoryCRUD transactionRepositoryCRUD, AccountRepositoryCRUD accountRepositoryCRUD) {
+    public CurrencyService(CurrencyModelConverter converter, CurrencyRepositoryCRUD currencyRepositoryCRUD, TransactionRepositoryCRUD transactionRepositoryCRUD, AccountRepositoryCRUD accountRepositoryCRUD) {
+        this.converter = converter;
         this.currencyRepositoryCRUD = currencyRepositoryCRUD;
         this.transactionRepositoryCRUD = transactionRepositoryCRUD;
         this.accountRepositoryCRUD = accountRepositoryCRUD;
@@ -36,7 +38,7 @@ public class CurrencyService {
     }
 
     public Optional<CurrencyDtoModel> findByName(String name) {
-        return Optional.empty();
+        return Optional.ofNullable(converter.convertToCurrencyDtoModel(currencyRepositoryCRUD.findByName(name).get()));
     }
 
     public Collection<CurrencyDtoModel> findAll() {
