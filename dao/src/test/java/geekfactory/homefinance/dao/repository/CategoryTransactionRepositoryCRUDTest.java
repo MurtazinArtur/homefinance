@@ -81,7 +81,6 @@ class CategoryTransactionRepositoryCRUDTest {
 
     private CategoryTransactionModel createModel() {
         CategoryTransactionModel categoryModel = new CategoryTransactionModel();
-        categoryModel.setId(1l);
         categoryModel.setName("test1");
         categoryModel.setParentCategory(null);
 
@@ -94,7 +93,6 @@ class CategoryTransactionRepositoryCRUDTest {
 
         for (int i = 1; i <= 3; i++) {
             CategoryTransactionModel categoryModel = new CategoryTransactionModel();
-            categoryModel.setId(Long.valueOf(i));
             categoryModel.setName("test");
             categoryModel.setParentCategory(null);
 

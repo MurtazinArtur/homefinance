@@ -148,7 +148,6 @@ class TransactionRepositoryCRUDTest {
 
     private void saveCategoryModel() {
         CategoryTransactionModel categoryTransactionModel = new CategoryTransactionModel();
-        categoryTransactionModel.setId(1l);
         categoryTransactionModel.setName("test1");
         categoryTransactionModel.setParentCategory(null);
 

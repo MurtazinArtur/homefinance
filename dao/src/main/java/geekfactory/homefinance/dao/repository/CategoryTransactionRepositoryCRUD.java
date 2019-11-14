@@ -1,6 +1,8 @@
 package geekfactory.homefinance.dao.repository;
 
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +14,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 @EnableTransactionManagement
-@Transactional
+@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Repository("categoryRepository")
 public class CategoryTransactionRepositoryCRUD {
 
