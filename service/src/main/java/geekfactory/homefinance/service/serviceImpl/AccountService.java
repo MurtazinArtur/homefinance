@@ -2,10 +2,8 @@ package geekfactory.homefinance.service.serviceImpl;
 
 import geekfactory.homefinance.dao.model.TransactionModel;
 import geekfactory.homefinance.dao.repository.AccountRepositoryCRUD;
-import geekfactory.homefinance.dao.repository.CurrencyRepositoryCRUD;
 import geekfactory.homefinance.dao.repository.TransactionRepositoryCRUD;
 import geekfactory.homefinance.service.converter.AccountModelConverter;
-import geekfactory.homefinance.service.converter.CurrencyModelConverter;
 import geekfactory.homefinance.service.dto.AccountDtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,18 +17,15 @@ import java.util.Optional;
 public class AccountService {
 
     private AccountModelConverter accountConverter;
-    private CurrencyModelConverter currencyConverter;
-    private TransactionRepositoryCRUD transactionRepositoryCRUD;
+    private TransactionService transactionService;
     private AccountRepositoryCRUD accountRepositoryCRUD;
-    private CurrencyService currencyService;
 
     @Autowired
-    public AccountService(TransactionRepositoryCRUD transactionRepositoryCRUD, AccountRepositoryCRUD accountRepositoryCRUD, CurrencyRepositoryCRUD currencyRepositoryCRUD, AccountModelConverter accountConverter, CurrencyModelConverter currencyConverter, CurrencyRepositoryCRUD currencyRepositoryCRUD1, CurrencyService currencyService) {
-        this.transactionRepositoryCRUD = transactionRepositoryCRUD;
+    public AccountService(AccountRepositoryCRUD accountRepositoryCRUD, AccountModelConverter accountConverter,
+                          TransactionService transactionService) {
+        this.transactionService = transactionService;
         this.accountRepositoryCRUD = accountRepositoryCRUD;
         this.accountConverter = accountConverter;
-        this.currencyConverter = currencyConverter;
-        this.currencyService = currencyService;
     }
 
     public Optional<AccountDtoModel> findById(Long id) {
@@ -56,12 +51,12 @@ public class AccountService {
     }
 
     public void remove(AccountDtoModel accountDtoModel) {
-        Collection<TransactionModel> transactionModelCollection = transactionRepositoryCRUD.findAll();
+        Collection<TransactionModel> transactionModelCollection = transactionService.findAll();
 
         for (TransactionModel transactionModel : transactionModelCollection) {
             if (accountConverter.convertToAccountModel(accountDtoModel).equals(transactionModel.getAccount())) {
                 transactionModel.setAccount(null);
-                transactionRepositoryCRUD.update(transactionModel);
+                transactionService.update(transactionModel);
             }
         }
         accountRepositoryCRUD.remove(accountConverter.convertToAccountModel(accountDtoModel));

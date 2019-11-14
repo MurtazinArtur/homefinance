@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryDtoModel {
-    private Long id;
+    private int id;
     private String name;
-    private CategoryTransactionModel parentCategory;
+    private String parentCategory;
 }

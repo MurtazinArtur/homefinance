@@ -9,6 +9,7 @@ import org.hibernate.service.spi.InjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +23,11 @@ import java.util.Collection;
 public class AccountModelConverter {
 
     public String conditionConvert;
-    private CurrencyModelConverter converter;
-    private CurrencyService currencyService;
+    private final CurrencyModelConverter converter;
+    private final CurrencyService currencyService;
 
     @Autowired
-    public AccountModelConverter(CurrencyModelConverter converter, CurrencyService currencyService) {
+    public AccountModelConverter(@Lazy CurrencyModelConverter converter, @Lazy CurrencyService currencyService) {
         this.converter = converter;
         this.currencyService = currencyService;
     }
