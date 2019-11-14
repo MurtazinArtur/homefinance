@@ -40,19 +40,16 @@ insertEditValue()
             $.ajax({
                 type: 'post',
                 url: "${contextPath}/currencies/update",
-                dataType: 'json',
                 contentType: "application/json",
 				cache: false,
                 data: result,
 				success: function(data){
                     window.location.reload();
-                	console.log("Запрос выполнен корректно!!!");
 				},
 				error: function () {
 					console.log("Запрос завершен с ошибкой!!!");
 					console.log("Status ajax responce: " + $.ajax.status +
 							"StatusText: " + $.ajax.statusText + "ajax responce: " + $.ajax.response);
-                    window.location.reload();
 					}
             });
             return false;

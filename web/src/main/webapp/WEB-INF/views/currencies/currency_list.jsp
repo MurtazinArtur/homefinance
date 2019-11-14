@@ -55,7 +55,7 @@
 </div>
 
 <div id="table" class="container">
-    <table class="table table-hover">
+    <table class="table table-hover" id="currency_table">
         <thead>
         <tr>
             <th scope="col"><p align="center">Наименование</p></th>
@@ -91,7 +91,7 @@
     </div>
 </div>
 
-<script src="${contextPath}/resources/js/filter.js"></script>
-<script src="${contextPath}/resources/js/currency_edit.js"></script>
+<script src="${contextPath}/resources/js/currencies/currency_filter.js"></script>
+<script src="${contextPath}/resources/js/currencies/currency_edit.js"></script>
 </body>
 </html>

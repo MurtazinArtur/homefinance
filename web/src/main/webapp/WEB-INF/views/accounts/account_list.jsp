@@ -55,7 +55,7 @@
 </div>
 
 <div id="table" class="container">
-    <table class="table table-hover">
+    <table class="table table-hover" id="account_table">
         <thead>
         <tr>
             <th scope="col"><p align="center">Наименование</p></th>
@@ -94,7 +94,7 @@
     </div>
 </div>
 
-<script src="${contextPath}/resources/js/filter.js"></script>
-<script src="${contextPath}/resources/js/account_edit.js"></script>
+<script src="${contextPath}/resources/js/accounts/account_filter.js"></script>
+<script src="${contextPath}/resources/js/accounts/account_edit.js"></script>
 </body>
 </html>

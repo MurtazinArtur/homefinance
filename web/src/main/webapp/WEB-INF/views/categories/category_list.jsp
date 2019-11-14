@@ -4,8 +4,7 @@
 
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Список Банков</title>
+    <title>Список Категорий Транзакций</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap/bootstrap.min.js"></script>
@@ -30,13 +29,13 @@
         <li><a href="${contextPath}/transactions/">Транзакции</a>
     </ul>
 </nav>
-<div class="mask-content" id="banks"></div>
+<div class="mask-content"></div>
 
 <div class="modal fade" id="modal_add">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>Добавить банк</h4>
+                <h4>Добавить Категорию</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -49,45 +48,45 @@
     </div>
 </div>
 
-<h1><p align="center">Список Банков</p></h1>
+<h1><p align="center">Список Категорий Платежей</p></h1>
 
 <div class="form-group">
     <input type="text" class="form-control pull-right" id="search" placeholder="Поиск по таблице">
 </div>
 
-<div id="table" class="container">
-    <table class="table table-hover" id="bank_table">
-        <thead>
-        <tr>
-            <th scope="col"><p align="center">Наименование</p></th>
+<table class="table table-hover" id="category_table">
+    <thead>
+    <tr>
+        <th scope="col"><p align="center">Наименование</p></th>
+        <th scope="col"><p align="center">Родительская категория</p></th>
+    </tr>
+    </thead>
+    <tbody class="list" id="category_tbl">
+    <c:forEach var="category" items="${categories}">
+        <tr id="category_${category.id}">
+            <td class="category_name" data-field="category_name" id="category_name">
+                <p align="center">${category.name}</p></td>
+            <td class="category_parentCategory" data-field="category_parentCategory" id="category_parentCategory">
+                <p align="center">${category.parentCategory}</p></td>
+            <td><a href="javascript:void(0);" data-href="${contextPath}/categories/category_edit" class="openPopup">
+                <button type="button" class="btn btn-primary" id="edit_category"
+                        name="${category.id}" onclick="getCategoryValue(this.name)">Edit
+                </button>
+            </a>
+                <a type="button" class="btn btn-warning"
+                   href="${contextPath}/categories/delete/${category.id}">Delete</a>
+            </td>
         </tr>
-        </thead>
-
-        <tbody class="list">
-        <c:forEach var="bank" items="${banks}">
-            <tr id="bank_${bank.id}">
-                <td class="bank_name" data-field="bank_name" id="bank_name">
-                    <p align="center">${bank.name}</p></td>
-                <td><a href="javascript:void(0);" data-href="${contextPath}/banks/bank_edit" class="openPopup">
-                    <button type="button" class="btn btn-primary" id="edit_bank"
-                            name="${bank.id}" onclick="getBankValue(this.name)">Edit
-                    </button>
-                </a>
-                    <a type="button" class="btn btn-warning"
-                       href="${contextPath}/banks/delete/${bank.id}">Delete</a>
-                </td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-    <div>
-        <a href="javascript:void(0);" data-href="${contextPath}/banks/add_new_bank" class="openPopup">
-            <button class="btn btn-success" type="button"> Add</button>
-        </a>
-    </div>
+    </c:forEach>
+    </tbody>
+</table>
+<div>
+    <a href="javascript:void(0);" data-href="${contextPath}/categories/add_new_category" class="openPopup">
+        <button class="btn btn-success" type="button"> Add</button>
+    </a>
 </div>
 
-<script src="${contextPath}/resources/js/banks/bank_filter.js"></script>
-<script src="${contextPath}/resources/js/banks/bank_edit.js"></script>
+<script src="${contextPath}/resources/js/categories/category_filter.js"></script>
+<script src="${contextPath}/resources/js/categories/category_edit.js"></script>
 </body>
 </html>

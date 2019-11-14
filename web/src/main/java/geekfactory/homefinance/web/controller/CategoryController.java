@@ -1,54 +1,119 @@
 package geekfactory.homefinance.web.controller;
 
-import geekfactory.homefinance.dao.model.CategoryTransactionModel;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import geekfactory.homefinance.service.dto.CategoryDtoModel;
 import geekfactory.homefinance.service.serviceImpl.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/categories")
 public class CategoryController {
 
-    @Autowired
     private CategoryService categoryTransactionService;
+    private ObjectMapper mapper = new ObjectMapper();
 
-    @PostMapping(value = "save", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String save(@RequestBody CategoryTransactionModel categoryModel, Model model) {
-        CategoryTransactionModel saveCategoryModel = new CategoryTransactionModel();
+    @Autowired
+    public CategoryController(CategoryService categoryTransactionService) {
+        this.categoryTransactionService = categoryTransactionService;
+    }
 
-        model.addAttribute("name", saveCategoryModel.getName());
-        model.addAttribute("parent_category", saveCategoryModel.getParentCategory().getId());
+    @GetMapping(value = "/add_new_category")
+    public String addNewCurrencyPage(Model model) {
+        Collection<CategoryDtoModel> allCategories = categoryTransactionService.findAll();
+        Set<String> allNamesCategory = new HashSet<>();
 
-        return "category_list";
+        for (CategoryDtoModel categoryDtoModel : allCategories) {
+            allNamesCategory.add(categoryDtoModel.getName());
+        }
+        model.addAttribute("nameCategories", allNamesCategory);
+
+        return "/categories/add_new_category";
+    }
+
+    @GetMapping(value = "/category_edit")
+    public String editCurrencyPage(Model model) {
+        Collection<CategoryDtoModel> allCategories = categoryTransactionService.findAll();
+        Set<String> allNamesCategory = new HashSet<>();
+
+        for (CategoryDtoModel categoryDtoModel : allCategories) {
+            allNamesCategory.add(categoryDtoModel.getName());
+        }
+        model.addAttribute("nameCategories", allNamesCategory);
+
+        return "/categories/category_edit";
     }
 
     @GetMapping("/")
     public String findAll(Model model) {
-        Collection<CategoryTransactionModel> allCategories = categoryTransactionService.findAll();
+        Collection<CategoryDtoModel> allCategories = categoryTransactionService.findAll();
 
         model.addAttribute("categories", allCategories);
 
-        return "category_list";
+        return "categories/category_list";
     }
 
-    @PutMapping("/update")
-    public String update(@PathVariable String id, @RequestBody CategoryTransactionModel bankModel, Model model) {
-        CategoryTransactionModel updateCategoryModel = new CategoryTransactionModel();
-        model.addAttribute("id", updateCategoryModel.getId());
-        model.addAttribute("name", updateCategoryModel.getName());
-        model.addAttribute("parent_category", updateCategoryModel.getParentCategory().getId());
+    @GetMapping("/{id}")
+    public @ResponseBody
+    String findById(@PathVariable Long id) {
+        categoryTransactionService.findById(id).get();
 
-        return "category_list";
+        return "/find";
     }
 
-    @DeleteMapping("/delete")
-    public void delete(Long id) {
+    @GetMapping("/{name}")
+    public @ResponseBody
+    String findByName(@PathVariable String name) {
+        categoryTransactionService.findByName(name).get();
 
-        //categoryTransactionService.remove(categoryTransactionService.findById(id));
+        return "/findByName";
+    }
+
+    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ModelAndView save(@RequestBody String jsonCategoryDtoModel) {
+        CategoryDtoModel saveCategoryDtoModel = new CategoryDtoModel();
+
+        try {
+            saveCategoryDtoModel = mapper.readValue(jsonCategoryDtoModel, CategoryDtoModel.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        categoryTransactionService.save(saveCategoryDtoModel);
+
+        return new ModelAndView("redirect:/categories/");
+    }
+
+    @PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    String update(@RequestBody String jsonCategoryDtoModel) {
+        CategoryDtoModel updateCategoryDtoModel = new CategoryDtoModel();
+
+        try {
+            updateCategoryDtoModel = mapper.readValue(jsonCategoryDtoModel, CategoryDtoModel.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        categoryTransactionService.update(updateCategoryDtoModel);
+
+        return "/categories/";
+    }
+
+    @GetMapping(value = "/delete/{id}")
+    public String delete(@PathVariable(value = "id", required = true) String categoryId) {
+        CategoryDtoModel removeCategoryDtoModel = categoryTransactionService.findById(Long.valueOf(categoryId)).get();
+
+        categoryTransactionService.remove(removeCategoryDtoModel);
+
+        return "redirect:/categories/";
     }
 }

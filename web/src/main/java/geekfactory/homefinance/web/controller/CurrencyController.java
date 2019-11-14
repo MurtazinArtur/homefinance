@@ -51,6 +51,7 @@ public class CurrencyController {
     public @ResponseBody
     String findById(@PathVariable Long id) {
         currencyService.findById(id).get();
+
         return "/find";
     }
 
@@ -59,6 +60,7 @@ public class CurrencyController {
     public @ResponseBody
     String findByName(@PathVariable String name) {
         currencyService.findByName(name).get();
+
         return "/findByName";
     }
 
@@ -93,7 +95,9 @@ public class CurrencyController {
     @GetMapping(value = "/delete/{id}")
     public String delete(@PathVariable(value = "id", required = true) String currencyId) {
         CurrencyDtoModel removeCurrencyDtoModel = currencyService.findById(Long.valueOf(currencyId)).get();
+
         currencyService.remove(removeCurrencyDtoModel);
+
         return "redirect:/currencies/";
     }
 }
