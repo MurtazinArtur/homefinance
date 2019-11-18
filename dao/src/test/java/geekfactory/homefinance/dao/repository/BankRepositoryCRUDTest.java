@@ -19,15 +19,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DaoConfiguration.class})
-@Sql(executionPhase= Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts="classpath:delete_tables_ddl.sql")
-@Sql(executionPhase= Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts="classpath:init_ddl.sql")
+@Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = "classpath:delete_tables_ddl.sql")
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:init_ddl.sql")
 class BankRepositoryCRUDTest {
 
     @Autowired
     private BankRepositoryCRUD bankRepositoryCRUD;
 
     @Test
-    void TestContext(){
+    void TestContext() {
         assertNotNull(bankRepositoryCRUD);
     }
 
@@ -87,9 +87,9 @@ class BankRepositoryCRUDTest {
         return bankModel;
     }
 
-    private List<BankModel> createCollectionModels(){
+    private List<BankModel> createCollectionModels() {
         List<BankModel> collection = new ArrayList<>();
-        for (int i = 1; i <= 3 ; i++) {
+        for (int i = 1; i <= 3; i++) {
             BankModel bankModel = new BankModel();
             bankModel.setName("VTB");
 

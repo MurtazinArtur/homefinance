@@ -42,19 +42,19 @@ class TransactionRepositoryCRUDTest {
     private CategoryTransactionRepositoryCRUD categoryTransactionModelRepositoryCRUD;
 
     @Test
-    void TestContext(){
+    void TestContext() {
         assertNotNull(transactionModelRepositoryCRUD);
     }
 
     @Test
     @DisplayName("running save and findById test")
-    void testSaveAndFind(){
+    void testSaveAndFind() {
         assertEquals(createModel(), transactionModelRepositoryCRUD.findById(1L).get());
     }
 
     @Test
     @DisplayName("running findAll test")
-    void testFindAll(){
+    void testFindAll() {
         List<TransactionModel> expectedList = createCollectionModels();
         List<TransactionModel> actualList = (List<TransactionModel>) transactionModelRepositoryCRUD.findAll();
 
@@ -85,7 +85,6 @@ class TransactionRepositoryCRUDTest {
         for (int i = 1; i <= 3; i++) {
             TransactionModel transactionModel = new TransactionModel();
             Collection<CategoryTransactionModel> categoryTransactionModels = new HashSet<>();
-            transactionModel.setId(Long.valueOf(i));
             transactionModel.setAmount(BigDecimal.valueOf(35.18));
             transactionModel.setDate(LocalDate.now());
             transactionModel.setSource("Testing Record");
@@ -105,7 +104,6 @@ class TransactionRepositoryCRUDTest {
         saveAllModels();
         TransactionModel transactionModel = new TransactionModel();
         Collection<CategoryTransactionModel> categoryTransactionModels = new HashSet<>();
-        transactionModel.setId(1L);
         transactionModel.setAmount(BigDecimal.valueOf(35.18));
         transactionModel.setDate(LocalDate.now());
         transactionModel.setSource("Testing Record");

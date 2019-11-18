@@ -1,9 +1,9 @@
 package geekfactory.homefinance.dao.repository;
 
+import geekfactory.homefinance.dao.config.DaoConfiguration;
 import geekfactory.homefinance.dao.model.AccountModel;
 import geekfactory.homefinance.dao.model.AccountType;
 import geekfactory.homefinance.dao.model.CurrencyModel;
-import geekfactory.homefinance.dao.config.DaoConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,14 +31,14 @@ class AccountRepositoryCRUDTest {
     private CurrencyRepositoryCRUD currencyModelRepositoryCRUD;
 
     @Test
-    void TestContext(){
+    void TestContext() {
         assertNotNull(accountModelRepositoryCRUD);
     }
 
     @Test
     @Transactional
     @DisplayName("running save and findById test")
-    void testSaveAndFind(){
+    void testSaveAndFind() {
         assertEquals(createModel(), accountModelRepositoryCRUD.findById(1L).get());
     }
 
@@ -60,7 +60,7 @@ class AccountRepositoryCRUDTest {
     @Test
     @Transactional
     @DisplayName("running update test")
-    void testUpdate(){
+    void testUpdate() {
         createModel();
 
         AccountModel accountUpdate = accountModelRepositoryCRUD.findById(1L).orElse(null);
@@ -74,7 +74,7 @@ class AccountRepositoryCRUDTest {
     @Test
     @Transactional
     @DisplayName("running remove test")
-    void testRemove(){
+    void testRemove() {
         createModel();
 
         AccountModel accountModel = accountModelRepositoryCRUD.findById(1L).orElse(null);

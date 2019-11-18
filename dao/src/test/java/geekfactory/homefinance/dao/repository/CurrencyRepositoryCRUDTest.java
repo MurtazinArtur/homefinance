@@ -27,7 +27,7 @@ class CurrencyRepositoryCRUDTest {
     private CurrencyRepositoryCRUD currencyModelRepositoryCRUD;
 
     @Test
-    void TestContext(){
+    void TestContext() {
         assertNotNull(currencyModelRepositoryCRUD);
     }
 

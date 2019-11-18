@@ -27,21 +27,21 @@ class CategoryTransactionRepositoryCRUDTest {
     private CategoryTransactionRepositoryCRUD categoryTransactionModelRepositoryCRUD;
 
     @Test
-    void TestContext(){
+    void TestContext() {
         assertNotNull(categoryTransactionModelRepositoryCRUD);
     }
 
     @Test
     @Transactional
     @DisplayName("running save and findById test")
-    void testSaveAndFind(){
+    void testSaveAndFind() {
         assertEquals(createModel(), categoryTransactionModelRepositoryCRUD.findById(1L).get());
     }
 
     @Test
     @Transactional
     @DisplayName("running findAll test")
-    void testFindAll(){
+    void testFindAll() {
         Collection<CategoryTransactionModel> expectedList = createCollectionModels();
         Collection<CategoryTransactionModel> actualList = (categoryTransactionModelRepositoryCRUD.findAll());
 
@@ -69,7 +69,7 @@ class CategoryTransactionRepositoryCRUDTest {
     @Test
     @Transactional
     @DisplayName("running remove test")
-    void testRemove(){
+    void testRemove() {
         createModel();
 
         CategoryTransactionModel categoryTransactionModel = categoryTransactionModelRepositoryCRUD.findById(1L).orElse(null);

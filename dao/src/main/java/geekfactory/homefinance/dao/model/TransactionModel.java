@@ -16,6 +16,8 @@ import java.util.Collection;
 @AllArgsConstructor
 public class TransactionModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     @Column(name = "amount")
     private BigDecimal amount;
@@ -23,18 +25,18 @@ public class TransactionModel {
     private LocalDate date;
     @Column(name = "source")
     private String source;
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "transaction_category_tbl",
             joinColumns = @JoinColumn(name = "transaction_id"),
-    inverseJoinColumns = @JoinColumn(name = "category_id"))
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Collection<CategoryTransactionModel> category;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "bank_id")
     private BankModel bank;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "account_id")
     private AccountModel account;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "currency_id")
     private CurrencyModel currency;
 }
