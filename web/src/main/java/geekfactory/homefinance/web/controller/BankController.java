@@ -7,7 +7,6 @@ import geekfactory.homefinance.service.serviceImpl.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,7 +62,7 @@ public class BankController {
         return "/findByName";
     }
 
-    @PostMapping(value = "/save", consumes =MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ModelAndView save(@RequestBody String jsonBankDtoModel) {
         BankDtoModel saveBankModel = new BankDtoModel();
 
@@ -78,7 +77,8 @@ public class BankController {
     }
 
     @PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody String update(@RequestBody String jsonBankDtoModel) {
+    public @ResponseBody
+    String update(@RequestBody String jsonBankDtoModel) {
         BankDtoModel updateModel = new BankDtoModel();
 
         try {

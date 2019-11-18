@@ -59,6 +59,6 @@ insertEditValue()
     }
 </script>
 
-<script src="${contextPath}/resources/js/currency_edit.js"></script>
+<script src="${contextPath}/resources/js/currencies/currency_edit.js"></script>
 </body>
 </html>

@@ -59,6 +59,6 @@ insertEditValue()
     }
 </script>
 
-<script src="${contextPath}/resources/js/category_edit.js"></script>
+<script src="${contextPath}/resources/js/categories/category_edit.js"></script>
 </body>
 </html>

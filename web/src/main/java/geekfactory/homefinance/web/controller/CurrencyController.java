@@ -2,8 +2,6 @@ package geekfactory.homefinance.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import geekfactory.homefinance.dao.model.CurrencyModel;
-import geekfactory.homefinance.service.dto.BankDtoModel;
 import geekfactory.homefinance.service.dto.CurrencyDtoModel;
 import geekfactory.homefinance.service.serviceImpl.CurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;

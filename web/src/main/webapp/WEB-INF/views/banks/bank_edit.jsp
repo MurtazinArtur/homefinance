@@ -49,6 +49,6 @@ insertEditValue()
     }
 </script>
 
-<script src="${contextPath}/resources/js/bank_edit.js"></script>
+<script src="${contextPath}/resources/js/banks/bank_edit.js"></script>
 </body>
 </html>
