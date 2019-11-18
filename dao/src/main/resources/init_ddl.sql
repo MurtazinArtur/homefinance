@@ -18,15 +18,15 @@ CREATE TABLE account_tbl
 
 CREATE TABLE category_tbl
 (
-    id   INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    name VARCHAR(50)                    NOT NULL,
+    id                 INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    name               VARCHAR(50)                    NOT NULL,
     parent_category_id INT
 );
 
 CREATE TABLE bank_tbl
 (
     id   INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    name VARCHAR(50) NOT NULL 
+    name VARCHAR(50)                    NOT NULL
 );
 
 CREATE TABLE transaction_tbl
@@ -51,4 +51,15 @@ CREATE TABLE transaction_category_tbl
 
     CONSTRAINT transaction_category_category_fk FOREIGN KEY (category_id) REFERENCES category_tbl (id),
     CONSTRAINT transaction_category_transaction_fk FOREIGN KEY (transaction_id) REFERENCES transaction_tbl (id)
+);
+
+CREATE TABLE user_tbl
+(
+    id         INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    user       VARCHAR(15)                    NOT NULL,
+    password   VARCHAR(15)                    NOT NULL,
+    user_role  VARCHAR(10)                    NOT NULL,
+    account_id INT,
+
+    CONSTRAINT account_user_fk FOREIGN KEY (account_id) REFERENCES account_tbl (id)
 );

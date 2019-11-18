@@ -53,3 +53,14 @@ CREATE TABLE IF NOT EXISTS transaction_category_tbl
     CONSTRAINT transaction_category_category_fk FOREIGN KEY (category_id) REFERENCES category_tbl (id),
     CONSTRAINT transaction_category_transaction_fk FOREIGN KEY (transaction_id) REFERENCES transaction_tbl (id)
 );
+
+CREATE TABLE IF NOT EXISTS user_tbl
+(
+    id         INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    user       VARCHAR(15)                    NOT NULL,
+    password   VARCHAR(15)                    NOT NULL,
+    user_role  VARCHAR(10)                    NOT NULL,
+    account_id INT,
+
+    CONSTRAINT account_user_fk FOREIGN KEY (account_id) REFERENCES account_tbl (id)
+);
