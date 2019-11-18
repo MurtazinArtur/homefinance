@@ -2,8 +2,8 @@ package geekfactory.homefinance.service.serviceImpl;
 
 import geekfactory.homefinance.dao.model.TransactionModel;
 import geekfactory.homefinance.dao.repository.AccountRepositoryCRUD;
-import geekfactory.homefinance.dao.repository.TransactionRepositoryCRUD;
 import geekfactory.homefinance.service.converter.AccountModelConverter;
+import geekfactory.homefinance.service.converter.TransactionModelConverter;
 import geekfactory.homefinance.service.dto.AccountDtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,14 @@ import java.util.Optional;
 public class AccountService {
 
     private AccountModelConverter accountConverter;
+    private TransactionModelConverter transactionModelConverter;
     private TransactionService transactionService;
     private AccountRepositoryCRUD accountRepositoryCRUD;
 
     @Autowired
     public AccountService(AccountRepositoryCRUD accountRepositoryCRUD, AccountModelConverter accountConverter,
-                          TransactionService transactionService) {
+                          TransactionModelConverter transactionModelConverter, TransactionService transactionService) {
+        this.transactionModelConverter = transactionModelConverter;
         this.transactionService = transactionService;
         this.accountRepositoryCRUD = accountRepositoryCRUD;
         this.accountConverter = accountConverter;
@@ -56,7 +58,7 @@ public class AccountService {
         for (TransactionModel transactionModel : transactionModelCollection) {
             if (accountConverter.convertToAccountModel(accountDtoModel).equals(transactionModel.getAccount())) {
                 transactionModel.setAccount(null);
-                transactionService.update(transactionModel);
+                transactionService.update(transactionModelConverter.convertToTransactionDtoModel(transactionModel));
             }
         }
         accountRepositoryCRUD.remove(accountConverter.convertToAccountModel(accountDtoModel));

@@ -16,12 +16,12 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionDtoModel {
-    private Long id;
-    private BigDecimal amount;
-    private LocalDate date;
+    private int id;
+    private String date;
     private String source;
-    private Collection<CategoryTransactionModel> category;
-    private BankModel bank;
-    private AccountModel account;
-    private CurrencyModel currency;
+    private Collection<String> category;
+    private String amount;
+    private String currency;
+    private String account;
+    private String bank;
 }

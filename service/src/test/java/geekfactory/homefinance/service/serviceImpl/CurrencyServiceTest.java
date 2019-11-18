@@ -1,8 +1,8 @@
 package geekfactory.homefinance.service.serviceImpl;
 
-import geekfactory.homefinance.service.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.CurrencyModel;
 import geekfactory.homefinance.dao.repository.CurrencyRepositoryCRUD;
+import geekfactory.homefinance.service.config.ServiceConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

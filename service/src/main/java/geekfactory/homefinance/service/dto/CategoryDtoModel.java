@@ -1,6 +1,5 @@
 package geekfactory.homefinance.service.dto;
 
-import geekfactory.homefinance.dao.model.CategoryTransactionModel;
 import lombok.*;
 
 @Data

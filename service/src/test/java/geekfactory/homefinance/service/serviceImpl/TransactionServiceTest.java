@@ -1,8 +1,9 @@
 package geekfactory.homefinance.service.serviceImpl;
 
-import geekfactory.homefinance.service.config.ServiceConfiguration;
 import geekfactory.homefinance.dao.model.*;
 import geekfactory.homefinance.dao.repository.TransactionRepositoryCRUD;
+import geekfactory.homefinance.service.config.ServiceConfiguration;
+import geekfactory.homefinance.service.converter.TransactionModelConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,13 +29,16 @@ public class TransactionServiceTest {
     @Autowired
     private TransactionService transactionService;
 
+    @Autowired
+    private TransactionModelConverter transactionModelConverter;
+
     @Test
     public void testTransactionService() {
 
         when(transactionRepositoryMock.findById(anyLong())).thenReturn(Optional.ofNullable(createTransactionModel()));
 
         assertNotNull(transactionRepositoryMock);
-        assertEquals(createTransactionModel(), transactionRepositoryMock.findById(5L).get());
+        assertEquals(createTransactionModel(), transactionRepositoryMock.findById(1L).get());
 
         verify(transactionRepositoryMock, times(1)).findById(anyLong());
         verify(transactionRepositoryMock, never()).findAll();
@@ -45,7 +49,6 @@ public class TransactionServiceTest {
 
     private TransactionModel createTransactionModel() {
         TransactionModel transactionModel = new TransactionModel();
-        transactionModel.setId(5L);
         transactionModel.setAmount(new BigDecimal("3.15"));
         transactionModel.setDate(LocalDate.now());
         transactionModel.setSource("TestSource");
@@ -58,7 +61,6 @@ public class TransactionServiceTest {
 
     private BankModel createBankModel() {
         BankModel bankModel = new BankModel();
-        bankModel.setId(1L);
         bankModel.setName("testUpdate");
 
         return bankModel;
@@ -66,7 +68,6 @@ public class TransactionServiceTest {
 
     private AccountModel createAccountModel() {
         AccountModel accountModel = new AccountModel();
-        accountModel.setId(1L);
         accountModel.setName("testModel");
         accountModel.setAmount(new BigDecimal("5.00"));
         accountModel.setAccountType(AccountType.CASH);
@@ -77,7 +78,6 @@ public class TransactionServiceTest {
 
     private CurrencyModel createCurrencyModel() {
         CurrencyModel currencyModel = new CurrencyModel();
-        currencyModel.setId(1L);
         currencyModel.setName("testCurrency");
         currencyModel.setCode("TC");
         currencyModel.setSymbol("T");

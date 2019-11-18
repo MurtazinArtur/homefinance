@@ -2,13 +2,12 @@ package geekfactory.homefinance.service.converter;
 
 import geekfactory.homefinance.dao.model.BankModel;
 import geekfactory.homefinance.service.dto.BankDtoModel;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
 @Component
 @Transactional
 public class BankModelConverter {
@@ -20,7 +19,8 @@ public class BankModelConverter {
             if (bankModel.getId() != null) {
                 bankDtoModel.setId(Math.toIntExact(bankModel.getId()));
             } else {
-                conditionConvert = "Поле id не может быть пустым"; }
+                conditionConvert = "Поле id не может быть пустым";
+            }
             if (bankModel.getName() != null) {
                 bankDtoModel.setName(bankModel.getName());
             } else {
@@ -40,7 +40,7 @@ public class BankModelConverter {
         return collectionBankDtoModels;
     }
 
-    public BankModel convertToBankModel(BankDtoModel bankDtoModel){
+    public BankModel convertToBankModel(BankDtoModel bankDtoModel) {
         BankModel bankModel = new BankModel();
         if (bankDtoModel != null) {
             Long id = Long.valueOf(bankDtoModel.getId());

@@ -2,6 +2,8 @@ package geekfactory.homefinance.service.serviceImpl;
 
 import geekfactory.homefinance.dao.model.TransactionModel;
 import geekfactory.homefinance.dao.repository.TransactionRepositoryCRUD;
+import geekfactory.homefinance.service.converter.TransactionModelConverter;
+import geekfactory.homefinance.service.dto.TransactionDtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +15,18 @@ import java.util.Optional;
 @Service("transactionService")
 public class TransactionService {
 
-    @Autowired
+    private TransactionModelConverter transactionModelConverter;
     private TransactionRepositoryCRUD transactionRepositoryCRUD;
 
-    public Optional<TransactionModel> findById(Long id) {
-        return Optional.ofNullable(transactionRepositoryCRUD.findById(id).get());
+    @Autowired
+    public TransactionService(TransactionModelConverter transactionModelConverter,
+                              TransactionRepositoryCRUD transactionRepositoryCRUD) {
+        this.transactionModelConverter = transactionModelConverter;
+        this.transactionRepositoryCRUD = transactionRepositoryCRUD;
+    }
+
+    public Optional<TransactionDtoModel> findById(Long id) {
+        return Optional.ofNullable(transactionModelConverter.convertToTransactionDtoModel(transactionRepositoryCRUD.findById(id).get()));
     }
 
     public Optional<TransactionModel> findByName(String name) {
@@ -28,16 +37,16 @@ public class TransactionService {
         return transactionRepositoryCRUD.findAll();
     }
 
-    public void remove(TransactionModel model) {
-        transactionRepositoryCRUD.remove(model);
+    public void remove(TransactionDtoModel transactionDtoModel) {
+        transactionRepositoryCRUD.remove(transactionModelConverter.convertToTransactionModel(transactionDtoModel));
     }
 
-    public void save(TransactionModel model) {
-        transactionRepositoryCRUD.save(model);
+    public void save(TransactionDtoModel transactionDtoModel) {
+        transactionRepositoryCRUD.save(transactionModelConverter.convertToTransactionModel(transactionDtoModel));
     }
 
-    public TransactionModel update(TransactionModel model) {
-        transactionRepositoryCRUD.update(model);
-        return model;
+    public TransactionDtoModel update(TransactionDtoModel transactionDtoModel) {
+        transactionRepositoryCRUD.update(transactionModelConverter.convertToTransactionModel(transactionDtoModel));
+        return transactionDtoModel;
     }
 }

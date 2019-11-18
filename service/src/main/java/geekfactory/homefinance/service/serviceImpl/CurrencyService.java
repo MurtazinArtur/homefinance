@@ -1,10 +1,9 @@
 package geekfactory.homefinance.service.serviceImpl;
 
-import geekfactory.homefinance.dao.model.AccountModel;
 import geekfactory.homefinance.dao.model.TransactionModel;
 import geekfactory.homefinance.dao.repository.CurrencyRepositoryCRUD;
-import geekfactory.homefinance.service.converter.AccountModelConverter;
 import geekfactory.homefinance.service.converter.CurrencyModelConverter;
+import geekfactory.homefinance.service.converter.TransactionModelConverter;
 import geekfactory.homefinance.service.dto.AccountDtoModel;
 import geekfactory.homefinance.service.dto.CurrencyDtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +18,17 @@ import java.util.Optional;
 public class CurrencyService {
 
     private CurrencyModelConverter currencyConverter;
+    private TransactionModelConverter transactionModelConverter;
     private CurrencyRepositoryCRUD currencyRepositoryCRUD;
     private TransactionService transactionService;
     private AccountService accountService;
 
     @Autowired
-    public CurrencyService(CurrencyModelConverter converter, CurrencyRepositoryCRUD currencyRepositoryCRUD,
-                           TransactionService transactionService, AccountService accountService) {
+    public CurrencyService(CurrencyModelConverter converter, TransactionModelConverter transactionModelConverter,
+                           CurrencyRepositoryCRUD currencyRepositoryCRUD, TransactionService transactionService,
+                           AccountService accountService) {
         this.currencyConverter = converter;
+        this.transactionModelConverter = transactionModelConverter;
         this.currencyRepositoryCRUD = currencyRepositoryCRUD;
         this.transactionService = transactionService;
         this.accountService = accountService;
@@ -51,7 +53,7 @@ public class CurrencyService {
         for (TransactionModel transactionModel : transactionModelCollection) {
             if (currencyConverter.convertToCurrencyModel(currencyDtoModel).equals(transactionModel.getCurrency())) {
                 transactionModel.setCurrency(null);
-                transactionService.update(transactionModel);
+                transactionService.update(transactionModelConverter.convertToTransactionDtoModel(transactionModel));
             }
         }
         for (AccountDtoModel accountDtoModel : accountDtoModelCollection) {
