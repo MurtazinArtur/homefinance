@@ -134,10 +134,12 @@ public class TransactionModelConverter {
             if (transactionDtoModel.getCategory() != null) {
                 Collection<String> collectionDtoCategories= transactionDtoModel.getCategory();
                 Collection<CategoryTransactionModel> collectionCategoryModels= new ArrayList<>();
+
                 for(String categoryModelName : collectionDtoCategories){
                     collectionCategoryModels.add(categoryModelConverter.convertToCategoryModel(
                             categoryService.findByName(categoryModelName).get()));
                 }
+
                 transactionModel.setCategory(collectionCategoryModels);
             } else {
                 conditionConvert = "Поле category не может быть пустым";

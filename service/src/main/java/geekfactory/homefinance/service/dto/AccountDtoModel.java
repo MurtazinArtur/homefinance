@@ -13,5 +13,5 @@ public class AccountDtoModel {
     private String amount;
     private String currencyModel;
     private String accountType;
-
+    private String userModel;
 }

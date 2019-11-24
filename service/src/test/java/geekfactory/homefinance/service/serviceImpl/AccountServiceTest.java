@@ -1,8 +1,6 @@
 package geekfactory.homefinance.service.serviceImpl;
 
-import geekfactory.homefinance.dao.model.AccountModel;
-import geekfactory.homefinance.dao.model.AccountType;
-import geekfactory.homefinance.dao.model.CurrencyModel;
+import geekfactory.homefinance.dao.model.*;
 import geekfactory.homefinance.dao.repository.AccountRepositoryCRUD;
 import geekfactory.homefinance.service.config.ServiceConfiguration;
 import org.junit.jupiter.api.Assertions;
@@ -46,21 +44,30 @@ public class AccountServiceTest {
 
     private AccountModel createAccountModel() {
         AccountModel accountModel = new AccountModel();
-        accountModel.setId(1L);
         accountModel.setName("testModel");
         accountModel.setAmount(new BigDecimal("5.00"));
         accountModel.setAccountType(AccountType.CASH);
         accountModel.setCurrencyModel(createCurrencyModel());
+        accountModel.setUserModel(createUserModel());
 
         return accountModel;
     }
 
     private CurrencyModel createCurrencyModel() {
         CurrencyModel currencyModel = new CurrencyModel();
-        currencyModel.setId(1L);
         currencyModel.setName("testCurrency");
         currencyModel.setCode("TC");
         currencyModel.setSymbol("T");
+
         return currencyModel;
+    }
+
+    private UserModel createUserModel(){
+        UserModel userModel = new UserModel();
+        userModel.setUser("test");
+        userModel.setPassword("test");
+        userModel.setUserRole(UserRoles.USER);
+
+        return userModel;
     }
 }

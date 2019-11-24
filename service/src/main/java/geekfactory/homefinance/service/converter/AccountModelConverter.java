@@ -4,7 +4,9 @@ import geekfactory.homefinance.dao.model.AccountModel;
 import geekfactory.homefinance.dao.model.AccountType;
 import geekfactory.homefinance.service.dto.AccountDtoModel;
 import geekfactory.homefinance.service.dto.CurrencyDtoModel;
+import geekfactory.homefinance.service.dto.UserDtoModel;
 import geekfactory.homefinance.service.serviceImpl.CurrencyService;
+import geekfactory.homefinance.service.serviceImpl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -18,14 +20,20 @@ import java.util.Collection;
 @Transactional
 public class AccountModelConverter {
 
-    private final CurrencyModelConverter converter;
+    private final CurrencyModelConverter currencyModelConverter;
+    private final UserModelConverter userModelConverter;
     private final CurrencyService currencyService;
+    private final UserService userService;
     public String conditionConvert;
 
     @Autowired
-    public AccountModelConverter(@Lazy CurrencyModelConverter converter, @Lazy CurrencyService currencyService) {
-        this.converter = converter;
+    public AccountModelConverter(@Lazy CurrencyModelConverter currencyModelConverter,
+                                 @Lazy UserModelConverter userModelConverter, @Lazy CurrencyService currencyService,
+                                 @Lazy UserService userService) {
+        this.currencyModelConverter = currencyModelConverter;
+        this.userModelConverter = userModelConverter;
         this.currencyService = currencyService;
+        this.userService = userService;
     }
 
     public AccountDtoModel convertToAccountDtoModel(AccountModel accountModel) {
@@ -56,6 +64,11 @@ public class AccountModelConverter {
                 accountDtoModel.setAccountType(String.valueOf(accountModel.getAccountType()));
             } else {
                 conditionConvert = "Поле accountType не может быть пустым";
+            }
+            if (accountModel.getUserModel() != null) {
+                accountDtoModel.setUserModel(accountModel.getUserModel().getUser());
+            } else {
+                conditionConvert = "Поле User не может быть пустым";
             }
         } else {
             conditionConvert = "Ошибка конвертации модели";
@@ -91,9 +104,8 @@ public class AccountModelConverter {
                 conditionConvert = "Поле amount не может быть пустым";
             }
             if (accountDtoModel.getCurrencyModel() != null) {
-                CurrencyDtoModel currencyDtoModel;
-                currencyDtoModel = currencyService.findByName(accountDtoModel.getCurrencyModel()).get();
-                accountModel.setCurrencyModel(converter.convertToCurrencyModel(currencyDtoModel));
+                CurrencyDtoModel currencyDtoModel = currencyService.findByName(accountDtoModel.getCurrencyModel()).get();
+                accountModel.setCurrencyModel(currencyModelConverter.convertToCurrencyModel(currencyDtoModel));
             } else {
                 conditionConvert = "Поле accountModel не может быть пустым";
             }
@@ -102,6 +114,13 @@ public class AccountModelConverter {
             } else {
                 conditionConvert = "Поле accountType не может быть пустым";
             }
+            if (accountDtoModel.getUserModel() != null) {
+                UserDtoModel userDtoModel = userService.findByName(accountDtoModel.getUserModel()).get();
+                accountModel.setUserModel(userModelConverter.convertToUserModel(userDtoModel));
+            } else {
+                conditionConvert = "Поле User не может быть пустым";
+            }
+
         } else {
             conditionConvert = "Ошибка конвертации модели";
         }
