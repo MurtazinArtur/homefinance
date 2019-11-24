@@ -1,9 +1,7 @@
 package geekfactory.homefinance.dao.repository;
 
 import geekfactory.homefinance.dao.config.DaoConfiguration;
-import geekfactory.homefinance.dao.model.AccountModel;
-import geekfactory.homefinance.dao.model.AccountType;
-import geekfactory.homefinance.dao.model.CurrencyModel;
+import geekfactory.homefinance.dao.model.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,10 +23,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:init_ddl.sql")
 class AccountRepositoryCRUDTest {
 
-    @Autowired
     private AccountRepositoryCRUD accountModelRepositoryCRUD;
-    @Autowired
     private CurrencyRepositoryCRUD currencyModelRepositoryCRUD;
+    private UserRepository userRepository;
+
+    @Autowired
+    AccountRepositoryCRUDTest(AccountRepositoryCRUD accountModelRepositoryCRUD,
+                              CurrencyRepositoryCRUD currencyModelRepositoryCRUD, UserRepository userRepository) {
+        this.accountModelRepositoryCRUD = accountModelRepositoryCRUD;
+        this.currencyModelRepositoryCRUD = currencyModelRepositoryCRUD;
+        this.userRepository = userRepository;
+    }
 
     @Test
     void TestContext() {
@@ -95,20 +100,32 @@ class AccountRepositoryCRUDTest {
 
     private AccountModel createModel() {
         saveCurrencyModel();
+        saveUserModel();
         AccountModel accountModel = new AccountModel();
         accountModel.setName("test");
         accountModel.setAmount(new BigDecimal("1.00"));
         accountModel.setCurrencyModel(currencyModelRepositoryCRUD.findById(1L).orElse(null));
         accountModel.setAccountType(AccountType.CASH);
+        accountModel.setUserModel(userRepository.findById(1L).orElse(null));
 
         accountModelRepositoryCRUD.save(accountModel);
 
         return accountModel;
     }
 
+    private void saveUserModel() {
+        UserModel userModel = new UserModel();
+        userModel.setUser("test");
+        userModel.setPassword("test");
+        userModel.setUserRole(UserRoles.ADMIN);
+
+        userRepository.save(userModel);
+    }
+
     private List<AccountModel> createCollectionModels() {
         List<AccountModel> collection = new ArrayList<>();
         saveCurrencyModel();
+        saveUserModel();
 
         for (int i = 1; i <= 3; i++) {
             AccountModel accountModel = new AccountModel();
@@ -116,6 +133,7 @@ class AccountRepositoryCRUDTest {
             accountModel.setAccountType(AccountType.CASH);
             accountModel.setAmount(new BigDecimal("1.00"));
             accountModel.setCurrencyModel(currencyModelRepositoryCRUD.findById(1L).orElse(null));
+            accountModel.setUserModel(userRepository.findById(1L).orElse(null));
 
             collection.add(accountModel);
             accountModelRepositoryCRUD.save(accountModel);

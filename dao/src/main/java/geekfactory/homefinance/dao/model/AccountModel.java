@@ -27,4 +27,7 @@ public class AccountModel {
     @Enumerated(EnumType.STRING)
     @Column(name = "account_type")
     private AccountType accountType;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private UserModel userModel;
 }

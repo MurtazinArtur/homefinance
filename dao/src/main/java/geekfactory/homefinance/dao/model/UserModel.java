@@ -21,9 +21,6 @@ public class UserModel {
     private String user;
     @Column(name = "password")
     private String password;
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "account_id")
-    private Collection<AccountModel> accountModel;
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role")
     private UserRoles userRole;

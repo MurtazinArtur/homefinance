@@ -30,16 +30,27 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Transactional
 class TransactionRepositoryCRUDTest {
 
-    @Autowired
     private TransactionRepositoryCRUD transactionModelRepositoryCRUD;
-    @Autowired
     private BankRepositoryCRUD bankModelRepositoryCRUD;
-    @Autowired
     private AccountRepositoryCRUD accountModelRepositoryCRUD;
-    @Autowired
     private CurrencyRepositoryCRUD currencyModelRepositoryCRUD;
-    @Autowired
     private CategoryTransactionRepositoryCRUD categoryTransactionModelRepositoryCRUD;
+    private UserRepository userRepository;
+
+    @Autowired
+    TransactionRepositoryCRUDTest(TransactionRepositoryCRUD transactionModelRepositoryCRUD,
+                                  BankRepositoryCRUD bankModelRepositoryCRUD,
+                                  AccountRepositoryCRUD accountModelRepositoryCRUD,
+                                  CurrencyRepositoryCRUD currencyModelRepositoryCRUD,
+                                  CategoryTransactionRepositoryCRUD categoryTransactionModelRepositoryCRUD,
+                                  UserRepository userRepository) {
+        this.transactionModelRepositoryCRUD = transactionModelRepositoryCRUD;
+        this.bankModelRepositoryCRUD = bankModelRepositoryCRUD;
+        this.accountModelRepositoryCRUD = accountModelRepositoryCRUD;
+        this.currencyModelRepositoryCRUD = currencyModelRepositoryCRUD;
+        this.categoryTransactionModelRepositoryCRUD = categoryTransactionModelRepositoryCRUD;
+        this.userRepository = userRepository;
+    }
 
     @Test
     void TestContext() {
@@ -124,6 +135,7 @@ class TransactionRepositoryCRUDTest {
         accountModel.setAmount(new BigDecimal("1.00"));
         accountModel.setCurrencyModel(currencyModelRepositoryCRUD.findById(1L).orElse(null));
         accountModel.setAccountType(CASH);
+        accountModel.setUserModel(userRepository.findById(1L).orElse(null));
 
         accountModelRepositoryCRUD.save(accountModel);
     }
@@ -152,7 +164,17 @@ class TransactionRepositoryCRUDTest {
         categoryTransactionModelRepositoryCRUD.save(categoryTransactionModel);
     }
 
+    private void saveUserModel() {
+        UserModel userModel = new UserModel();
+        userModel.setUser("test");
+        userModel.setPassword("test");
+        userModel.setUserRole(UserRoles.ADMIN);
+
+        userRepository.save(userModel);
+    }
+
     private void saveAllModels() {
+        saveUserModel();
         saveBankModel();
         saveCurrencyModel();
         saveAccountModel();

@@ -23,14 +23,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:init_ddl.sql")
 public class UserRepositoryTest {
     private UserRepository userRepository;
-    private AccountRepositoryCRUD accountRepositoryCRUD;
-    private CurrencyRepositoryCRUD currencyRepositoryCRUD;
 
     @Autowired
-    public UserRepositoryTest(UserRepository userRepository, AccountRepositoryCRUD accountRepositoryCRUD, CurrencyRepositoryCRUD currencyRepositoryCRUD) {
+    public UserRepositoryTest(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.accountRepositoryCRUD = accountRepositoryCRUD;
-        this.currencyRepositoryCRUD = currencyRepositoryCRUD;
     }
 
     @Test
@@ -88,11 +84,9 @@ public class UserRepositoryTest {
     }
 
     private UserModel createUserModel() {
-        createAccountModel();
         UserModel userModel = new UserModel();
         userModel.setUser("test");
         userModel.setPassword("test");
-        userModel.setAccountModel(accountRepositoryCRUD.findAll());
         userModel.setUserRole(UserRoles.ADMIN);
 
         userRepository.save(userModel);
@@ -102,7 +96,6 @@ public class UserRepositoryTest {
 
     private List<UserModel> createCollectionModels() {
         List<UserModel> collection = new ArrayList<>();
-        createAccountModel();
 
         for (int i = 1; i <= 3; i++) {
             UserModel userModel = new UserModel();
@@ -114,25 +107,5 @@ public class UserRepositoryTest {
             userRepository.save(userModel);
         }
         return collection;
-    }
-
-    private void createAccountModel() {
-        createCurrencyModel();
-        AccountModel accountModel = new AccountModel();
-        accountModel.setName("test");
-        accountModel.setAmount(new BigDecimal("1.00"));
-        accountModel.setCurrencyModel(currencyRepositoryCRUD.findById(1L).orElse(null));
-        accountModel.setAccountType(AccountType.CASH);
-
-        accountRepositoryCRUD.save(accountModel);
-    }
-
-    private void createCurrencyModel() {
-        CurrencyModel currencyModel = new CurrencyModel();
-        currencyModel.setName("Dollar");
-        currencyModel.setSymbol("D");
-        currencyModel.setCode("USD");
-
-        currencyRepositoryCRUD.save(currencyModel);
     }
 }
