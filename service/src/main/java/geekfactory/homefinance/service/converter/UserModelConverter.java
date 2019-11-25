@@ -29,6 +29,11 @@ public class UserModelConverter {
         UserDtoModel userDtoModel = new UserDtoModel();
 
         if (userModel != null) {
+            if(userModel.getId() != null){
+                userDtoModel.setId(Math.toIntExact(userModel.getId()));
+            }else {
+                conditionConvert = "Поле id не может быть пустым";
+            }
             if (userModel.getUser() != null) {
                 userDtoModel.setUser(userModel.getUser());
             } else {
@@ -63,6 +68,11 @@ public class UserModelConverter {
         UserModel userModel = new UserModel();
 
         if (userDtoModel != null) {
+            if (userDtoModel.getId() != 0){
+                userModel.setId(Long.valueOf(userDtoModel.getId()));
+            }else {
+                conditionConvert = "Поле id не может быть пустым";
+            }
             if (userDtoModel.getUser() != null) {
                 userModel.setUser(userDtoModel.getUser());
             } else {

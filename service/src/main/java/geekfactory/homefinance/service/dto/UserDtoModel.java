@@ -14,5 +14,4 @@ public class UserDtoModel {
     private String user;
     private String password;
     private String userRole;
-    private Collection<String> account;
 }
