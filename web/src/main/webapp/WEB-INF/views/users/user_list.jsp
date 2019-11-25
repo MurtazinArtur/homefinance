@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>Список Категорий Транзакций</title>
+    <title>Список Пользователей</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="${contextPath}/resources/js/bootstrap/bootstrap.min.js"></script>
@@ -37,7 +37,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4>Добавить Категорию</h4>
+                <h4>Добавить Пользователя</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -50,45 +50,50 @@
     </div>
 </div>
 
-<h1><p align="center">Список Категорий Платежей</p></h1>
+<h1><p align="center">Список Пользователей</p></h1>
 
 <div class="form-group">
     <input type="text" class="form-control pull-right" id="search" placeholder="Поиск по таблице">
 </div>
 
-<table class="table table-hover" id="category_table">
-    <thead>
-    <tr>
-        <th scope="col"><p align="center">Наименование</p></th>
-        <th scope="col"><p align="center">Родительская категория</p></th>
-    </tr>
-    </thead>
-    <tbody class="list" id="category_tbl">
-    <c:forEach var="category" items="${categories}">
-        <tr id="category_${category.id}">
-            <td class="category_name" data-field="category_name" id="category_name">
-                <p align="center">${category.name}</p></td>
-            <td class="category_parentCategory" data-field="category_parentCategory" id="category_parentCategory">
-                <p align="center">${category.parentCategory}</p></td>
-            <td><a href="javascript:void(0);" data-href="${contextPath}/categories/category_edit" class="openPopup">
-                <button type="button" class="btn btn-primary" id="edit_category"
-                        name="${category.id}" onclick="getCategoryValue(this.name)">Edit
-                </button>
-            </a>
-                <a type="button" class="btn btn-warning"
-                   href="${contextPath}/categories/delete/${category.id}">Delete</a>
-            </td>
+<div id="table" class="container">
+    <table class="table table-hover" id="user_table">
+        <thead>
+        <tr>
+            <th scope="col"><p align="center">Имя пользоателя</p></th>
+            <th scope="col"><p align="center">Пароль</p></th>
+            <th scope="col"><p align="center">Тип пользователя</p></th>
         </tr>
-    </c:forEach>
-    </tbody>
-</table>
-<div>
-    <a href="javascript:void(0);" data-href="${contextPath}/categories/add_new_category" class="openPopup">
-        <button class="btn btn-success" type="button"> Add</button>
-    </a>
+        </thead>
+        <tbody class="list" id="user_tbl">
+        <c:forEach var="user" items="${users}">
+            <tr id="user_${user.id}">
+                <td class="user_name" data-field="user_name" id="user_name">
+                    <p align="center">${user.user}</p></td>
+                <td class="user_password" data-field="user_password" id="user_password">
+                    <p align="center">${user.password}</p></td>
+                <td class="user_userRole" data-field="user_userRole" id="user_userRole">
+                    <p align="center">${user.userRole}</p></td>
+                <td><a href="javascript:void(0);" data-href="${contextPath}/users/user_edit" class="openPopup">
+                    <button type="button" class="btn btn-primary" id="edit_user"
+                            name="${user.id}" onclick="getUserValue(this.name)">Edit
+                    </button>
+                </a>
+                    <a type="button" class="btn btn-warning"
+                       href="${contextPath}/users/delete/${user.id}">Delete</a>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+    <div>
+        <a href="javascript:void(0);" data-href="${contextPath}/users/add_new_user" class="openPopup">
+            <button class="btn btn-success" type="button"> Add</button>
+        </a>
+    </div>
 </div>
 
-<script src="${contextPath}/resources/js/categories/category_filter.js"></script>
-<script src="${contextPath}/resources/js/categories/category_edit.js"></script>
+<script src="${contextPath}/resources/js/users/user_filter.js"></script>
+<script src="${contextPath}/resources/js/users/user_edit.js"></script>
 </body>
 </html>

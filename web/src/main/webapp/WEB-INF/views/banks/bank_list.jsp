@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <html>
@@ -28,6 +29,7 @@
         <li><a href="${contextPath}/banks/">Банки</a>
         <li><a href="${contextPath}/categories/">Категории Платежей</a>
         <li><a href="${contextPath}/transactions/">Транзакции</a>
+        <li><a href="${contextPath}/users/">Пользователи</a>
     </ul>
 </nav>
 <div class="mask-content" id="banks"></div>
