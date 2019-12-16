@@ -1,3 +1,5 @@
+package geekfactory.homefinance.service.serviceImpl;
+
 import geekfactory.homefinance.dao.model.UserModel;
 import geekfactory.homefinance.dao.model.UserRoles;
 import geekfactory.homefinance.dao.repository.UserRepository;
@@ -46,7 +48,7 @@ public class UserServiceTest {
         UserModel userModel = new UserModel();
         userModel.setUser("test");
         userModel.setPassword("test");
-        userModel.setUserRole(UserRoles.USER);
+        userModel.setUserRole(UserRoles.ROLE_USER);
 
         return userModel;
     }

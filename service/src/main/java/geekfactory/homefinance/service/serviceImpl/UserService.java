@@ -6,11 +6,19 @@ import geekfactory.homefinance.service.converter.UserModelConverter;
 import geekfactory.homefinance.service.dto.AccountDtoModel;
 import geekfactory.homefinance.service.dto.UserDtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Transactional
 @Service("userService")
@@ -34,7 +42,12 @@ public class UserService {
     }
 
     public Optional<UserDtoModel> findByName(String name) {
-        return Optional.ofNullable(userModelConverter.convertToUserDtoModel(userRepository.findByName(name).get()));
+        Optional<UserDtoModel> resultFindUser =
+                Optional.ofNullable(userModelConverter.convertToUserDtoModel(userRepository.findByName(name).get()));
+        if(!resultFindUser.isPresent()){
+            throw new UsernameNotFoundException("User " + name + " name not found!");
+        }
+        return resultFindUser;
     }
 
     public Collection<UserDtoModel> findAll() {

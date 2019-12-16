@@ -1,37 +1,27 @@
 package geekfactory.homefinance.service.converter;
 
-import geekfactory.homefinance.dao.model.AccountModel;
 import geekfactory.homefinance.dao.model.UserModel;
 import geekfactory.homefinance.dao.model.UserRoles;
 import geekfactory.homefinance.service.dto.UserDtoModel;
-import geekfactory.homefinance.service.serviceImpl.AccountService;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 @Component
 @Transactional
 public class UserModelConverter {
-    private final AccountService accountService;
-    private final AccountModelConverter accountModelConverter;
     public String conditionConvert;
-
-    public UserModelConverter(@Lazy AccountService accountService, @Lazy AccountModelConverter accountModelConverter) {
-        this.accountService = accountService;
-        this.accountModelConverter = accountModelConverter;
-    }
 
     public UserDtoModel convertToUserDtoModel(UserModel userModel) {
         UserDtoModel userDtoModel = new UserDtoModel();
 
         if (userModel != null) {
-            if(userModel.getId() != null){
+            if (userModel.getId() != null) {
                 userDtoModel.setId(Math.toIntExact(userModel.getId()));
-            }else {
+            } else {
                 conditionConvert = "Поле id не может быть пустым";
             }
             if (userModel.getUser() != null) {
@@ -68,9 +58,9 @@ public class UserModelConverter {
         UserModel userModel = new UserModel();
 
         if (userDtoModel != null) {
-            if (userDtoModel.getId() != 0){
+            if (userDtoModel.getId() != 0) {
                 userModel.setId(Long.valueOf(userDtoModel.getId()));
-            }else {
+            } else {
                 conditionConvert = "Поле id не может быть пустым";
             }
             if (userDtoModel.getUser() != null) {
@@ -86,7 +76,7 @@ public class UserModelConverter {
             if (userDtoModel.getUserRole() != null) {
                 userModel.setUserRole(UserRoles.valueOf(userDtoModel.getUserRole()));
             } else {
-                conditionConvert = "Поле userRole не может быть пустым";
+                userModel.setUserRole(UserRoles.ROLE_USER);
             }
         } else {
             conditionConvert = "Ошибка конвертации модели";

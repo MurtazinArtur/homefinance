@@ -66,7 +66,7 @@ public class AccountServiceTest {
         UserModel userModel = new UserModel();
         userModel.setUser("test");
         userModel.setPassword("test");
-        userModel.setUserRole(UserRoles.USER);
+        userModel.setUserRole(UserRoles.ROLE_USER);
 
         return userModel;
     }
