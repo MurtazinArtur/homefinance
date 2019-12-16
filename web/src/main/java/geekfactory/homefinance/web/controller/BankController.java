@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -40,10 +42,11 @@ public class BankController {
     }
 
     @GetMapping("/")
-    public String findAll(Model model) {
+    public String findAll(Model model, @AuthenticationPrincipal User user) {
         Collection<BankDtoModel> allBanks = bankService.findAll();
 
         model.addAttribute("banks", allBanks);
+        model.addAttribute("authUser", user);
 
         return "/banks/bank_list";
     }

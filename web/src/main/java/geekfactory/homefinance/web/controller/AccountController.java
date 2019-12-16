@@ -9,6 +9,9 @@ import geekfactory.homefinance.service.serviceImpl.AccountService;
 import geekfactory.homefinance.service.serviceImpl.CurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -80,10 +83,11 @@ public class AccountController {
     }
 
     @GetMapping("/")
-    public String findAll(Model model) {
+    public String findAll(Model model, @AuthenticationPrincipal User user) {
         Collection<AccountDtoModel> allAccounts = accountService.findAll();
 
         model.addAttribute("accounts", allAccounts);
+        model.addAttribute("authUser", user);
 
         return "accounts/account_list";
     }

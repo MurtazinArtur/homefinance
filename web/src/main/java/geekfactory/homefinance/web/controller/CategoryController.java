@@ -6,6 +6,8 @@ import geekfactory.homefinance.service.dto.CategoryDtoModel;
 import geekfactory.homefinance.service.serviceImpl.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -54,10 +56,11 @@ public class CategoryController {
     }
 
     @GetMapping("/")
-    public String findAll(Model model) {
+    public String findAll(Model model, @AuthenticationPrincipal User user) {
         Collection<CategoryDtoModel> allCategories = categoryTransactionService.findAll();
 
         model.addAttribute("categories", allCategories);
+        model.addAttribute("authUser", user);
 
         return "categories/category_list";
     }

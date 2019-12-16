@@ -5,11 +5,12 @@
 
 <html>
 <head>
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
     <title>Список Пользователей</title>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="${contextPath}/resources/js/bootstrap/bootstrap.min.js"></script>
-    <script src="${contextPath}/resources/js/modal.js"></script>
     <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/buttons.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/menu.css" rel="stylesheet">
@@ -20,7 +21,7 @@
 <nav class="nav">
     <label for="nav-toggle" class="nav-toggle" onclick=""></label>
     <h2 class="logo">
-        <a href="//dbmast.ru/">DBmast.ru</a>
+        <a href="${contextPath}/hello/">Главная</a>
     </h2>
     <ul>
         <li><a href="${contextPath}/currencies/">Виды Валют</a>
@@ -50,12 +51,32 @@
     </div>
 </div>
 
+<nav class="navbar navbar-dark bg-dark" style="margin-bottom: 0px">
+    <div class="container" style="margin: 5px; padding: 3px; width: 100%">
+        <c:if test="${authUser.authorities != null}">
+            <form method="get" class="form-inline">
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control pull-right" id="search"
+                               style="margin-left: 30px" placeholder="Поиск по таблице">
+                    </div>
+                    <div class="col">
+                        <label id="user_label_login" style="margin-left: 1050px">
+                            Вы авторизовались как ${authUser.username}
+                        </label>
+                        <label>
+                            <a class="nav-link" href="/logout">Выйти</a>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </c:if>
+    </div>
+</nav>
+
 <h1><p align="center">Список Пользователей</p></h1>
 
-<div class="form-group">
-    <input type="text" class="form-control pull-right" id="search" placeholder="Поиск по таблице">
-</div>
-
+<div class="container"></div>
 <div id="table" class="container">
     <table class="table table-hover" id="user_table">
         <thead>
@@ -93,6 +114,10 @@
     </div>
 </div>
 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="${contextPath}/resources/js/modal.js"></script>
+<script src="${contextPath}/resources/js/bootstrap/bootstrap.min.js"></script>
 <script src="${contextPath}/resources/js/users/user_filter.js"></script>
 <script src="${contextPath}/resources/js/users/user_edit.js"></script>
 </body>

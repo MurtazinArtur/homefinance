@@ -20,7 +20,7 @@
 <nav class="nav">
     <label for="nav-toggle" class="nav-toggle" onclick=""></label>
     <h2 class="logo">
-        <a href="//dbmast.ru/">DBmast.ru</a>
+        <a href="${contextPath}/hello/">Главная</a>
     </h2>
     <ul>
         <li><a href="${contextPath}/currencies/">Виды Валют</a>
@@ -49,12 +49,30 @@
         </div>
     </div>
 </div>
+<nav class="navbar navbar-dark bg-dark" style="margin-bottom: 0px">
+    <div class="container" style="margin: 5px; padding: 3px; width: 100%">
+        <c:if test="${authUser.authorities != null}">
+            <form method="get" class="form-inline">
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control pull-right" id="search"
+                               style="margin-left: 30px" placeholder="Поиск по таблице">
+                    </div>
+                    <div class="col">
+                        <label id="user_label_login" style="margin-left: 1050px">
+                            Вы авторизовались как ${authUser.username}
+                        </label>
+                        <label>
+                            <a class="nav-link" href="/logout">Выйти</a>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </c:if>
+    </div>
+</nav>
 
 <h1><p align="center">Список Валют</p></h1>
-
-<div class="form-group">
-    <input type="text" class="form-control pull-right" id="search" placeholder="Поиск по таблице">
-</div>
 
 <div id="table" class="container">
     <table class="table table-hover" id="currency_table">

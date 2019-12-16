@@ -21,7 +21,7 @@
 <nav class="nav">
     <label for="nav-toggle" class="nav-toggle" onclick=""></label>
     <h2 class="logo">
-        <a href="//dbmast.ru/">DBmast.ru</a>
+        <a href="${contextPath}/hello/">Главная</a>
     </h2>
     <ul>
         <li><a href="${contextPath}/currencies/">Виды Валют</a>
@@ -50,6 +50,27 @@
         </div>
     </div>
 </div>
+
+<nav class="navbar navbar-dark bg-dark">
+    <form th:action="@{/hello}" method="get" style="width: 2100px">
+        <div class="row">
+            <div class="col-sm">
+                <input type="text" class="form-control pull-right" id="search"
+                       style="margin-left: 30px" placeholder="Поиск по таблице">
+            </div>
+            <div class="col-sm">
+                <label id="user_label_login" style="color: white; margin-left: 170px;">
+                    Вы авторизовались как ${authUser.username}
+                </label>
+            </div>
+            <div class="col-sm">
+                <button type="submit" id="logout" name="submit" class="btn btn-primary"
+                        style="margin-left: 50px" onsubmit="/logout">Выйти
+                </button>
+            </div>
+        </div>
+    </form>
+</nav>
 
 <h1><p align="center">Список Операций</p></h1>
 

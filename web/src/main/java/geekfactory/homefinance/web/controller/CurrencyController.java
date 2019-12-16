@@ -6,6 +6,8 @@ import geekfactory.homefinance.service.dto.CurrencyDtoModel;
 import geekfactory.homefinance.service.serviceImpl.CurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,10 +39,11 @@ public class CurrencyController {
     }
 
     @GetMapping("/")
-    public String findAll(Model model) {
+    public String findAll(Model model, @AuthenticationPrincipal User user) {
         Collection<CurrencyDtoModel> allCurrencies = currencyService.findAll();
 
         model.addAttribute("currencies", allCurrencies);
+        model.addAttribute("authUser", user);
 
         return "/currencies/currency_list";
     }
