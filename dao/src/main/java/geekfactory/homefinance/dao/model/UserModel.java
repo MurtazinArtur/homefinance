@@ -3,7 +3,6 @@ package geekfactory.homefinance.dao.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Entity
 @Table(name = "user_tbl")
@@ -24,4 +23,6 @@ public class UserModel {
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role")
     private UserRoles userRole;
+    @Transient
+    private String confirmPassword;
 }

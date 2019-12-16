@@ -87,7 +87,7 @@ public class UserRepositoryTest {
         UserModel userModel = new UserModel();
         userModel.setUser("test");
         userModel.setPassword("test");
-        userModel.setUserRole(UserRoles.ADMIN);
+        userModel.setUserRole(UserRoles.ROLE_ADMIN);
 
         userRepository.save(userModel);
 
@@ -101,7 +101,7 @@ public class UserRepositoryTest {
             UserModel userModel = new UserModel();
             userModel.setUser("test");
             userModel.setPassword("test");
-            userModel.setUserRole(UserRoles.ADMIN);
+            userModel.setUserRole(UserRoles.ROLE_ADMIN);
 
             collection.add(userModel);
             userRepository.save(userModel);

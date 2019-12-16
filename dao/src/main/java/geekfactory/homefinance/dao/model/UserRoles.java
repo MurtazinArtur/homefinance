@@ -1,7 +1,7 @@
 package geekfactory.homefinance.dao.model;
 
 public enum UserRoles {
-    ADMIN,
-    ANONYMOUS,
-    USER
+    ROLE_ADMIN,
+    ROLE_ANONYMOUS,
+    ROLE_USER
 }

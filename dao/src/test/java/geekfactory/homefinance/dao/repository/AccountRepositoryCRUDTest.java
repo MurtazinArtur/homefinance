@@ -117,7 +117,7 @@ class AccountRepositoryCRUDTest {
         UserModel userModel = new UserModel();
         userModel.setUser("test");
         userModel.setPassword("test");
-        userModel.setUserRole(UserRoles.ADMIN);
+        userModel.setUserRole(UserRoles.ROLE_ADMIN);
 
         userRepository.save(userModel);
     }
