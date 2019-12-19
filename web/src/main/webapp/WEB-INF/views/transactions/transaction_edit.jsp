@@ -13,10 +13,6 @@
 
     <link href="${contextPath}/resources/css/daterangepicker.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/chosen.css" rel="stylesheet">
-    <script src="${contextPath}/resources/js/chosen.jquery.min.js"></script>
-    <script src="${contextPath}/resources/js/chosen.proto.js"></script>
-    <script src="${contextPath}/resources/js/moment.min.js"></script>
-    <script src="${contextPath}/resources/js/daterangepicker.js"></script>
 
 </head>
 <body>
@@ -69,7 +65,7 @@
     });
 </script>
 <script type="text/javascript">
-    $(function(){
+    $(function () {
         $("#transaction_category").chosen({width: "22%"});
     });
 </script>
@@ -123,6 +119,10 @@
     }
 </script>
 
+<script src="${contextPath}/resources/js/chosen.jquery.min.js"></script>
+<script src="${contextPath}/resources/js/chosen.proto.js"></script>
+<script src="${contextPath}/resources/js/moment.min.js"></script>
+<script src="${contextPath}/resources/js/daterangepicker.js"></script>
 <script src="${contextPath}/resources/js/transactions/transaction_edit.js"></script>
 </body>
 </html>

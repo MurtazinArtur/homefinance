@@ -2,7 +2,6 @@ package geekfactory.homefinance.web.controller;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import geekfactory.homefinance.dao.model.TransactionModel;
@@ -70,6 +69,7 @@ public class TransactionController {
         model.addAttribute("categories", allCategories);
         model.addAttribute("accounts", allAccounts);
         model.addAttribute("banks", allBanks);
+
         return "/transactions/transaction_edit";
     }
 
@@ -78,6 +78,7 @@ public class TransactionController {
     public ModelAndView save(@RequestBody String jsonTransactionDtoModel) {
         TransactionDtoModel transactionDtoModel = new TransactionDtoModel();
         mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+
         try {
             transactionDtoModel = mapper.readValue(jsonTransactionDtoModel, TransactionDtoModel.class);
         } catch (JsonProcessingException e) {
@@ -104,6 +105,7 @@ public class TransactionController {
     public ModelAndView update(@RequestBody String jsonTransactionDtoModel) {
         TransactionDtoModel updateTransactionDtoModel = new TransactionDtoModel();
         mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+
         try {
             updateTransactionDtoModel = mapper.readValue(jsonTransactionDtoModel, TransactionDtoModel.class);
         } catch (JsonProcessingException e) {

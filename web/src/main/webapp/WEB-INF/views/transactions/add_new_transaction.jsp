@@ -13,11 +13,6 @@
 
     <link href="${contextPath}/resources/css/daterangepicker.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/chosen.css" rel="stylesheet">
-    <script src="${contextPath}/resources/js/chosen.jquery.min.js"></script>
-    <script src="${contextPath}/resources/js/chosen.proto.js"></script>
-    <script src="${contextPath}/resources/js/moment.min.js"></script>
-    <script src="${contextPath}/resources/js/daterangepicker.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 </head>
 <body>
@@ -32,7 +27,8 @@
     if(yratext.test(this.value)) this.value=''" placeholder="Введите место проведения операции:"
            class="transaction_source" required/><br>
     <label>Категория операции</label><br>
-    <select data-placeholder="Выберите категорию(ии)" name="category" id="transaction_category" required multiple="multiple">
+    <select data-placeholder="Выберите категорию(ии)" name="category" id="transaction_category" required
+            multiple="multiple">
         <option value="0"></option>
         <category:forEach var="category" items="${categories}">
             <option>${category.name}</option>
@@ -86,9 +82,9 @@
         var formData = new FormData(event.target);
 
         formData.forEach(function (value, key) {
-            if(key ==="category"){
+            if (key === "category") {
                 category.push(value);
-            }else{
+            } else {
                 transaction[key] = value;
             }
         });
@@ -112,9 +108,15 @@
     }
 </script>
 <script type="text/javascript">
-    $(function(){
+    $(function () {
         $("#transaction_category").chosen({width: "22%"});
     });
 </script>
+
+<script src="${contextPath}/resources/js/chosen.jquery.min.js"></script>
+<script src="${contextPath}/resources/js/chosen.proto.js"></script>
+<script src="${contextPath}/resources/js/moment.min.js"></script>
+<script src="${contextPath}/resources/js/daterangepicker.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </body>
 </html>

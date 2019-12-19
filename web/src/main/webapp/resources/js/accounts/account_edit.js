@@ -13,6 +13,7 @@ function getAccountValue(data) {
     };
     localStorage.setItem("storageName", JSON.stringify(account));
 }
+
 function insertEditValue() {
     var editValue = localStorage.getItem("storageName");
     var account = JSON.parse(editValue);

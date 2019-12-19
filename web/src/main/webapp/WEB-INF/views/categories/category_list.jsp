@@ -98,6 +98,7 @@
     </c:forEach>
     </tbody>
 </table>
+
 <div>
     <a href="javascript:void(0);" data-href="${contextPath}/categories/add_new_category" class="openPopup">
         <button class="btn btn-success" type="button"> Add</button>

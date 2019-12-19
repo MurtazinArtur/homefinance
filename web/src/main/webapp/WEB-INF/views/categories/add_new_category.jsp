@@ -14,12 +14,12 @@
     if(yratext.test(this.value)) this.value=''" placeholder="Введите наименование категории:"
            class="name" required/><br>
     <label>Родительская категория</label><br>
-    <select name = "parentCategory" id="parentCategory" required>
-    <option value="0"></option>
-    <c:forEach var="parentCategory" items="${nameCategories}">
-        <option>${parentCategory}</option>
-    </c:forEach>
-</select><br>
+    <select name="parentCategory" id="parentCategory" required>
+        <option value="0"></option>
+        <c:forEach var="parentCategory" items="${nameCategories}">
+            <option>${parentCategory}</option>
+        </c:forEach>
+    </select><br>
     <input type="submit" value="Добавить категорию"><br>
 </form>
 <script>

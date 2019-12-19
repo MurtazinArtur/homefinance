@@ -24,7 +24,7 @@
         var bank = {};
         var formData = new FormData(event.target);
 
-        formData.forEach(function(value, key){
+        formData.forEach(function (value, key) {
             bank[key] = value;
         });
         formData.close;

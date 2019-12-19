@@ -1,4 +1,4 @@
-    $(document).ready(function() {
+$(document).ready(function () {
     $("#search").keyup(function () {
         _this = this;
 

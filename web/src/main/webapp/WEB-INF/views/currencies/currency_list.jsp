@@ -46,6 +46,7 @@
         </div>
     </div>
 </div>
+
 <nav class="navbar navbar-dark bg-dark" style="margin-bottom: 0px">
     <div class="container" style="margin: 5px; padding: 3px; width: 100%">
         <c:if test="${authUser.authorities != null}">
@@ -101,6 +102,7 @@
         </c:forEach>
         </tbody>
     </table>
+
     <div>
         <a href="javascript:void(0);" data-href="${contextPath}/currencies/add_new_currency" class="openPopup">
             <button class="btn btn-success" type="button"> Add</button>

@@ -13,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -82,6 +81,7 @@ public class UserController {
     public @ResponseBody
     String findById(@PathVariable Long id) {
         userService.findById(id).get();
+
         return "/find";
     }
 
@@ -89,19 +89,21 @@ public class UserController {
     public @ResponseBody
     String findByName(@PathVariable String name) {
         userService.findByName(name).get();
+
         return "/findByName";
     }
 
     @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ModelAndView save(@RequestBody String jsonUserDtoModel) {
         UserDtoModel saveUserModel = new UserDtoModel();
+
         try {
             saveUserModel = mapper.readValue(jsonUserDtoModel, UserDtoModel.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         saveUserModel.setPassword(new BCryptPasswordEncoder().encode(saveUserModel.getPassword()));
-        if (saveUserModel.getUserRole() == null){
+        if (saveUserModel.getUserRole() == null) {
             saveUserModel.setUserRole("ROLE_USER");
         }
         userService.save(saveUserModel);
@@ -131,6 +133,7 @@ public class UserController {
     public String delete(@PathVariable(value = "id", required = true) String userId) {
         UserDtoModel removedUserDtoModel = userService.findById(Long.valueOf(userId)).get();
         userService.remove(removedUserDtoModel);
+
         return "redirect:/users/";
     }
 }

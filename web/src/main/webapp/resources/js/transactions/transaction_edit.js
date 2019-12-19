@@ -8,17 +8,18 @@ function getTransactionValue(data) {
     var editAccount = rows[0].cells[5].innerText;
     var editBank = rows[0].cells[6].innerText;
     var transaction = {
-        'id' : data,
-        'date' : editDate,
-        'source' : editSource,
-        'category' : editCategory,
-        'amount' : editAmount,
-        'currency' : editCurrency,
-        'account' : editAccount,
-        'bank' : editBank
+        'id': data,
+        'date': editDate,
+        'source': editSource,
+        'category': editCategory,
+        'amount': editAmount,
+        'currency': editCurrency,
+        'account': editAccount,
+        'bank': editBank
     };
     localStorage.setItem("storageName", JSON.stringify(transaction));
 }
+
 function insertEditValue() {
     var editValue = localStorage.getItem("storageName");
     var transaction = JSON.parse(editValue);

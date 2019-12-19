@@ -55,6 +55,7 @@ public class BankController {
     public @ResponseBody
     String findById(@PathVariable Long id) {
         bankService.findById(id).get();
+
         return "/find";
     }
 
@@ -62,6 +63,7 @@ public class BankController {
     public @ResponseBody
     String findByName(@PathVariable String name) {
         bankService.findByName(name).get();
+
         return "/findByName";
     }
 
@@ -99,6 +101,7 @@ public class BankController {
     public String delete(@PathVariable(value = "id", required = true) String bankId) {
         BankDtoModel removedBankDtoModel = bankService.findById(Long.valueOf(bankId)).get();
         bankService.remove(removedBankDtoModel);
+
         return "redirect:/banks/";
     }
 }

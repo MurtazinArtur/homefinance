@@ -24,8 +24,9 @@ public class AppInit extends AbstractAnnotationConfigDispatcherServletInitialize
     @Override
     protected DispatcherServlet createDispatcherServlet(WebApplicationContext servletAppContext) {
         final DispatcherServlet dispatcherServlet = (DispatcherServlet) super.createDispatcherServlet(servletAppContext);
+
         dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+
         return dispatcherServlet;
     }
-
 }

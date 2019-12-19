@@ -18,13 +18,13 @@
     if(yratext.test(this.value)) this.value=''" placeholder="Введите Пароль:"
            class="password" required/><br>
     <c:if test="${authUser != null}">
-    <label>Тип пользователя</label><br>
-    <select name = "userRole" id="userRole" required>
-        <option value="0"></option>
-        <userRoles:forEach var="userRole" items="${userRoles}">
-            <option>${userRole}</option>
-        </userRoles:forEach>
-    </select><br>
+        <label>Тип пользователя</label><br>
+        <select name="userRole" id="userRole" required>
+            <option value="0"></option>
+            <userRoles:forEach var="userRole" items="${userRoles}">
+                <option>${userRole}</option>
+            </userRoles:forEach>
+        </select><br>
     </c:if>
     <input name="submit" type="submit" value="Отправить"/>
 </form>

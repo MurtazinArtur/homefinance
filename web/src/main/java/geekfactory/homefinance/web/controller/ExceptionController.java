@@ -38,6 +38,7 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNoHandlerFoundException(NoHandlerFoundException ex) {
         logger.error("ErrorLog: ", ex);
+
         return "error/404";
     }
 }
