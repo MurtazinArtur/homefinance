@@ -4,9 +4,7 @@ import geekfactory.homefinance.dao.model.TransactionModel;
 import geekfactory.homefinance.dao.repository.AccountRepositoryCRUD;
 import geekfactory.homefinance.service.converter.AccountModelConverter;
 import geekfactory.homefinance.service.converter.TransactionModelConverter;
-import geekfactory.homefinance.service.converter.UserModelConverter;
 import geekfactory.homefinance.service.dto.AccountDtoModel;
-import geekfactory.homefinance.service.dto.UserDtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +23,7 @@ public class AccountService {
 
     @Autowired
     public AccountService(AccountRepositoryCRUD accountRepositoryCRUD, AccountModelConverter accountConverter,
-                          TransactionModelConverter transactionModelConverter, TransactionService transactionService){
+                          TransactionModelConverter transactionModelConverter, TransactionService transactionService) {
         this.transactionModelConverter = transactionModelConverter;
         this.transactionService = transactionService;
         this.accountRepositoryCRUD = accountRepositoryCRUD;
@@ -63,6 +61,7 @@ public class AccountService {
                 transactionService.update(transactionModelConverter.convertToTransactionDtoModel(transactionModel));
             }
         }
+
         accountRepositoryCRUD.remove(accountConverter.convertToAccountModel(accountDtoModel));
     }
 }

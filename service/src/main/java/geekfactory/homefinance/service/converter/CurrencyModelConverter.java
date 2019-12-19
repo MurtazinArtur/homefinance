@@ -41,19 +41,23 @@ public class CurrencyModelConverter {
         } else {
             conditionConvert = "Ошибка конвертации модели";
         }
+
         return currencyDtoModel;
     }
 
     public Collection<CurrencyDtoModel> convertCollectionToCurrencyDtoModel(Collection<CurrencyModel> all) {
         Collection<CurrencyDtoModel> currencyDtoModels = new ArrayList<>();
+
         for (CurrencyModel currencyModel : all) {
             currencyDtoModels.add(convertToCurrencyDtoModel(currencyModel));
         }
+
         return currencyDtoModels;
     }
 
     public CurrencyModel convertToCurrencyModel(CurrencyDtoModel currencyDtoModel) {
         CurrencyModel currencyModel = new CurrencyModel();
+
         if (currencyDtoModel != null) {
             if (currencyDtoModel.getId() != 0) {
                 currencyModel.setId(Long.valueOf(currencyDtoModel.getId()));
@@ -78,14 +82,17 @@ public class CurrencyModelConverter {
         } else {
             conditionConvert = "Ошибка конвертации модели";
         }
+
         return currencyModel;
     }
 
     public Collection<CurrencyModel> convertCollectionToCurrencyModel(Collection<CurrencyDtoModel> all) {
         Collection<CurrencyModel> currencyModels = new ArrayList<>();
+
         for (CurrencyDtoModel currencyDtoModel : all) {
             currencyModels.add(convertToCurrencyModel(currencyDtoModel));
         }
         return currencyModels;
+
     }
 }

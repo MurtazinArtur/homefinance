@@ -3,7 +3,6 @@ package geekfactory.homefinance.service.converter;
 import geekfactory.homefinance.dao.model.UserModel;
 import geekfactory.homefinance.dao.model.UserRoles;
 import geekfactory.homefinance.service.dto.UserDtoModel;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +41,7 @@ public class UserModelConverter {
         } else {
             conditionConvert = "Ошибка конвертации модели";
         }
+
         return userDtoModel;
     }
 
@@ -51,6 +51,7 @@ public class UserModelConverter {
         for (UserModel userModel : userModelCollection) {
             userDtoModelCollection.add(convertToUserDtoModel(userModel));
         }
+
         return userDtoModelCollection;
     }
 
@@ -81,6 +82,7 @@ public class UserModelConverter {
         } else {
             conditionConvert = "Ошибка конвертации модели";
         }
+
         return userModel;
     }
 
@@ -90,6 +92,7 @@ public class UserModelConverter {
         for (UserDtoModel userDtoModel : userDtoModelCollection) {
             userModelCollection.add(convertToUserModel(userDtoModel));
         }
+
         return userModelCollection;
     }
 }

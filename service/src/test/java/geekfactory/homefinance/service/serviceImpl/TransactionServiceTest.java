@@ -25,6 +25,7 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {ServiceConfiguration.class})
 public class TransactionServiceTest {
     private TransactionRepositoryCRUD transactionRepositoryMock = mock(TransactionRepositoryCRUD.class);
+
     @InjectMocks
     @Autowired
     private TransactionService transactionService;
@@ -81,6 +82,7 @@ public class TransactionServiceTest {
         currencyModel.setName("testCurrency");
         currencyModel.setCode("TC");
         currencyModel.setSymbol("T");
+
         return currencyModel;
     }
 }

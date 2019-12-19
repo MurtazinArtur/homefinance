@@ -47,6 +47,7 @@ public class TransactionService {
 
     public TransactionDtoModel update(TransactionDtoModel transactionDtoModel) {
         transactionRepositoryCRUD.update(transactionModelConverter.convertToTransactionModel(transactionDtoModel));
+
         return transactionDtoModel;
     }
 }

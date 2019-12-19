@@ -6,19 +6,12 @@ import geekfactory.homefinance.service.converter.UserModelConverter;
 import geekfactory.homefinance.service.dto.AccountDtoModel;
 import geekfactory.homefinance.service.dto.UserDtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 @Transactional
 @Service("userService")
@@ -44,9 +37,10 @@ public class UserService {
     public Optional<UserDtoModel> findByName(String name) {
         Optional<UserDtoModel> resultFindUser =
                 Optional.ofNullable(userModelConverter.convertToUserDtoModel(userRepository.findByName(name).get()));
-        if(!resultFindUser.isPresent()){
+        if (!resultFindUser.isPresent()) {
             throw new UsernameNotFoundException("User " + name + " name not found!");
         }
+
         return resultFindUser;
     }
 
@@ -55,12 +49,12 @@ public class UserService {
     }
 
     public void save(UserDtoModel userDtoModel) {
-
         userRepository.save(userModelConverter.convertToUserModel(userDtoModel));
     }
 
     public UserDtoModel update(UserDtoModel userDtoModel) {
         userRepository.update(userModelConverter.convertToUserModel(userDtoModel));
+
         return userDtoModel;
     }
 
@@ -73,6 +67,7 @@ public class UserService {
                 accountService.update(accountDtoModel);
             }
         }
+
         userRepository.remove(userModelConverter.convertToUserModel(userDtoModel));
     }
 }

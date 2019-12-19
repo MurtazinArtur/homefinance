@@ -21,6 +21,7 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {ServiceConfiguration.class})
 public class BankServiceTest {
     private BankRepositoryCRUD bankRepositoryMock = mock(BankRepositoryCRUD.class);
+
     @InjectMocks
     @Autowired
     private BankService bankService;

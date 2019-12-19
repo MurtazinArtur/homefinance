@@ -1,9 +1,11 @@
 package geekfactory.homefinance.service.converter;
 
-
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
 import geekfactory.homefinance.dao.model.TransactionModel;
-import geekfactory.homefinance.service.dto.*;
+import geekfactory.homefinance.service.dto.AccountDtoModel;
+import geekfactory.homefinance.service.dto.BankDtoModel;
+import geekfactory.homefinance.service.dto.CurrencyDtoModel;
+import geekfactory.homefinance.service.dto.TransactionDtoModel;
 import geekfactory.homefinance.service.serviceImpl.AccountService;
 import geekfactory.homefinance.service.serviceImpl.BankService;
 import geekfactory.homefinance.service.serviceImpl.CategoryService;
@@ -96,14 +98,17 @@ public class TransactionModelConverter {
         } else {
             conditionConvert = "Ошибка конвертации модели";
         }
+
         return transactionDtoModel;
     }
 
     public Collection<TransactionDtoModel> convertCollectionToTransactionDtoModel(Collection<TransactionModel> all) {
         Collection<TransactionDtoModel> transactionDtoModels = new ArrayList<>();
+
         for (TransactionModel transactionModel : all) {
             transactionDtoModels.add(convertToTransactionDtoModel(transactionModel));
         }
+
         return transactionDtoModels;
     }
 
@@ -132,10 +137,10 @@ public class TransactionModelConverter {
                 conditionConvert = "Поле source не может быть пустым";
             }
             if (transactionDtoModel.getCategory() != null) {
-                Collection<String> collectionDtoCategories= transactionDtoModel.getCategory();
-                Collection<CategoryTransactionModel> collectionCategoryModels= new ArrayList<>();
+                Collection<String> collectionDtoCategories = transactionDtoModel.getCategory();
+                Collection<CategoryTransactionModel> collectionCategoryModels = new ArrayList<>();
 
-                for(String categoryModelName : collectionDtoCategories){
+                for (String categoryModelName : collectionDtoCategories) {
                     collectionCategoryModels.add(categoryModelConverter.convertToCategoryModel(
                             categoryService.findByName(categoryModelName).get()));
                 }
@@ -165,14 +170,17 @@ public class TransactionModelConverter {
         } else {
             conditionConvert = "Ошибка конвертации модели";
         }
+
         return transactionModel;
     }
 
     public Collection<TransactionModel> convertCollectionToTransactionModel(Collection<TransactionDtoModel> all) {
         Collection<TransactionModel> transactionModels = new ArrayList<>();
+
         for (TransactionDtoModel transactionDtoModel : all) {
             transactionModels.add(convertToTransactionModel(transactionDtoModel));
         }
+
         return transactionModels;
     }
 }

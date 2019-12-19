@@ -22,6 +22,7 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {ServiceConfiguration.class})
 public class CurrencyServiceTest {
     private CurrencyRepositoryCRUD currencyRepositoryMock = mock(CurrencyRepositoryCRUD.class);
+
     @InjectMocks
     @Autowired
     private CurrencyService currencyService;

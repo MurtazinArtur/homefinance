@@ -61,16 +61,17 @@ public class CategoryService {
                 categoryTransactionModel.setParentCategory(null);
             }
         }
+
         categoryTransactionRepositoryCRUD.remove(categoryModelConverter.convertToCategoryModel(categoryDtoModel));
     }
 
     public void save(CategoryDtoModel categoryDtoModel) {
-
         categoryTransactionRepositoryCRUD.save(categoryModelConverter.convertToCategoryModel(categoryDtoModel));
     }
 
     public CategoryDtoModel update(CategoryDtoModel categoryDtoModel) {
         categoryTransactionRepositoryCRUD.update(categoryModelConverter.convertToCategoryModel(categoryDtoModel));
+
         return categoryDtoModel;
     }
 }

@@ -15,6 +15,7 @@ public class BankModelConverter {
 
     public BankDtoModel convertToBankDtoModel(BankModel bankModel) {
         BankDtoModel bankDtoModel = new BankDtoModel();
+
         if (bankModel != null) {
             if (bankModel.getId() != null) {
                 bankDtoModel.setId(Math.toIntExact(bankModel.getId()));
@@ -29,19 +30,23 @@ public class BankModelConverter {
         } else {
             conditionConvert = "Ошибка конвертации модели";
         }
+
         return bankDtoModel;
     }
 
     public Collection<BankDtoModel> convertCollectionToBankDtoModel(Collection<BankModel> all) {
         Collection<BankDtoModel> collectionBankDtoModels = new ArrayList<>();
+
         for (BankModel bankModel : all) {
             collectionBankDtoModels.add(convertToBankDtoModel(bankModel));
         }
+
         return collectionBankDtoModels;
     }
 
     public BankModel convertToBankModel(BankDtoModel bankDtoModel) {
         BankModel bankModel = new BankModel();
+
         if (bankDtoModel != null) {
             Long id = Long.valueOf(bankDtoModel.getId());
             String name = bankDtoModel.getName();
@@ -58,14 +63,17 @@ public class BankModelConverter {
         } else {
             conditionConvert = "Ошибка конвертации модели";
         }
+
         return bankModel;
     }
 
     public Collection<BankModel> convertCollectionToBankModel(Collection<BankDtoModel> all) {
         Collection<BankModel> collectionBankModels = new ArrayList<>();
+
         for (BankDtoModel bankDtoModel : all) {
             collectionBankModels.add(convertToBankModel(bankDtoModel));
         }
+
         return collectionBankModels;
     }
 }

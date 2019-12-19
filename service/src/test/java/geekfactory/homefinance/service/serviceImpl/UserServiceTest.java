@@ -4,7 +4,6 @@ import geekfactory.homefinance.dao.model.UserModel;
 import geekfactory.homefinance.dao.model.UserRoles;
 import geekfactory.homefinance.dao.repository.UserRepository;
 import geekfactory.homefinance.service.config.ServiceConfiguration;
-import geekfactory.homefinance.service.serviceImpl.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +24,7 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {ServiceConfiguration.class})
 public class UserServiceTest {
     private UserRepository userRepositoryMock = mock(UserRepository.class);
+
     @InjectMocks
     @Autowired
     private UserService userService;

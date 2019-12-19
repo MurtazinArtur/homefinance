@@ -23,6 +23,7 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {ServiceConfiguration.class})
 public class AccountServiceTest {
     private AccountRepositoryCRUD accountRepositoryMock = mock(AccountRepositoryCRUD.class);
+
     @InjectMocks
     @Autowired
     private AccountService accountService;
@@ -62,7 +63,7 @@ public class AccountServiceTest {
         return currencyModel;
     }
 
-    private UserModel createUserModel(){
+    private UserModel createUserModel() {
         UserModel userModel = new UserModel();
         userModel.setUser("test");
         userModel.setPassword("test");

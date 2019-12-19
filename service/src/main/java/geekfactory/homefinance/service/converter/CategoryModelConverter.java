@@ -1,6 +1,5 @@
 package geekfactory.homefinance.service.converter;
 
-
 import geekfactory.homefinance.dao.model.CategoryTransactionModel;
 import geekfactory.homefinance.service.dto.CategoryDtoModel;
 import geekfactory.homefinance.service.serviceImpl.CategoryService;
@@ -45,19 +44,23 @@ public class CategoryModelConverter {
         } else {
             conditionConvert = "Ошибка конвертации модели";
         }
+
         return categoryDtoModel;
     }
 
     public Collection<CategoryDtoModel> convertCollectionToCategoryDtoModel(Collection<CategoryTransactionModel> all) {
         Collection<CategoryDtoModel> categoryDtoModels = new ArrayList<>();
+
         for (CategoryTransactionModel categoryTransactionModel : all) {
             categoryDtoModels.add(convertToCategoryDtoModel(categoryTransactionModel));
         }
+
         return categoryDtoModels;
     }
 
     public CategoryTransactionModel convertToCategoryModel(CategoryDtoModel categoryDtoModel) {
         CategoryTransactionModel categoryTransactionModel = new CategoryTransactionModel();
+
         if (categoryDtoModel != null) {
             if (categoryDtoModel.getId() != 0) {
                 categoryTransactionModel.setId(Long.valueOf(categoryDtoModel.getId()));
@@ -78,14 +81,17 @@ public class CategoryModelConverter {
         } else {
             conditionConvert = "Ошибка конвертации модели";
         }
+
         return categoryTransactionModel;
     }
 
     public Collection<CategoryTransactionModel> convertCollectionToCategoryModel(Collection<CategoryDtoModel> all) {
         Collection<CategoryTransactionModel> categoryTransactionModels = new ArrayList<>();
+
         for (CategoryDtoModel categoryDtoModel : all) {
             categoryTransactionModels.add(convertToCategoryModel(categoryDtoModel));
         }
+
         return categoryTransactionModels;
     }
 }

@@ -24,7 +24,7 @@ public class UserDtoModel implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> result = new ArrayList<>();
-        if(userRole != null){
+        if (userRole != null) {
             result.add(new SimpleGrantedAuthority(userRole));
         }
         return result;

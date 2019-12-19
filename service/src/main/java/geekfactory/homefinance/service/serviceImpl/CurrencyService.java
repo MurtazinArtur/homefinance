@@ -62,6 +62,7 @@ public class CurrencyService {
                 accountService.update(accountDtoModel);
             }
         }
+
         currencyRepositoryCRUD.remove(currencyConverter.convertToCurrencyModel(currencyDtoModel));
     }
 
@@ -71,6 +72,7 @@ public class CurrencyService {
 
     public CurrencyDtoModel update(CurrencyDtoModel currencyDtoModel) {
         currencyRepositoryCRUD.update(currencyConverter.convertToCurrencyModel(currencyDtoModel));
+
         return currencyDtoModel;
     }
 }

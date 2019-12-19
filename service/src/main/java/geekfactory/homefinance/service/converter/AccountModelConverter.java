@@ -73,14 +73,17 @@ public class AccountModelConverter {
         } else {
             conditionConvert = "Ошибка конвертации модели";
         }
+
         return accountDtoModel;
     }
 
     public Collection<AccountDtoModel> convertCollectionToAccountDtoModel(Collection<AccountModel> all) {
         Collection<AccountDtoModel> accountDtoModels = new ArrayList<>();
+
         for (AccountModel accountModel : all) {
             accountDtoModels.add(convertToAccountDtoModel(accountModel));
         }
+
         return accountDtoModels;
     }
 
@@ -120,18 +123,20 @@ public class AccountModelConverter {
             } else {
                 conditionConvert = "Поле User не может быть пустым";
             }
-
         } else {
             conditionConvert = "Ошибка конвертации модели";
         }
+
         return accountModel;
     }
 
     public Collection<AccountModel> convertCollectionToCurrencyModel(Collection<AccountDtoModel> all) {
         Collection<AccountModel> accountModels = new ArrayList<>();
+
         for (AccountDtoModel accountDtoModel : all) {
             accountModels.add(convertToAccountModel(accountDtoModel));
         }
+
         return accountModels;
     }
 }

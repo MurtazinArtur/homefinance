@@ -22,6 +22,7 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {ServiceConfiguration.class})
 public class CategoryServiceTest {
     private CategoryTransactionRepositoryCRUD categoryTransactionRepositoryMock = mock(CategoryTransactionRepositoryCRUD.class);
+
     @InjectMocks
     @Autowired
     private CategoryService categoryService;

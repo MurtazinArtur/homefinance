@@ -60,6 +60,7 @@ public class BankService {
                 transactionService.update(transactionModelConverter.convertToTransactionDtoModel(transactionModel));
             }
         }
+
         bankRepositoryCRUD.remove(bankModelConverter.convertToBankModel(bankDtoModel));
     }
 }
