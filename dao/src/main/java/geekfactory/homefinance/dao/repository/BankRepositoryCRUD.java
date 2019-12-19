@@ -27,6 +27,7 @@ public class BankRepositoryCRUD {
                 entityManager.createQuery("SELECT bank FROM BankModel bank " +
                         "WHERE bank.name = :name", BankModel.class);
         query.setParameter("name", name);
+
         return Optional.ofNullable(query.getSingleResult());
     }
 
@@ -54,6 +55,7 @@ public class BankRepositoryCRUD {
     @Transactional
     public BankModel update(BankModel model) {
         entityManager.merge(model);
+
         return model;
     }
 }

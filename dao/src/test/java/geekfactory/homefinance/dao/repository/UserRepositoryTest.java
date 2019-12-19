@@ -1,7 +1,8 @@
 package geekfactory.homefinance.dao.repository;
 
 import geekfactory.homefinance.dao.config.DaoConfiguration;
-import geekfactory.homefinance.dao.model.*;
+import geekfactory.homefinance.dao.model.UserModel;
+import geekfactory.homefinance.dao.model.UserRoles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +12,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +106,7 @@ public class UserRepositoryTest {
             collection.add(userModel);
             userRepository.save(userModel);
         }
+
         return collection;
     }
 }

@@ -27,6 +27,7 @@ public class CategoryTransactionRepositoryCRUD {
                 entityManager.createQuery("SELECT category FROM CategoryTransactionModel category " +
                         "WHERE category.name = :name", CategoryTransactionModel.class);
         query.setParameter("name", name);
+
         return Optional.ofNullable(query.getSingleResult());
     }
 
@@ -54,6 +55,7 @@ public class CategoryTransactionRepositoryCRUD {
     @Transactional
     public CategoryTransactionModel update(CategoryTransactionModel model) {
         entityManager.merge(model);
+
         return model;
     }
 }

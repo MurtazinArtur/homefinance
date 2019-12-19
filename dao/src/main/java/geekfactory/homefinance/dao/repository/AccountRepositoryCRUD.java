@@ -27,6 +27,7 @@ public class AccountRepositoryCRUD {
                 entityManager.createQuery("SELECT account FROM AccountModel account " +
                         "WHERE account.name = :name", AccountModel.class);
         query.setParameter("name", name);
+
         return Optional.ofNullable(query.getSingleResult());
     }
 
@@ -43,6 +44,7 @@ public class AccountRepositoryCRUD {
     @Transactional
     public void remove(AccountModel model) {
         AccountModel modelToDelete = entityManager.find(AccountModel.class, model.getId());
+
         entityManager.remove(modelToDelete);
     }
 
@@ -54,6 +56,7 @@ public class AccountRepositoryCRUD {
     @Transactional
     public AccountModel update(AccountModel model) {
         entityManager.merge(model);
+
         return model;
     }
 }

@@ -85,6 +85,7 @@ class CurrencyRepositoryCRUDTest {
         currencyModel.setCode("USD");
 
         currencyModelRepositoryCRUD.save(currencyModel);
+
         return currencyModel;
     }
 

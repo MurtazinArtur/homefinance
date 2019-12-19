@@ -25,6 +25,7 @@ public class CurrencyRepositoryCRUD {
                 entityManager.createQuery("SELECT currency FROM CurrencyModel currency " +
                         "WHERE currency.name = :name", CurrencyModel.class);
         query.setParameter("name", name);
+
         return Optional.ofNullable(query.getSingleResult());
     }
 
@@ -52,6 +53,7 @@ public class CurrencyRepositoryCRUD {
     @Transactional
     public CurrencyModel update(CurrencyModel model) {
         entityManager.merge(model);
+
         return model;
     }
 }

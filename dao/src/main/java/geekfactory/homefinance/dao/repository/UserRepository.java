@@ -27,6 +27,7 @@ public class UserRepository {
                 entityManager.createQuery("SELECT userModel FROM UserModel userModel " +
                         "WHERE userModel.user = :user", UserModel.class);
         query.setParameter("user", user);
+
         return Optional.ofNullable(query.getSingleResult());
     }
 
@@ -55,6 +56,7 @@ public class UserRepository {
     @Transactional
     public UserModel update(UserModel userModel) {
         entityManager.merge(userModel);
+
         return userModel;
     }
 }

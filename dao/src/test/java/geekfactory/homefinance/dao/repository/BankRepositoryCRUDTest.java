@@ -84,11 +84,13 @@ class BankRepositoryCRUDTest {
         bankModel.setName("VTB");
 
         bankRepositoryCRUD.save(bankModel);
+
         return bankModel;
     }
 
     private List<BankModel> createCollectionModels() {
         List<BankModel> collection = new ArrayList<>();
+
         for (int i = 1; i <= 3; i++) {
             BankModel bankModel = new BankModel();
             bankModel.setName("VTB");
@@ -96,6 +98,7 @@ class BankRepositoryCRUDTest {
             collection.add(bankModel);
             bankRepositoryCRUD.save(bankModel);
         }
+
         return collection;
     }
 }

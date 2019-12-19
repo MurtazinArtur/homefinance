@@ -108,6 +108,7 @@ class TransactionRepositoryCRUDTest {
 
             transactionModelRepositoryCRUD.save(transactionModel);
         }
+
         return collection;
     }
 

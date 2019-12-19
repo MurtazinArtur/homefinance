@@ -41,6 +41,7 @@ public class DaoConfiguration {
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
+
         return dataSource;
     }
 

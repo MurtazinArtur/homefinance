@@ -85,6 +85,7 @@ class CategoryTransactionRepositoryCRUDTest {
         categoryModel.setParentCategory(null);
 
         categoryTransactionModelRepositoryCRUD.save(categoryModel);
+
         return categoryModel;
     }
 
@@ -99,6 +100,7 @@ class CategoryTransactionRepositoryCRUDTest {
             collection.add(categoryModel);
             categoryTransactionModelRepositoryCRUD.save(categoryModel);
         }
+
         return collection;
     }
 }

@@ -138,6 +138,7 @@ class AccountRepositoryCRUDTest {
             collection.add(accountModel);
             accountModelRepositoryCRUD.save(accountModel);
         }
+
         return collection;
     }
 }
