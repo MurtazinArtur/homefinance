@@ -1,7 +1,6 @@
 package geekfactory.homefinance.web.config;
 
 import geekfactory.homefinance.service.serviceImpl.UserDetailsServiceImpl;
-import geekfactory.homefinance.service.serviceImpl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +34,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/hello?error=true")
                 .and()
                 .logout()
-                .clearAuthentication(true)
                 .logoutSuccessUrl("/hello")
                 .permitAll()
                 .and()
@@ -43,6 +41,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/resources/js/**").permitAll()
                 .antMatchers("/resources/images/**").permitAll()
                 .antMatchers("/users/add_new_user").permitAll()
+                .antMatchers("/error/**").permitAll()
+                .antMatchers("/users/save").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();

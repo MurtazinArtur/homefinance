@@ -6,11 +6,8 @@
 
 <html>
 <head>
-    <title>Список Опкраций</title>
+    <title>Список Операций</title>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="${contextPath}/resources/js/bootstrap/bootstrap.min.js"></script>
-    <script src="${contextPath}/resources/js/modal.js"></script>
     <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/buttons.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/menu.css" rel="stylesheet">
@@ -51,32 +48,30 @@
     </div>
 </div>
 
-<nav class="navbar navbar-dark bg-dark">
-    <form th:action="@{/hello}" method="get" style="width: 2100px">
-        <div class="row">
-            <div class="col-sm">
-                <input type="text" class="form-control pull-right" id="search"
-                       style="margin-left: 30px" placeholder="Поиск по таблице">
-            </div>
-            <div class="col-sm">
-                <label id="user_label_login" style="color: white; margin-left: 170px;">
-                    Вы авторизовались как ${authUser.username}
-                </label>
-            </div>
-            <div class="col-sm">
-                <button type="submit" id="logout" name="submit" class="btn btn-primary"
-                        style="margin-left: 50px" onsubmit="/logout">Выйти
-                </button>
-            </div>
-        </div>
-    </form>
+<nav class="navbar navbar-dark bg-dark" style="margin-bottom: 0px">
+    <div class="container" style="margin: 5px; padding: 3px; width: 100%">
+        <c:if test="${authUser.authorities != null}">
+            <form method="get" class="form-inline">
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control pull-right" id="search"
+                               style="margin-left: 30px" placeholder="Поиск по таблице">
+                    </div>
+                    <div class="col">
+                        <label id="user_label_login" style="margin-left: 1050px">
+                            Вы авторизовались как ${authUser.username}
+                        </label>
+                        <label>
+                            <a class="nav-link" href="/logout">Выйти</a>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </c:if>
+    </div>
 </nav>
 
 <h1><p align="center">Список Операций</p></h1>
-
-<div class="form-group">
-    <input type="text" class="form-control pull-right" id="search" placeholder="Поиск по таблице">
-</div>
 
 <div id="table" class="container">
     <table class="table table-hover" id="transaction_table">
@@ -130,6 +125,9 @@
     </div>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="${contextPath}/resources/js/bootstrap/bootstrap.min.js"></script>
+<script src="${contextPath}/resources/js/modal.js"></script>
 <script src="${contextPath}/resources/js/transactions/transaction_filter.js"></script>
 <script src="${contextPath}/resources/js/transactions/transaction_edit.js"></script>
 </body>

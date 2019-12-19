@@ -7,9 +7,6 @@
 <head>
     <title>Список Категорий Транзакций</title>
 
-    <script src="${contextPath}/resources/js/jquery-2.1.4.min.js"></script>
-    <script src="${contextPath}/resources/js/bootstrap/bootstrap.min.js"></script>
-    <script src="${contextPath}/resources/js/modal.js"></script>
     <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/buttons.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/menu.css" rel="stylesheet">
@@ -107,6 +104,9 @@
     </a>
 </div>
 
+<script src="${contextPath}/resources/js/jquery-2.1.4.min.js"></script>
+<script src="${contextPath}/resources/js/bootstrap/bootstrap.min.js"></script>
+<script src="${contextPath}/resources/js/modal.js"></script>
 <script src="${contextPath}/resources/js/categories/category_filter.js"></script>
 <script src="${contextPath}/resources/js/categories/category_edit.js"></script>
 </body>

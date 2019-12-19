@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/add_new_user")
-    public String addNewUserPage(Model model) {
+    public String addNewUserPage(Model model, @AuthenticationPrincipal User user) {
         UserRoles[] allUserRoles = UserRoles.values();
         List<String> valuesUserRoles = new ArrayList<>();
 
@@ -45,6 +45,7 @@ public class UserController {
         }
 
         model.addAttribute("userRoles", valuesUserRoles);
+        model.addAttribute("authUser", user);
 
         return "/users/add_new_user";
     }
@@ -99,9 +100,10 @@ public class UserController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String password = passwordEncoder.encode(saveUserModel.getPassword());
-        saveUserModel.setPassword(password);
+        saveUserModel.setPassword(new BCryptPasswordEncoder().encode(saveUserModel.getPassword()));
+        if (saveUserModel.getUserRole() == null){
+            saveUserModel.setUserRole("ROLE_USER");
+        }
         userService.save(saveUserModel);
 
         return new ModelAndView("redirect:/users/");

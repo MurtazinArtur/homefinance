@@ -17,6 +17,7 @@
     <input type="text" name="password" id="password" value="" onkeyup="var yratext=/[,':']/;
     if(yratext.test(this.value)) this.value=''" placeholder="Введите Пароль:"
            class="password" required/><br>
+    <c:if test="${authUser != null}">
     <label>Тип пользователя</label><br>
     <select name = "userRole" id="userRole" required>
         <option value="0"></option>
@@ -24,6 +25,7 @@
             <option>${userRole}</option>
         </userRoles:forEach>
     </select><br>
+    </c:if>
     <input name="submit" type="submit" value="Отправить"/>
 </form>
 <script>
@@ -41,17 +43,19 @@
         formData.close;
         var json = JSON.stringify(user);
         $.ajax({
-            type: 'post',
+            type: 'POST',
             url: "${contextPath}/users/save",
             contentType: "application/json",
             cache: false,
             data: json,
             success: function (html) {
                 window.location.reload();
+                alert("Пользователь успешно создан");
             },
             error: function () {
                 // Запрос не получилось отправить
                 console.error("Ошибка сохранения в базу");
+                alert("Ошибка сохранения в базу");
             }
         });
     }

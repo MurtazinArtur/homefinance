@@ -6,7 +6,6 @@
 <html>
 <head>
 
-
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
     <title>Список Пользователей</title>
@@ -82,7 +81,6 @@
         <thead>
         <tr>
             <th scope="col"><p align="center">Имя пользоателя</p></th>
-            <th scope="col"><p align="center">Пароль</p></th>
             <th scope="col"><p align="center">Тип пользователя</p></th>
         </tr>
         </thead>
@@ -91,8 +89,6 @@
             <tr id="user_${user.id}">
                 <td class="user_name" data-field="user_name" id="user_name">
                     <p align="center">${user.user}</p></td>
-                <td class="user_password" data-field="user_password" id="user_password">
-                    <p align="center">${user.password}</p></td>
                 <td class="user_userRole" data-field="user_userRole" id="user_userRole">
                     <p align="center">${user.userRole}</p></td>
                 <td><a href="javascript:void(0);" data-href="${contextPath}/users/user_edit" class="openPopup">
@@ -113,7 +109,6 @@
         </a>
     </div>
 </div>
-
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/modal.js"></script>

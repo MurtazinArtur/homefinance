@@ -69,7 +69,7 @@ public class AccountController {
     }
 
     @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ModelAndView save(@RequestBody String jsonAccountDtoModel) {
+    public ModelAndView save(@RequestBody String jsonAccountDtoModel, @AuthenticationPrincipal User user) {
         AccountDtoModel accountDtoModel = new AccountDtoModel();
 
         try {
@@ -77,6 +77,7 @@ public class AccountController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        accountDtoModel.setUserModel(user.getUsername());
         accountService.save(accountDtoModel);
 
         return new ModelAndView("redirect:/accounts/");

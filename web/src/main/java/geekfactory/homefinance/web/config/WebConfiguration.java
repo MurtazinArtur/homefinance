@@ -57,13 +57,13 @@ public class WebConfiguration implements WebMvcConfigurer {
     }
 
     @Override
-    public  void addViewControllers(final ViewControllerRegistry registry){
+    public void addViewControllers(final ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("hello");
         registry.addViewController("/login").setViewName("login");
     }
 
     @Bean
-    public UserDetailsService getUserDetailsService(){
+    public UserDetailsService getUserDetailsService() {
         return new UserDetailsServiceImpl();
     }
 

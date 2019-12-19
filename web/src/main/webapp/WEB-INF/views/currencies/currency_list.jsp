@@ -7,9 +7,6 @@
 <head>
     <title>Список Валют</title>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="${contextPath}/resources/js/bootstrap/bootstrap.min.js"></script>
-    <script src="${contextPath}/resources/js/modal.js"></script>
     <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/buttons.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/menu.css" rel="stylesheet">
@@ -111,6 +108,9 @@
     </div>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="${contextPath}/resources/js/bootstrap/bootstrap.min.js"></script>
+<script src="${contextPath}/resources/js/modal.js"></script>
 <script src="${contextPath}/resources/js/currencies/currency_filter.js"></script>
 <script src="${contextPath}/resources/js/currencies/currency_edit.js"></script>
 </body>
