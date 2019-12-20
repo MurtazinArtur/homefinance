@@ -27,12 +27,12 @@ Web – Приложение HomeFinance
 
  
 Стартовая страница служит для авторизации пользователей в системе, а так же для регистрации новых 
-пользователей через [форму регистрации пользователя].(https://bitbucket.org/Murtazin__Artur/homefinance/src/master/README/Screenshots/readme_1.1.png)
+пользователей через [форму регистрации пользователя](https://bitbucket.org/Murtazin__Artur/homefinance/src/master/README/Screenshots/readme_1.1.png).
 
 Если пользователь ввел неверные данные, то в правом верхнем углу появится [сообщение об ошибке](https://bitbucket.org/Murtazin__Artur/homefinance/src/master/README/Screenshots/readme_1.2.png) 
 авторизации, чтобы повторить попытку авторизации нужно будет нажать на ссылку «Повторить попытку»
  
-После  удачной авторизации, на всех страницах будет отображаться ![строчка](https://bitbucket.org/Murtazin__Artur/homefinance/src/master/README/Screenshots/readme_1.3.png) в которой будет прописан 
+После  удачной авторизации, на всех страницах будет отображаться [строчка](https://bitbucket.org/Murtazin__Artur/homefinance/src/master/README/Screenshots/readme_1.3.png) в которой будет прописан 
 логин под которым пользователь авторизовался
  
 После нажатия на ссылку «Выйти» на любой странице, приложение вернется на стартовую страницу
