@@ -50,11 +50,13 @@ Web – Приложение HomeFinance
 
 Автор проекта:
 
-Муртазин Артур, email: <arturmurtazin85@gmail.com>
+Муртазин Артур: 
+email: <arturmurtazin85@gmail.com>
 
 Благодарность за помощь в создании проекта:
 
-Группа GeekFactory официальная группа [ВКонтакте](https://vk.com/geek_facktory)
+Группа GeekFactory: 
+официальная группа [ВКонтакте](https://vk.com/geek_facktory)
 
 и персонально:
 ~~~
