@@ -16,10 +16,13 @@
         <mysql>8.0.11</mysql>
         <jstl>1.2</jstl>
         <servlet-api>4.0.1</servlet-api>
+        <javax.ws.rs>2.1.1</javax.ws.rs>
         <jackson>2.10.0</jackson>
         <thymeleaf>3.0.11.RELEASE</thymeleaf>
         <spring>5.1.9.RELEASE</spring>
         <spring-data>2.2.0.RELEASE</spring-data>
+        <spring-security>5.2.1.RELEASE</spring-security>
+        <spring-security-annotations>1.0</spring-security-annotations>
         <hibernate>5.4.6.Final</hibernate>
         <logger>1.7.13</logger>
         <junitjupiter>5.5.1</junitjupiter>
@@ -55,6 +58,11 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>jstl</artifactId>
                 <version>${jstl}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+                <version>${javax.ws.rs}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -110,6 +118,34 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
                 <version>${spring}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring-security}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${spring-security}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring-security}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-taglibs</artifactId>
+                <version>${spring-security}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.annotation</groupId>
+                <artifactId>jsr250-api</artifactId>
+                <version>${spring-security-annotations}</version>
             </dependency>
             <dependency>
             <groupId>org.springframework</groupId>
