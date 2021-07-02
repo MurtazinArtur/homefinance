@@ -21,7 +21,7 @@
         <thymeleaf>3.0.11.RELEASE</thymeleaf>
         <spring>5.1.9.RELEASE</spring>
         <spring-data>2.2.0.RELEASE</spring-data>
-        <spring-security>5.2.1.RELEASE</spring-security>
+        <spring-security>5.2.11.RELEASE</spring-security>
         <spring-security-annotations>1.0</spring-security-annotations>
         <hibernate>5.4.6.Final</hibernate>
         <logger>1.7.13</logger>
