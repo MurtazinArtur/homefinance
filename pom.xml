@@ -32,7 +32,7 @@
         <war-plugin>3.2.3</war-plugin>
         <mockito>2.24.0</mockito>
         <source>1.8</source>
-        <h2>1.4.199</h2>
+        <h2>2.0.206</h2>
         <spring-test>3.2.2.RELEASE</spring-test>
     </properties>
 
